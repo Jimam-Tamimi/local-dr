@@ -29,7 +29,7 @@ export const Column = styled.div`
         (100 / 12) * (md || lg || sm || sx)
       }% - ${selfSpacing}px) !important;`}
   }
-  @media screen and (min-width: 600px) and (max-width: 992px) {
+  @media screen and (min-width: 768px) and (max-width: 992px) {
     ${({ lg, md, sm, sx, selfSpacing = 0 }) =>
       `width:calc(${
         (100 / 12) * (sm || md || lg || sx)
@@ -79,7 +79,7 @@ export const Grid = styled.div`
       ${({ lg, md, sm, sx, spacing = 0 }) =>
         `width:calc(${(100 / 12) * (md || lg || sm || sx)}% - ${spacing}px);`}
     }
-    @media screen and (min-width: 600px) and (max-width: 992px) {
+    @media screen and (min-width: 768px) and (max-width: 992px) {
       ${({ lg, md, sm, sx, spacing = 0 }) =>
         `width:calc(${(100 / 12) * (sm || md || lg || sx)}% - ${spacing}px);`}
     }

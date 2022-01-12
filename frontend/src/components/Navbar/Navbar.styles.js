@@ -6,10 +6,39 @@ export const NavWrap = styled.div`
     ${Flex}
     width: 100vw;
     height: 100px;
-    border: 2px solid red;
+    background: var(--secondary-color);
+    border-bottom: 2px solid #0000001f;
+
 `;
 export const Logo = styled.div`
 
 
 `;
  
+export const Account = styled.div`
+ ${Flex}
+    flex-direction: column;
+ position: relative;
+`
+
+export const Menu = styled.div`
+ ${Flex}
+ & > p {
+    font-size: 1.1rem;
+    font-weight: 700;
+ }
+ cursor: pointer;
+ padding: 3px 3px;
+ & > svg {
+    position: relative;
+    top: 1.26px;
+    left: 3px;
+ }
+`
+
+export const DropdownDiv = styled.div`
+    width: 308px;
+    min-height: 100px;
+    background-color: white;
+    box-shadow: 0px 0px 8px 2px #00000036;
+`

@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
     --primary-color: #3C3FD8;
     --primary-text-black: white ;
     --primary-hover-color: #b52a37;
+    --secondary-color: #D6E5F3;
 
  
      
@@ -44,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
       }
   }
   body{ 
-
+    overflow-x: hidden;
   }
 
   

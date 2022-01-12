@@ -61,8 +61,11 @@ export const Container = styled.div`
   @media only screen and (min-width: 768px) {
     padding: 0 30px;
   }
-
   display: flex;
+  flex-direction: ${({ direction }) => (direction ? direction : "row")};
+  justify-content: ${({ justify }) => (justify ? justify : "center")};
+  align-items: ${({ align }) => (align ? align : "center")};
+  flex-wrap: ${({ wrap }) => (wrap ? wrap : "nowrap")};
 `;
 
 export const SmallContainer = styled(Container)`
@@ -119,6 +122,11 @@ export const Button = styled.button`
     display: block;
     padding: 0.7rem 1rem;
   `}
+  ${({sm}) => sm && `
+    padding: 0.35rem 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+  `}
 `;
 
 export const ButtonLink = styled(Link)`
@@ -137,4 +145,33 @@ export const ButtonLink = styled(Link)`
   &:active {
     transform: var(--for-active-click);
   }
+  ${({block}) => block && `
+    width: 100%;
+    display: block;
+    padding: 0.7rem 1rem;
+  `}
+  ${({sm}) => sm && `
+    padding: 0.35rem 0.6rem;
+    font-size: 1rem;
+    font-weight: 600;
+  `}
 `;
+
+
+
+export const Badge = styled.span`
+  background: var(--info-color);
+  color: white;
+  padding: 0.3rem 1rem;
+  font-size: .8rem;
+  transition: var(--main-transition);
+  letter-spacing: 0.51px;
+  font-weight: 700;
+  border-radius: 10px;
+  
+  padding: 0.21rem 0.61rem;
+    border-radius: 5px;
+
+ 
+
+`

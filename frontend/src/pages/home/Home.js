@@ -34,7 +34,7 @@ export default function Home() {
                     borderRight: "2px solid #0000001f",
                   }}
                   type="text"
-                  placeholder="Doctor Name"
+                  placeholder="Search For Doctor or Hospital"
                 />
                 <input
                   style={{
@@ -43,7 +43,7 @@ export default function Home() {
                     borderBottomLeftRadius: 0,
                   }}
                   type="text"
-                  placeholder="Address"
+                  placeholder="My Location"
                 />
                 <button>
                   <FaSearch />

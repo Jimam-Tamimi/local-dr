@@ -23,8 +23,12 @@ const GlobalStyle = createGlobalStyle`
     /* --main-transition: all .3s cubic-bezier(0.25, 0.46, 0.45, 0.94); */
     --primary-color: #3C3FD8;
     --primary-text-black: white ;
-    --primary-hover-color: #b52a37;
+    /* --primary-hover-color: #b52a37; */
+
     --secondary-color: #D6E5F3;
+    
+    --info-color: #e74e84;
+    --info-text-color: white;
 
  
      

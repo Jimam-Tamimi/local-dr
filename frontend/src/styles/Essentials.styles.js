@@ -114,6 +114,11 @@ export const Button = styled.button`
   &:active {
     transform: var(--for-active-click);
   }
+  ${({block}) => block && `
+    width: 100%;
+    display: block;
+    padding: 0.7rem 1rem;
+  `}
 `;
 
 export const ButtonLink = styled(Link)`

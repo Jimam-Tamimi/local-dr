@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 export default function Dropdown({show, children, style}) {
 
-    console.log(show)
     return (
         <>
             <DropdownWrap style={style} show={show} >

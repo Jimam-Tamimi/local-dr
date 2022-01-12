@@ -33,12 +33,11 @@ export const RightCol = styled.div`
     & > * {
         margin: 3px 0px;
     }
-    & > button {
-        @media screen and (min-width: 715px) {
-            position: absolute;
-            right: 0;
-            bottom: 5px;
-        }
+    & > a {
+        font-weight: 600;
+        text-decoration: underline;
+        position: absolute;
+        right: 0;
         @media screen and (max-width: 715px) {
             font-size: .8rem;
 

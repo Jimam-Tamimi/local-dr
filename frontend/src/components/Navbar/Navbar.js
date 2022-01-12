@@ -20,7 +20,7 @@ import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SearchColumn } from "../../pages/styles/home/Home.styles";
 import { FaSearch } from "react-icons/fa";
 
@@ -65,7 +65,9 @@ export default function Navbar() {
         <Container>
           <Grid wrap="no-wrap" justify="space-between" >
             <Column justify="start" lg={2}  >
+              <Link to='/'>
               <img src={logo} />
+              </Link>
             </Column>
             {
               showSearch && location.pathname !== "/" && 

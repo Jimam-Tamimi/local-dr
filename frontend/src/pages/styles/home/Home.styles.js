@@ -10,6 +10,7 @@ export const HeroWrap = styled.div`
 export const ColumnOne = styled(Column)`
   & > h1 {
     font-size: 4.4rem;
+    color: var(--primary-text-color);
   }
   & > * {
     margin-top: 20px;
@@ -47,17 +48,23 @@ export const SearchColumn = styled.form`
   width: 100%;
   display: flex;
   position: relative;
-
-  & > input {
+  background: white;
+  & > div > input {
     border: none;
+      width: 100% !important;
     font-size: 1rem;
-    padding: 1.3rem 1.1rem;
+    padding: 1.3rem 2.1rem;
     font-weight: 600;
     outline: none;
     border-radius: 4px;
   }
+  & > div  {
+    position: relative;
+    padding: 0px 20px;
 
-  & > span {
+  }
+
+  /* & > span {
     background: #0000001f;
     height: 58%;
     position: absolute;
@@ -65,18 +72,51 @@ export const SearchColumn = styled.form`
     z-index: 1;
     width: 1.5px;
     border-radius: 35px;
-  }
+  } */
   & > button {
     padding: 0 10px;
     border: 0;
     outline: none;
-    background: #3c3fd8;
-    color: white;
+    background: var(--primary-color);
+    color: var(--primary-text-color);
     font-size: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+  }
+
+  & > div > svg {
+    position: absolute;
+    top: 19px;
+    font-size: 25px;
+  }
+  @media screen and (max-width: 992px) {
+    
+    flex-direction: column;
+    background: white;
+    padding: 15px;
+    & > div > input {
+      width: 100% !important;
+      
+    }
+    & > div  {
+      width: 100% !important;
+      padding: 0px 0px;
+
+  }
+    & > button {
+      width: 100% !important;
+      padding: 10px 10px;
+    font-size: 21px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  & > div > input {
+    padding: 1rem 2.1rem;
+    border-bottom: 1px solid #0000003b;
+    margin: 5px 0px;
+  }
   }
 
 `;

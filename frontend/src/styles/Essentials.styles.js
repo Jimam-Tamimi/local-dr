@@ -103,7 +103,7 @@ export const Grid = styled.div`
 
 export const Button = styled.button`
   background: var(--primary-color);
-  color: white;
+  color: var(--primary-text-color);
   padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 2px solid transparent;
@@ -131,7 +131,7 @@ export const Button = styled.button`
 
 export const ButtonLink = styled(Link)`
   background: var(--primary-color);
-  color: white;
+  color: var(--primary-text-color);
   padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 2px solid transparent;

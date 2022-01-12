@@ -16,6 +16,7 @@ export const Wrapper = styled.div`
 
 export const Column = styled.div`
   display: flex;
+  ${Flex}
   @media screen and (min-width: 1200px) {
     ${({ lg, md, sm, sx, selfSpacing = 0 }) =>
       `width:calc(${
@@ -45,7 +46,7 @@ export const Column = styled.div`
   justify-content: ${({ justify }) => (justify ? justify : "center")};
   align-items: ${({ align }) => (align ? align : "center")};
   flex-wrap: ${({ wrap }) => (wrap ? wrap : "nowrap")};
-
+  margin: ${({ selfSpacing }) => typeof selfSpacing === "string" ? selfSpacing : "0px " + (selfSpacing/2) + "px"};
   & > * {
     margin: ${({ spacing = 0 }) =>
       typeof spacing === "string" ? spacing : "0px " + spacing + "px"};
@@ -62,6 +63,12 @@ export const Container = styled.div`
   }
 
   display: flex;
+`;
+
+export const SmallContainer = styled(Container)`
+ 
+  max-width: 1300px;
+ 
 `;
 export const Grid = styled.div`
   display: flex;

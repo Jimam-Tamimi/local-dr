@@ -21,7 +21,7 @@ export default function Home() {
       <HeroWrap>
         <Container>
           <Grid>
-            <ColumnOne direction="column" lg={6} sm={12} align="start">
+            <ColumnOne direction="column" lg={7} sm={12} align="start">
               <h1>
                 Find local OB-GYNs <br /> who take your insurance
               </h1>
@@ -50,7 +50,7 @@ export default function Home() {
                 </button>
               </SearchColumn>
             </ColumnOne>
-            <ColumnTwo sm={0} lg={6}>
+            <ColumnTwo sm={0} lg={5}>
               <img src={hero} alt="hero" />
             </ColumnTwo>
           </Grid>

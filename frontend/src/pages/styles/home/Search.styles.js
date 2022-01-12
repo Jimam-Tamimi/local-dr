@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { SearchColumnNav } from "../components/Navbar/Navbar.styles";
-import { Column } from "./Essentials.styles";
+import { SearchColumnNav } from "../../../components/Navbar/Navbar.styles";
+import { Column } from "../../../styles/Essentials.styles";
 
 export const ProvidersWrap = styled('div')`
     width: 100vw;
@@ -47,7 +47,39 @@ export const RightCol = styled.div`
     }
 `;
 
-export const SearchColumnSearch = styled(SearchColumnNav)`
+export const SearchColumnSearch = styled.div`
+display: flex;
+  position: relative;
+
+  & > input {
+    min-height: 46px;
+    width: 100%;
+    padding: 0px 15px;
+    font-size: 1rem;
+    border: 1px solid #0000001f;
+    font-weight: 600;
+    outline: none;
+  }
+
+ 
+  & > button {
+    padding: 0 10px;
+    border: 0;
+    outline: none;
+    background: #3c3fd8;
+    color: white;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 15px;
+
+  } 
+
+   
+  & > button {
+  }
     width: 50%;
     @media screen and (max-width: 768px) {
         width: 100%;

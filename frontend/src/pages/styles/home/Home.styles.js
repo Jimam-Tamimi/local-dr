@@ -9,7 +9,7 @@ export const HeroWrap = styled.div`
 
 export const ColumnOne = styled(Column)`
   & > h1 {
-    font-size: 3.6rem;
+    font-size: 4.4rem;
   }
   & > * {
     margin-top: 20px;
@@ -44,7 +44,7 @@ export const ColumnTwo = styled(Column)`
   }
 `;
 export const SearchColumn = styled.form`
-  width: 90%;
+  width: 100%;
   display: flex;
   position: relative;
 

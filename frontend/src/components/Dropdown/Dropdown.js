@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
-export default function Dropdown({show, children, style}) {
-
+export default function Dropdown({show, setShow, children, style}) {
+    const dropdownRef = useRef(null)
+    useEffect(() => {
+        const toggleOpen = (e) => { 
+          if (!dropdownRef.current.contains(e.target) && show) {
+            setShow(false);
+          }
+        };
+        window.addEventListener("click", toggleOpen);
+        return () => {
+          window.removeEventListener("click", toggleOpen);
+        };
+      }, [show]);
     return (
         <>
-            <DropdownWrap style={style} show={show} >
+            <DropdownWrap ref={dropdownRef} style={style} show={show} >
                 {children}
             </DropdownWrap>
         </>
@@ -14,6 +25,8 @@ export default function Dropdown({show, children, style}) {
 
 export const DropdownWrap = styled.div`
     position: absolute;
+    z-index: 1;
+
     ${({show}) => show ? `
     opacity: 1;
     visibility: visible;    

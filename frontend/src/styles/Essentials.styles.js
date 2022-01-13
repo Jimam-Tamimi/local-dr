@@ -108,7 +108,7 @@ export const Button = styled.button`
   font-size: 1rem;
   border: 2px solid transparent;
   cursor: pointer;
-  box-shadow: 3px 3px 13px #00000075;
+  /* box-shadow: 3px 3px 13px #00000075; */
   transition: var(--main-transition);
   letter-spacing: 0.51px;
   font-weight: 700;
@@ -127,6 +127,15 @@ export const Button = styled.button`
     font-size: 1rem;
     font-weight: 600;
   `}
+  ${({xsm}) => xsm && `
+    padding: 0.25rem 0.5rem;
+    font-size: .89rem;
+    font-weight: 600;
+  `}
+  ${({shadow}) => shadow && `
+  box-shadow: none;
+    
+  `}
 `;
 
 export const ButtonLink = styled(Link)`
@@ -136,7 +145,7 @@ export const ButtonLink = styled(Link)`
   font-size: 1rem;
   border: 2px solid transparent;
   cursor: pointer;
-  box-shadow: 3px 3px 13px #00000075;
+  /* box-shadow: 3px 3px 13px #00000075; */
   transition: var(--main-transition);
   letter-spacing: 0.51px;
   font-weight: 700;
@@ -160,8 +169,7 @@ export const ButtonLink = styled(Link)`
 
 
 export const Badge = styled.span`
-  background: var(--info-color);
-  color: white;
+  background: var(--primary-color);
   padding: 0.3rem 1rem;
   font-size: .8rem;
   transition: var(--main-transition);
@@ -170,7 +178,8 @@ export const Badge = styled.span`
   border-radius: 10px;
   
   padding: 0.21rem 0.61rem;
-    border-radius: 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
 
  
 

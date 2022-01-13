@@ -83,3 +83,87 @@ export const SearchColumnNav = styled(SearchColumn)`
     font-size: 15px;
   }
 `
+
+export const SearchMobileColumn = styled.div`
+    min-height: 46px;
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid #0000001f;
+    font-weight: 600;
+    outline: none; 
+    ${Flex}
+    justify-content: flex-start;
+    padding: 5px 0px;
+    padding-left: 20px;
+    background: #f3f3f4;
+    border-radius: 6px;
+    cursor: pointer;
+  & > svg { 
+   font-size: 1.3rem;
+    margin-right: 10px;
+  }
+  & > div { 
+      ${Flex}
+      flex-direction: column;
+      align-items: flex-start;
+  }
+  & > div b { 
+   font-size: 1rem;
+   font-weight: 500;
+  }
+  & > div p { 
+   font-size: .88rem;
+    font-weight: 500;
+    color: #00234bbf;
+  }
+   
+`
+
+export const SearchModal = styled.div`
+
+width: 550px;
+    padding-top: 30px;  
+    padding-bottom: 30px;
+    @media screen and (max-width: 570px) {
+      width: 450px;
+    }
+    @media screen and (max-width: 470px) {
+      width: 350px;
+    }
+
+`
+
+
+
+export const MobileMenu = styled.div`
+   /* position: relative; */
+   
+`
+
+export const MobileMenuDiv = styled.div`
+   position: fixed;
+   bottom: 0;
+   right: 0;
+   width: 70%;
+   height: calc(100% - 100px);
+   background: white;
+   z-index: 1;
+   box-shadow: -1px 0px 8px #0000002b;
+
+    transition: var(--main-transition);
+    opacity: 0;
+    transform: translateX(100%);
+    visibility: hidden;
+
+   ${({show}) => show && `
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+
+   `}
+       display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px;
+   
+`

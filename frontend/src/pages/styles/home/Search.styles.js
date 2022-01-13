@@ -1,53 +1,83 @@
 import styled from "styled-components";
 import { SearchColumnNav } from "../../../components/Navbar/Navbar.styles";
-import { Column } from "../../../styles/Essentials.styles";
+import { Column, Flex } from "../../../styles/Essentials.styles";
 
-export const ProvidersWrap = styled('div')`
-    width: 100vw;
-    padding: 1rem 0;
+export const ProvidersWrap = styled("div")`
+  width: 100vw;
+  padding: 1rem 0;
 `;
 
 export const ProviderColumn = styled(Column)`
-    justify-content: flex-start;
-    border-top: 1px solid #0000001f;
-    padding: 20px 0px;
+  justify-content: flex-start;
+  border-top: 1px solid #0000001f;
+  padding: 20px 0px;
+  @media screen and (max-width: 615px) {
 
+    align-items: flex-start;
+
+  }
 `;
 export const LeftCol = styled.div`
-    margin-right: 40px;
-    & > img{
-        width: 100%;
-    }
-    width: 210px;
+  margin-right: 40px;
+  & > img {
+    width: 100%;
+  }
+  width: 210px;
 
-    @media screen and (max-width: 600px) {
-        margin-right: 10px;
-        &{
-            width: 150px;
-        }
-    }
+  @media screen and (max-width: 615px) {
+  margin-right: 10px;
+
+    width: 130px;
+  }
+  @media screen and (max-width: 515px) {
+    width: 100px;
+  }
 `;
 export const RightCol = styled.div`
-    width: inherit;
-    position: relative;
-    & > * {
-        margin: 3px 0px;
+  width: inherit;
+  position: relative;
+  & > * {
+    margin: 3px 0px;
+  }
+  & > a {
+    font-weight: 600;
+    text-decoration: underline;
+    position: absolute;
+    right: 0;
+    @media screen and (max-width: 715px) {
+      font-size: 0.8rem;
     }
-    & > a {
-        font-weight: 600;
-        text-decoration: underline;
-        position: absolute;
-        right: 0;
-        @media screen and (max-width: 715px) {
-            font-size: .8rem;
-
-        }
-
+  }
+  & > h2 {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-bottom: 5px;
+    @media screen and (max-width: 715px) {
+      font-size: 1.6rem;
     }
+  }
+  & > p > b {
+    font-weight: 600;
+
+    @media screen and (max-width: 715px) {
+      /* font-size: 1rem; */
+    }
+  }
+  & > button {  
+    position: absolute;
+    right: 28px;
+    bottom: -32px;
+    @media screen and (max-width: 615px) {
+      position: relative;
+      right: 0px;
+    bottom: 0px;
+    }
+  }
+ 
 `;
 
 export const SearchColumnSearch = styled.div`
-display: flex;
+  display: flex;
   position: relative;
 
   & > input {
@@ -60,12 +90,12 @@ display: flex;
     outline: none;
   }
 
- 
   & > button {
     padding: 0 10px;
     border: 0;
     outline: none;
-    background: #3c3fd8;
+    background: var(--primary-color);
+    color: var(--primary--text-color);
     color: white;
     font-size: 25px;
     display: flex;
@@ -73,15 +103,82 @@ display: flex;
     align-items: center;
     cursor: pointer;
     font-size: 15px;
+  }
 
-  } 
-
-   
   & > button {
   }
-    width: 50%;
-    @media screen and (max-width: 768px) {
-        width: 100%;
+  width: 50%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
 
+
+export const Tab = styled.div`
+  ${Flex}
+  font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 20px;
+    border: 1px solid #00234b6b;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 15px;
+`
+export const DropdownDiv = styled.form`
+  flex-direction: column;
+  ${Flex}
+  width: 150px;
+  /* height: 200px;  */
+  background: white;
+  padding: 10px 0px;
+  box-shadow: 0px 0px 9px 0px #00214654;
+  & > button {
+    position: relative;
+    left: 38px;
+    box-shadow: none;
+    /* margin: 20px 0px; */
+    margin-bottom: 15px;
+  }
+  & > hr {
+    width: 100%;
+    margin: 10px 0px;
+    border: 1px solid #0021461a;
+  }
+`
+export const DropdownOption = styled.div`
+  ${Flex}
+  justify-content: flex-start;
+  width: 100%;
+  height: 20px;
+  transition: var(--main-transition);
+  &:hover {
+    background: #00234b17;
+  }
+  padding: 14px 0px;
+  padding-left: 20px;
+  cursor: pointer;
+  & > * {
+    cursor: pointer;
+    margin-right: 12px;
+    font-weight: 600;
+  }
+`
+
+
+export const TabUnderline = styled.p`
+ font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+  position: relative;
+  padding: 10px 5px;
+    &::after {
+      background-color: var(--primary-text-color);
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 2px;
+    border-radius: 1px;
+    bottom: 0;
+    left: 0;
     }
 `

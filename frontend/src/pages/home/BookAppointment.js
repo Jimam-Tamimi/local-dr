@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { FormTitle, Input, InputDiv, Label } from '../../styles/Form.styles'
 import { Form, Wrap } from '../styles/home/BookAppointment.styles'
 import {MdOutlineEmail, MdOutlinePermIdentity} from 'react-icons/md'
+import {AiFillPhone} from 'react-icons/ai'
 
 export default function BookAppointment({match}) {
    

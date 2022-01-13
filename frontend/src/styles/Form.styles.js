@@ -33,6 +33,15 @@ export const InputDiv = styled.div`
         position: absolute;
         font-size: 20px;
         left: 13px;
+        @media screen and (max-width: 768px) {
+          top: 36.8px;
+    
+        }
+        @media screen and (max-width: 480px) {
+          font-size: 18px;
+          top: 36.6px;
+
+        }
     }
     & > input {
         padding-left: 40px;

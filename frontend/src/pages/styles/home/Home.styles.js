@@ -5,6 +5,10 @@ export const HeroWrap = styled.div`
   width: 100vw;
   padding: 130px 0px;
   background: var(--secondary-color);
+  @media only screen and (max-width: 992px) {
+  padding: 50px 0px;
+
+  }
 `;
 
 export const ColumnOne = styled(Column)`
@@ -90,6 +94,18 @@ export const SearchColumn = styled.form`
     position: absolute;
     top: 19px;
     font-size: 25px;
+  }
+  @media screen  and (max-width: 768px) {
+    & > div > svg {
+    top: 17px;
+    font-size: 23px; 
+    }
+  }
+  @media screen  and (max-width: 768px) {
+    & > div > svg {
+      top: 13px;
+
+    }
   }
   @media screen and (max-width: 992px) {
     

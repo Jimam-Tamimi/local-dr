@@ -32,6 +32,7 @@ const ModalWrap = styled.div`
   height: 100vh;
   background-color: #00000087;
   top: 0;
+  z-index: 2;
   ${Flex}
   ${({ show }) =>
     show

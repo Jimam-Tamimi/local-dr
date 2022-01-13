@@ -4,6 +4,12 @@ import { Column } from "../../styles/Essentials.styles";
 
 export const AccountWrap = styled.div`
     width: 470px;
+    @media screen  and (max-width: 500px) {
+        width: 400px;
+    }
+    @media screen  and (max-width: 420px) {
+        width: 95%;
+    }
     /* height: 500px; */
     background-color: white;
     padding: 35px;

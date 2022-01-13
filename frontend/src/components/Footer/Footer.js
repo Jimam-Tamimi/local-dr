@@ -7,13 +7,13 @@ export default function Footer() {
   return (
     <>
       <FooterWrap>
-        <Grid justify="space-between">
-          <FooterColumn>
+        <Grid justify="space-between" >
+          <FooterColumn justify="start"  sx={12} lg={8}>
             <h3>Local Doctor</h3>
-            <p><b>© 2022 Zocdoc, Inc.</b></p>
+            <p><b>© 2022 Local Doctor, Inc.</b></p>
             <Link>Home</Link>
-          </FooterColumn>
-          <FooterColumn>
+          </FooterColumn  >
+          <FooterColumn justify="end" sx={12} lg={4}>
               <Link to ="#" ><BsFacebook /></Link>
               <Link to ="#" ><BsLinkedin /></Link>
               <Link to ="#" ><BsTwitter /></Link>

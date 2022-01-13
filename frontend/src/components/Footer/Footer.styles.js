@@ -6,8 +6,18 @@ export const FooterWrap = styled.div`
   background: #000024;
   color: white;
   padding: 25px 55px;
+  position: absolute;
+  top: auto;
+  @media screen  and (max-width: 768px) {
+    padding: 10px 55px;
+
+    }
 `;
 export const FooterColumn = styled(Column)`
+    @media screen  and (max-width: 768px) {
+        justify-content: center;
+        margin: 8px 0px;
+    }
   & > * {
       transition: var(--main-transition);
     margin: 0px 10px;
@@ -18,7 +28,7 @@ export const FooterColumn = styled(Column)`
   }
   & > a > svg {
     margin: 0px 5px;
-    font-size: 22px;
+    font-size: 1.4rem;
   }
   & > a:hover {
     color: white;

@@ -6,6 +6,7 @@ import {  Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Account from "./components/Account/Account";
 import Search from "./pages/home/Search";
+import BookAppointment from "./pages/home/BookAppointment";
  
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <GuestRoute>
           <Route exact path='/'  component={Home} />
           <Route exact path='/search/'  component={Search} />
+          <Route exact path='/doctor/:id/'  component={BookAppointment} />
           <Route path='/' component={Account} />
         </GuestRoute>
       </Layout>

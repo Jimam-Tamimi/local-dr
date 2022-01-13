@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { Button, Grid } from "../../styles/Essentials.styles";
-import { Input, InputDiv, Label } from "../../styles/Form.styles";
+import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import Modal from "../Modal/Modal";
 import {
   AccountWrap,
@@ -31,12 +31,12 @@ export default function Account() {
 
   return (
     <>
-      <Modal setShow={setShowModal} show={showModal}>
+      <Modal zoom setShow={setShowModal} show={showModal}>
         <AccountWrap>
           <Grid direction="column">
             {form === "login" ? (
                 <LoginForm>
-                  <h3>Enter Email And Password to Login</h3>
+                  <FormTitle>Enter Email And Password to Login</FormTitle>
                 <InputDiv>
                   <Label>Enter Your Email</Label>
                   <Input
@@ -63,7 +63,7 @@ export default function Account() {
             ) : (
               form === "signUp" && (
                 <SignupForm>
-                  <h3>Enter Email And Password and Create Account</h3>
+                  <FormTitle>Enter Email And Password and Create Account</FormTitle>
 
                   <InputDiv>
                     <Label>Enter Your Email</Label>

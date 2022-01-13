@@ -13,3 +13,7 @@ export const Form = styled.form`
     height: 800px;
     background-color: #f7f8f9;
 `
+export const Time = styled.b`
+        padding: 60px;
+
+`

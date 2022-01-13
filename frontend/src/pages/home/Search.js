@@ -31,6 +31,16 @@ import { SearchColumnNav } from "../../components/Navbar/Navbar.styles";
 import { Input } from "../../styles/Form.styles";
 import InfiniteScroll from "react-infinite-scroll-component";
 import SyncLoader from "react-spinners/SyncLoader";
+import { Eventcalendar } from '@mobiscroll/react'; /* or import any other component */
+import { Datepicker, Page, setOptions } from '@mobiscroll/react';
+
+import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+
+setOptions({
+  theme: 'ios',
+  themeVariant: 'light'
+});
+
 export default function Search() {
   const [providers, setProviders] = useState([
     demoDr,

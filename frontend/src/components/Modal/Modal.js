@@ -6,7 +6,10 @@ export default function Modal({show, setShow, children}) {
     const modalRef = useRef(null)
     useEffect(() => {
         const toggleOpen = (e) => {
-            if (!modalRef.current?.contains(e.target) && show) {
+            
+            console.log(modalRef.current.contains(e.target))
+            console.log(modalRef.current)
+            if (!modalRef.current.contains(e.target) && show) {
             setShow(false);
           } 
         };

@@ -7,6 +7,8 @@ export const AccountWrap = styled.div`
     /* height: 500px; */
     background-color: white;
     padding: 35px;
+    padding-bottom: 15px;
+    border-radius: 5px;
 `
 
 export const ColumnTab = styled(Column)`
@@ -28,8 +30,12 @@ transition: var(--main-transition);
 const Form = styled.form`
     width: 100%;
 
+    & > h3 {
+        font-size: 1.6rem;
+    }
 `
 export const LoginForm = styled(Form)`
+
 
 `
 export const SignupForm = styled(Form)`

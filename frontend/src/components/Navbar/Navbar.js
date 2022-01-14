@@ -148,12 +148,23 @@ export default function Navbar() {
                     </DropdownDiv>
                   </Dropdown>
                 </Account>) : (
-                <ButtonLink to="?show-account=true">Login/Signup</ButtonLink>
+
+                <Link to="?show-account=true"><Account>
+                  <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
+                    <p style={{textDecoration: 'underline', fontWeight: 600}}>Login/Signup</p>
+                  </Menu>
+                  
+                </Account></Link>
               ):
               <MobileMenu>
                 <GiHamburgerMenu onClick={e => setShowNav(!showNav)} style={{fontSize: "28px" ,color: "var(--primary-text-color)", cursor: "pointer", }} />
                 <MobileMenuDiv ref={navRef} show={showNav} >
-                  <ButtonLink to="?show-account=true">Login/Signup</ButtonLink>
+                <Link to="?show-account=true"><Account>
+                  <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
+                    <p style={{textDecoration: 'underline', fontWeight: 600}}>Login/Signup</p>
+                  </Menu>
+                  
+                </Account></Link>
                 </MobileMenuDiv>
               </MobileMenu>
 

@@ -29,7 +29,21 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
-    
+    <style>
+      .react-calendar{
+        width: 100% !important;
+      } 
+      .mbsc-ios.mbsc-selected .mbsc-calendar-cell-text {
+        border-color: #000024 !important;
+        background: #000024 !important;
+      }
+      .mbsc-calendar-button > span{
+        color: #000024;
+        font-weight: 700;
+
+      }
+      
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -44,5 +58,7 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTLGaTW3tW7Ky_cB1X05UZ7pbfrSalTcg&libraries=places,drawing&callback=initMap"></script> 
+
   </body>
 </html>

@@ -5,6 +5,15 @@ import { Column, Flex } from "../../../styles/Essentials.styles";
 export const ProvidersWrap = styled("div")`
   width: 100vw;
   padding: 1rem 0;
+  padding-left: 30px;
+  ${Flex}
+  justify-content: space-between;
+  position: relative;
+  align-items: flex-start;
+  @media screen and (max-width: 830px) {
+  padding: 0px 0;
+
+}
 `;
 
 export const ProviderColumn = styled(Column)`
@@ -62,6 +71,18 @@ export const RightCol = styled.div`
     @media screen and (max-width: 715px) {
       /* font-size: 1rem; */
     }
+  }
+  & > p.consultation {
+    ${Flex}
+    justify-content: start;
+    color: #00569e;
+    text-decoration: underline;
+    margin: 10px 0px;
+  }
+  & > p.consultation >svg {
+    color: rgb(15, 157, 239) !important;
+    margin-right: 5px;
+
   }
   & > button {  
     position: absolute;
@@ -171,14 +192,29 @@ export const TabUnderline = styled.p`
     cursor: pointer;
   position: relative;
   padding: 10px 5px;
-    &::after {
-      background-color: var(--primary-text-color);
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 2px;
-    border-radius: 1px;
-    bottom: 0;
-    left: 0;
-    }
+  margin-right: 10px;
+
+  &::after {
+    transition: var(--main-transition);
+    background-color: var(--primary-text-color);
+  position: absolute;
+  content: '';
+  width: 0%;
+  height: 2px;
+  border-radius: 1px;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  }
+  ${({activeTab}) => activeTab && `
+  &::after {
+  width: 100%;
+     
+  opacity: 1;
+  
+  }
+
+
+  `}
+
 `

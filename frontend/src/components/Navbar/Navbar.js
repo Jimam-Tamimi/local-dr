@@ -84,7 +84,7 @@ export default function Navbar() {
 
   return (
     <>
-      <NavWrap className={location.pathname === "/" && "bg-color"}>
+      <NavWrap data-aos="fade-in" className={location.pathname === "/" && "bg-color"}>
         <Container>
           <Grid wrap="no-wrap" justify="space-between" >
             {

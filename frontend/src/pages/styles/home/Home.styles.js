@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { Column } from "../../../styles/Essentials.styles";
+import styled, { keyframes } from 'styled-components'; 
 
 export const HeroWrap = styled.div`
   width: 100vw;

@@ -54,12 +54,14 @@ padding: 30px 0px;
 `;
 
 const ModalDiv = styled.div`
-  min-height: 200px;
+  min-height: calc(100vh - 60px);
   min-width: 100px;
   width: auto;
   height: auto;
   transition: var(--main-transition);
-
+  align-items: center;
+    justify-content: center;
+    display: flex;
   ${({ show, zoom }) =>
     show
       ? `

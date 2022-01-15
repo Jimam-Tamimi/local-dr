@@ -6,7 +6,7 @@ import {BsFacebook, BsInstagram, BsLinkedin, BsTwitter} from 'react-icons/bs';
 export default function Footer() {
   return (
     <>
-      <FooterWrap>
+      <FooterWrap >
         <Grid justify="space-between" >
           <FooterColumn justify="start"  sx={12} lg={8}>
             <h3>Local Doctor</h3>

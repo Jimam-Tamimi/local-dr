@@ -24,6 +24,17 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoLocationSharp } from "react-icons/io5";
+
+import TextTransition, { presets } from "react-text-transition";
+
+const TEXTS = [
+  "Doctor",
+  "Dentist",
+  "Psychologist",
+  "Dermatologist",
+];
+
+
 export default function Home() {
   const [changeSearch, setChangeSearch] = useState(
     window.innerWidth > 992 ? false : true
@@ -33,40 +44,50 @@ export default function Home() {
       setChangeSearch(window.innerWidth > 992 ? false : true);
     });
   }, []);
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() =>
+      setIndex(index => index + 1),
+      2500
+    );
+    return () => clearTimeout(intervalId);
+  }, []);
   return (
     <>
-      <HeroWrap>
+      <HeroWrap data-aos="fade-in">
         <Container>
           <Grid>
-            <ColumnOne direction="column" lg={8} sm={12} align="start">
-              <h1>
-                Find local OB-GYNs <br /> who take your insurance
+            <ColumnOne data-aos="fade-right" direction="column" lg={8} sm={12} align="start">
+              <h1 >
+                Find local <TextTransition inline={true} text={TEXTS[index % TEXTS.length]} springConfig={presets.default}/>s <br /> who take your insurance       
               </h1>
               <SearchColumn>
                 <div
-                style={{
-                  width: "60%",
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
-                  borderRight: "2px solid #0000001f",
-                }}
+                  style={{
+                    width: "60%",
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                    borderRight: "2px solid #0000001f",
+                  }}
                 >
                   <AiOutlineSearch />
                   <input
-                    
+
                     type="text"
                     placeholder={`Search For Doctor or Hospital`}
                   />
                 </div>
 
-                <div 
-                    style={{
-                      width: "40%",
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0,
-                    }}
-                    >
-                <IoLocationSharp />
+                <div
+                  style={{
+                    width: "40%",
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                  }}
+                >
+                  <IoLocationSharp />
 
                   <input
                     type="text"
@@ -77,7 +98,7 @@ export default function Home() {
                 <button>{changeSearch ? "Find Care" : <FaSearch />}</button>
               </SearchColumn>
             </ColumnOne>
-            <ColumnTwo sm={0} lg={4}>
+            <ColumnTwo data-aos="fade-left" sm={0} lg={4}>
               <img src={hero} alt="hero" />
             </ColumnTwo>
           </Grid>
@@ -87,8 +108,8 @@ export default function Home() {
       <FeatureWrap>
         <SmallContainer>
           <Grid direction="column">
-            <HeadingColumn direction="column" lg={12}>
-              <h1>
+            <HeadingColumn data-aos="zoom-in" direction="column" lg={12}>
+              <h1 >
                 DISCOVER THE <b>ONLINE</b> APPOINTMENT!
               </h1>
               <p>
@@ -99,6 +120,7 @@ export default function Home() {
             </HeadingColumn>
             <BoxColumn wrap="wrap" lg={12}>
               <FeatureBox
+                data-aos="fade-right"
                 direction="column"
                 lg={4}
                 sm={6}
@@ -113,6 +135,8 @@ export default function Home() {
                 </p>
               </FeatureBox>
               <FeatureBox
+                data-aos="fade-in"
+
                 direction="column"
                 lg={4}
                 sm={6}
@@ -127,6 +151,8 @@ export default function Home() {
                 </p>
               </FeatureBox>
               <FeatureBox
+                data-aos="fade-left"
+
                 direction="column"
                 lg={4}
                 sm={6}

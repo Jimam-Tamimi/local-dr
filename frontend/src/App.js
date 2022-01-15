@@ -11,8 +11,14 @@ import Index from "./pages/admin/Index";
 import AdminLayout from "./hoc/admin/AdminLayout";
 import AdminRoute from "./hoc/admin/AdminRoute";
 import Hospitals from "./pages/admin/Hospitals";
- 
+import AOS from 'aos'
+import 'aos/dist/aos.css'; // You can also use <link> for styles
+
+import { useEffect } from "react";
 function App() {
+  useEffect(() => {
+    AOS.init({once: true,})
+  }, [])
   return (
 
     <> 

@@ -1,14 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux' 
 import { Redirect, Route } from 'react-router-dom'
-import { AccountWrap, LoginForm } from '../components/Account/Account.styles'
-import { Button, Grid } from '../styles/Essentials.styles'
-import { FormTitle, Input, InputDiv, Label } from '../styles/Form.styles'
-
-export default function PrivateRoute({children}) {
+import { AccountWrap, LoginForm } from '../../components/Account/Account.styles'
+import { Button, Grid } from '../../styles/Essentials.styles'
+import { FormTitle, Input, InputDiv, Label } from '../../styles/Form.styles'
+export default function AdminRoute({children}) {
     const auth = useSelector(state => state.auth)
 
-    if(auth.isAuthenticated){            
+    if(true){            
         return (
             <>
             {children}
@@ -24,6 +23,9 @@ export default function PrivateRoute({children}) {
         )
     }
 }
+
+
+
 
 
 

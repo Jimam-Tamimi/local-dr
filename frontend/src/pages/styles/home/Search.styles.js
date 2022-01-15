@@ -11,9 +11,8 @@ export const ProvidersWrap = styled("div")`
   position: relative;
   align-items: flex-start;
   @media screen and (max-width: 830px) {
-  padding: 0px 0;
-
-}
+    padding: 0px 0;
+  }
 `;
 
 export const ProviderColumn = styled(Column)`
@@ -21,9 +20,7 @@ export const ProviderColumn = styled(Column)`
   border-top: 1px solid #0000001f;
   padding: 20px 0px;
   @media screen and (max-width: 615px) {
-
     align-items: flex-start;
-
   }
 `;
 export const LeftCol = styled.div`
@@ -34,7 +31,7 @@ export const LeftCol = styled.div`
   width: 210px;
 
   @media screen and (max-width: 615px) {
-  margin-right: 10px;
+    margin-right: 10px;
 
     width: 130px;
   }
@@ -79,22 +76,20 @@ export const RightCol = styled.div`
     text-decoration: underline;
     margin: 10px 0px;
   }
-  & > p.consultation >svg {
+  & > p.consultation > svg {
     color: rgb(15, 157, 239) !important;
     margin-right: 5px;
-
   }
-  & > button {  
+  & > button {
     position: absolute;
     right: 28px;
     bottom: -32px;
     @media screen and (max-width: 615px) {
       position: relative;
       right: 0px;
-    bottom: 0px;
+      bottom: 0px;
     }
   }
- 
 `;
 
 export const SearchColumnSearch = styled.div`
@@ -134,17 +129,16 @@ export const SearchColumnSearch = styled.div`
   }
 `;
 
-
 export const Tab = styled.div`
   ${Flex}
   font-size: 1rem;
-    font-weight: 600;
-    padding: 8px 20px;
-    border: 1px solid #00234b6b;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-right: 15px;
-`
+  font-weight: 600;
+  padding: 8px 20px;
+  border: 1px solid #00234b6b;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-right: 15px;
+`;
 export const DropdownDiv = styled.form`
   flex-direction: column;
   ${Flex}
@@ -165,7 +159,7 @@ export const DropdownDiv = styled.form`
     margin: 10px 0px;
     border: 1px solid #0021461a;
   }
-`
+`;
 export const DropdownOption = styled.div`
   ${Flex}
   justify-content: flex-start;
@@ -183,13 +177,12 @@ export const DropdownOption = styled.div`
     margin-right: 12px;
     font-weight: 600;
   }
-`
-
+`;
 
 export const TabUnderline = styled.p`
- font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
   position: relative;
   padding: 10px 5px;
   margin-right: 10px;
@@ -197,16 +190,18 @@ export const TabUnderline = styled.p`
   &::after {
     transition: var(--main-transition);
     background-color: var(--primary-text-color);
-  position: absolute;
-  content: '';
-  width: 0%;
-  height: 2px;
-  border-radius: 1px;
-  bottom: 0;
-  left: 0;
-  opacity: 0;
+    position: absolute;
+    content: "";
+    width: 0%;
+    height: 2px;
+    border-radius: 1px;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
   }
-  ${({activeTab}) => activeTab && `
+  ${({ activeTab }) =>
+    activeTab &&
+    `
   &::after {
   width: 100%;
      
@@ -216,5 +211,12 @@ export const TabUnderline = styled.p`
 
 
   `}
+`;
 
-`
+export const ProviderHeading = styled.h1`
+  color: var(--primary-text-color);
+  text-align: start;
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 5px;
+`;

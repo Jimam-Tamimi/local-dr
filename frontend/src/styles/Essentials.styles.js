@@ -16,6 +16,7 @@ export const Wrapper = styled.div`
 
 export const Column = styled.div`
   display: flex;
+  width: 100%;
   ${Flex}
   @media screen and (min-width: 1200px) {
     ${({ lg, md, sm, sx, selfSpacing = 0 }) =>
@@ -136,6 +137,10 @@ export const Button = styled.button`
   box-shadow: none;
     
   `}
+    ${({green}) => green && `
+    background: #39b27c;
+    color: #fff;
+  `}
 `;
 
 export const ButtonLink = styled(Link)`
@@ -163,6 +168,10 @@ export const ButtonLink = styled(Link)`
     padding: 0.35rem 0.6rem;
     font-size: 1rem;
     font-weight: 600;
+  `}
+  ${({green}) => green && `
+    background: #39b27c;
+    color: #fff;
   `}
 `;
 

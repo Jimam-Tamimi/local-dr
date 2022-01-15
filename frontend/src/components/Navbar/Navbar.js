@@ -71,7 +71,7 @@ export default function Navbar() {
 
   const navRef = useRef(null);
   useEffect(() => {
-    const toggleOpen = (e) => { 
+    const toggleOpen = (e) => {
       if (!navRef.current.contains(e.target) && showNav) {
         setShowNav(false);
       }
@@ -80,8 +80,8 @@ export default function Navbar() {
     return () => {
       window.removeEventListener("click", toggleOpen);
     };
-  }, [showNav ]);
-  
+  }, [showNav]);
+
   return (
     <>
       <NavWrap className={location.pathname === "/" && "bg-color"}>
@@ -94,6 +94,23 @@ export default function Navbar() {
                   <img src={logo} />
                 </Link>
               </Column>
+            }
+            {
+              !showSearch &&
+              <Column justify="start" sx={2} >
+              <MobileMenu>
+                <GiHamburgerMenu onClick={e => setShowNav(!showNav)} style={{ fontSize: "28px", color: "var(--primary-text-color)", cursor: "pointer", }} />
+                <MobileMenuDiv ref={navRef} show={showNav} >
+                  <Link to="?show-account=true"><Account>
+                    <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
+                      <p style={{ textDecoration: 'underline', fontWeight: 600 }}>Login/Signup</p>
+                    </Menu>
+
+                  </Account></Link>
+                </MobileMenuDiv>
+              </MobileMenu>
+              </Column>
+
             }
             {
               showSearch ? location.pathname !== "/" &&
@@ -133,10 +150,10 @@ export default function Navbar() {
                 </SearchMobileColumn>
             }
 
-            <Column justify="end" lg={2} sm={2} sx={2} spacing={10}>
+            {showSearch ?
+              <Column justify="end" lg={2} sm={2} sx={2} spacing={10}>
 
-              {showSearch ?
-               auth.isAuthenticated ? (
+                {auth.isAuthenticated ? (
                 <Account>
                   <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
                     <p>Account</p>
@@ -151,26 +168,14 @@ export default function Navbar() {
 
                 <Link to="?show-account=true"><Account>
                   <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
-                    <p style={{textDecoration: 'underline', fontWeight: 600}}>Login/Signup</p>
+                    <p style={{ textDecoration: 'underline', fontWeight: 600 }}>Login/Signup</p>
                   </Menu>
-                  
-                </Account></Link>
-              ):
-              <MobileMenu>
-                <GiHamburgerMenu onClick={e => setShowNav(!showNav)} style={{fontSize: "28px" ,color: "var(--primary-text-color)", cursor: "pointer", }} />
-                <MobileMenuDiv ref={navRef} show={showNav} >
-                <Link to="?show-account=true"><Account>
-                  <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
-                    <p style={{textDecoration: 'underline', fontWeight: 600}}>Login/Signup</p>
-                  </Menu>
-                  
-                </Account></Link>
-                </MobileMenuDiv>
-              </MobileMenu>
 
+                </Account></Link> )}
+
+
+              </Column> :''
               }
-              
-            </Column>
           </Grid>
         </Container>
       </NavWrap>

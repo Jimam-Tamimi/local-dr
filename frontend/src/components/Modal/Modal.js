@@ -32,6 +32,9 @@ const ModalWrap = styled.div`
   height: 100vh;
   background-color: #00000087;
   top: 0;
+  left: 0;
+  overflow-y: scroll;
+
   z-index: 2;
   ${Flex}
   ${({ show }) =>
@@ -45,6 +48,9 @@ const ModalWrap = styled.div`
     visibility: hidden;
     `}
     transition: var(--main-transition);
+    align-items: flex-start;
+
+padding: 30px 0px;
 `;
 
 const ModalDiv = styled.div`

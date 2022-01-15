@@ -3,7 +3,7 @@ import { SearchColumn } from '../../pages/styles/home/Home.styles';
 import { Flex } from '../../styles/Essentials.styles';
 
 
-export const NavWrap = styled.div`
+export const NavWrap = styled.header`
     ${Flex}
     width: 100vw;
     height: 100px;

@@ -29,11 +29,11 @@ export default function BookAppointment({ match }) {
                 hour++;
                 minute = 0;
             }
-            if (hour === 12) {
-                break;
-            }
             tempTimes.push(`${hour}:${minute} AM`)
             console.log(`${hour}:${minute} AM`);
+            if (hour === 11 && minute === 30) {
+                break;
+            }
             minute = minute + 10;
         }
         setTimes(tempTimes)
@@ -72,7 +72,7 @@ export default function BookAppointment({ match }) {
                         <Input placeholder='Number' name='number' />
                     </InputDiv>
                     <InputDiv>
-                        <Label>Date</Label> 
+                        <Label>Date</Label>
                         <Datepicker
                             controls={['calendar']}
                             display="inline"

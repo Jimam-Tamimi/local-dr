@@ -12,6 +12,7 @@ import {
   DropdownOption,
   LeftCol,
   ProviderColumn,
+  ProviderHeading,
   ProvidersWrap,
   RightCol,
   SearchColumnSearch,
@@ -65,6 +66,9 @@ export default function Search() {
   const [showButton, setShowButton] = useState(
     window.innerWidth > 615 ? true : false
   );
+  const [showMap, setShowMap] = useState(
+    window.innerWidth > 768 ? true : false
+  );
   const [showDistance, setShowDistance] = useState(false)
   const [showSpeciality, setShowSpeciality] = useState(false)
   const [showAvailablaity, setShowAvailablaity] = useState(false)
@@ -81,6 +85,11 @@ export default function Search() {
         setShowButton(true);
       } else {
         setShowButton(false);
+      }
+      if (window.innerWidth > 768) {
+        setShowMap(true);
+      } else {
+        setShowMap(false);
       }
     });
   }, [showSearch]);
@@ -101,7 +110,7 @@ export default function Search() {
   return (
     <>
       <ProvidersWrap >
-        <Column direction="column" lg={8}>
+        <Column direction="column" lg={8} sx={12}>
           <Grid justify="space-between" lg={6}>
             <Column style={{ margin: "20px 0px" }} justify="flex-start" lg={12}>
               <TabUnderline activeTab={activeTab === 1} onClick={e => setActiveTab(1)}>All Appointment</TabUnderline>
@@ -162,6 +171,9 @@ export default function Search() {
                 </Dropdown>
               </div>
             </Column>
+            <Column>
+              <ProviderHeading>772 providers</ProviderHeading>
+            </Column>
           </Grid>
 
           <Grid justify="center" align="center" lg={12} direction="column">
@@ -221,22 +233,26 @@ export default function Search() {
             </InfiniteScroll>
           </Grid>
         </Column>
-        <Column lg={4} style={{ position: "sticky", right: 0, top: 0, height: "calc(100vh)" }}>
-          <Map
-            coords={{ lat: 40.730610, lng: -73.935242 }}
-            isMarkerShown
-            googleMapURL=" "
-            loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
-            containerElement={<div style={{ height: `100%`, width: "100%" }} />}
-            mapElement={<div style={{ height: `100%`, width: "100%" }} />}
-            defaultZoom={14}
-          >
-            {
-              providers.map(({ cords }, i) => (<Marker size="20px" icon={cords === activeProvider ? { url: activeLocationSvg, scaledSize: new window.google.maps.Size(35, 35) } : { url: locationSvg, scaledSize: new window.google.maps.Size(35, 35) }} key={i} position={cords} />))
+        {
+          showMap && (
+            <Column lg={4} sx={0} style={{ position: "sticky", right: 0, top: 0, height: "calc(100vh)" }}>
+              <Map
+                coords={{ lat: 40.730610, lng: -73.935242 }}
+                isMarkerShown
+                googleMapURL=" "
+                loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
+                containerElement={<div style={{ height: `100%`, width: "100%" }} />}
+                mapElement={<div style={{ height: `100%`, width: "100%" }} />}
+                defaultZoom={14}
+              >
+                {
+                  providers.map(({ cords }, i) => (<Marker size="20px" icon={cords === activeProvider ? { url: activeLocationSvg, scaledSize: new window.google.maps.Size(35, 35) } : { url: locationSvg, scaledSize: new window.google.maps.Size(35, 35) }} key={i} position={cords} />))
 
-            }
-          </Map>
-        </Column>
+                }
+              </Map>
+            </Column>
+              )
+          }
       </ProvidersWrap>
     </>
   );

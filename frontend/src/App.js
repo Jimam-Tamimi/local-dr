@@ -17,7 +17,7 @@ import 'aos/dist/aos.css'; // You can also use <link> for styles
 import { useEffect } from "react";
 function App() {
   useEffect(() => {
-    AOS.init({once: true,})
+    AOS.init({once: true, duration: 1000});
   }, [])
   return (
 

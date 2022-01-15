@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Flex } from "../../styles/Essentials.styles";
 
-export default function Modal({ show, setShow, children, zoom }) {
+export default function Modal({ show, setShow, children, zoom, style }) {
   const modalRef = useRef(null);
   useEffect(() => {
     const toggleOpen = (e) => { 
@@ -17,7 +17,7 @@ export default function Modal({ show, setShow, children, zoom }) {
   }, [show]);
   return (
     <>
-      <ModalWrap show={show}>
+      <ModalWrap style={style} show={show}>
         <ModalDiv zoom={zoom} show={show} ref={modalRef}>
           {children}
         </ModalDiv>
@@ -48,13 +48,11 @@ const ModalWrap = styled.div`
     visibility: hidden;
     `}
     transition: var(--main-transition);
-    align-items: flex-start;
 
 padding: 30px 0px;
 `;
 
 const ModalDiv = styled.div`
-  min-height: calc(100vh - 60px);
   min-width: 100px;
   width: auto;
   height: auto;

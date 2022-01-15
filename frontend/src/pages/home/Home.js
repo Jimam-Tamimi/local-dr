@@ -26,6 +26,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { IoLocationSharp } from "react-icons/io5";
 
 import TextTransition, { presets } from "react-text-transition";
+import { MdFolderSpecial } from "react-icons/md";
 
 const TEXTS = [
   "Doctor",
@@ -66,7 +67,7 @@ export default function Home() {
               <SearchColumn>
                 <div
                   style={{
-                    width: "60%",
+                    width: "50%",
                     borderTopRightRadius: 0,
                     borderBottomRightRadius: 0,
                     borderRight: "2px solid #0000001f",
@@ -82,12 +83,28 @@ export default function Home() {
 
                 <div
                   style={{
-                    width: "40%",
+                    width: "30%",
+                    borderTopLeftRadius: 0,
+                    borderBottomLeftRadius: 0,
+                    borderRight: "2px solid #0000001f",
+
+                  }}
+                >
+                  <IoLocationSharp />
+
+                  <input
+                    type="text"
+                    placeholder="My Location"
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "20%",
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
                   }}
                 >
-                  <IoLocationSharp />
+                  <MdFolderSpecial />
 
                   <input
                     type="text"

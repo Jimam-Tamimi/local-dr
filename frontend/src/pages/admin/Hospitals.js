@@ -115,7 +115,7 @@ export default function Hospitals() {
         </Table>
       </Grid>
 
-      <Modal zoom show={showHospitalForm} setShow={setShowHospitalForm}>
+      <Modal style={{    alignItems: "flex-start"}} zoom show={showHospitalForm} setShow={setShowHospitalForm}>
         <HospitalsForm />
       </Modal>
     </>

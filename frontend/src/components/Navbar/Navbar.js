@@ -84,9 +84,9 @@ export default function Navbar() {
 
   return (
     <>
-      <NavWrap data-aos="fade-in" className={location.pathname === "/" && "bg-color"}>
+      <NavWrap  className={location.pathname === "/" && "bg-color"}>
         <Container>
-          <Grid wrap="no-wrap" justify="space-between" >
+          <Grid wrap="no-wrap" justify={!showSearch && location.pathname ==='/' ? `flex-end`: 'space-between'}  >
             {
               showSearch &&
               <Column justify="start" lg={2} sm={0} >
@@ -96,8 +96,8 @@ export default function Navbar() {
               </Column>
             }
             {
-              !showSearch &&
-              <Column justify="start" sx={2} >
+              !showSearch  &&
+              <Column justify={!showSearch && location.pathname ==='/' ? `flex-end`: 'start'}  sx={2} >
               <MobileMenu>
                 <GiHamburgerMenu onClick={e => setShowNav(!showNav)} style={{ fontSize: "28px", color: "var(--primary-text-color)", cursor: "pointer", }} />
                 <MobileMenuDiv ref={navRef} show={showNav} >
@@ -113,7 +113,9 @@ export default function Navbar() {
 
             }
             {
-              showSearch ? location.pathname !== "/" &&
+              location.pathname !== "/" &&(
+
+              showSearch  ?
                 <Column justify="start" lg={8} sm={3} spacing={10}>
                   <SearchColumnNav>
                     <input
@@ -148,6 +150,8 @@ export default function Navbar() {
                     <p>Place</p>
                   </div>
                 </SearchMobileColumn>
+              )
+
             }
 
             {showSearch ?

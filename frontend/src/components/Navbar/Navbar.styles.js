@@ -7,7 +7,7 @@ export const NavWrap = styled.header`
     ${Flex}
     width: 100vw;
     height: 100px;
-    border-bottom: 2px solid #0000001f;
+    /* border-bottom: 2px solid #0000001f; */
     &.bg-color{
        background: var(--secondary-color);
     }
@@ -26,6 +26,7 @@ export const Account = styled.div`
 
 export const Menu = styled.div`
  ${Flex}
+ margin: 5px 0px;
  & > p {
     font-size: 1.1rem;
     font-weight: 700;
@@ -142,28 +143,27 @@ export const MobileMenu = styled.div`
 
 export const MobileMenuDiv = styled.div`
    position: fixed;
-   bottom: 0;
-   right: 0;
-   width: 70%;
-   height: calc(100% - 100px);
    background: white;
    z-index: 1;
    box-shadow: -1px 0px 8px #0000002b;
 
     transition: var(--main-transition);
-    opacity: 0;
-    transform: translateX(100%);
+    opacity: 0; 
     visibility: hidden;
 
+    width: 100%;
+    top: 0;
+    min-height: 100px;
+    justify-content: center;
+    left: 0;
+
    ${({show}) => show && `
-    transform: translateX(0);
     opacity: 1;
     visibility: visible;
 
    `}
        display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
+    align-items: center;
     padding: 20px;
    
 `

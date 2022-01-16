@@ -36,6 +36,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import SyncLoader from "react-spinners/SyncLoader";
 import { BsShieldFillPlus } from 'react-icons/bs'
 import { IoLocationSharp } from 'react-icons/io5'
+import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { Datepicker, Page, setOptions } from '@mobiscroll/react';
 import { Marker } from "react-google-maps";
 
@@ -120,8 +121,8 @@ export default function Search() {
 
             <Column justify="start" lg={12} sx={12} style={{ width: "100%" }}>
               <div style={{ position: 'relative', }}>
-                <Tab onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
-                <Dropdown show={showAvailablaity} setShow={setShowAvailablaity}>
+                <Tab  onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
+                <Dropdown style={{left: '10px'}} show={showAvailablaity} setShow={setShowAvailablaity}>
                   <DropdownDiv>
                     <DropdownOption>
                       <input value="10" id="d-10" name="distance" type={'radio'} />
@@ -199,14 +200,14 @@ export default function Search() {
                       <img src={img} />
                     </LeftCol>
                     <RightCol>
-                      <Badge style={{}}>Available</Badge>
+                      {/* <Badge style={{}}>Available</Badge> */}
                       <h2>Dr. Anuradha Kottapalli, MD</h2>
                       <p>
                         <b>Primary Care Doctor</b>
                       </p>
                       <p>Mount Sinai Doctors Health Quarteres NoHo</p>
                       <p>632 Broadway, Ste A</p>
-                      <p className="consultation"><BsShieldFillPlus />Consultation charges may vary</p>
+                      <p className="consultation"><RiMoneyDollarCircleFill style={{fontSize: '1.4rem'}} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
                         <Button style={{ boxShadow: "none" }} sm>
@@ -235,22 +236,23 @@ export default function Search() {
         </Column>
         {
           showMap && (
-            <Column lg={4} sx={0} style={{ position: "sticky", right: 0, top: 0, height: "calc(100vh)" }}>
-              <Map
-                coords={{ lat: 40.730610, lng: -73.935242 }}
-                isMarkerShown
-                googleMapURL=" "
-                loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
-                containerElement={<div style={{ height: `100%`, width: "100%" }} />}
-                mapElement={<div style={{ height: `100%`, width: "100%" }} />}
-                defaultZoom={14}
-              >
-                {
-                  providers.map(({ cords }, i) => (<Marker size="20px" icon={cords === activeProvider ? { url: activeLocationSvg, scaledSize: new window.google.maps.Size(35, 35) } : { url: locationSvg, scaledSize: new window.google.maps.Size(35, 35) }} key={i} position={cords} />))
+            <></>
+            // <Column lg={4} sx={0} style={{ position: "sticky", right: 0, top: 0, height: "calc(100vh)" }}>
+            //   <Map
+            //     coords={{ lat: 40.730610, lng: -73.935242 }}
+            //     isMarkerShown
+            //     googleMapURL=" "
+            //     loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
+            //     containerElement={<div style={{ height: `100%`, width: "100%" }} />}
+            //     mapElement={<div style={{ height: `100%`, width: "100%" }} />}
+            //     defaultZoom={14}
+            //   >
+            //     {
+            //       providers.map(({ cords }, i) => (<Marker size="20px" icon={cords === activeProvider ? { url: activeLocationSvg, scaledSize: new window.google.maps.Size(35, 35) } : { url: locationSvg, scaledSize: new window.google.maps.Size(35, 35) }} key={i} position={cords} />))
 
-                }
-              </Map>
-            </Column>
+            //     }
+            //   </Map>
+            // </Column>
               )
           }
       </ProvidersWrap>

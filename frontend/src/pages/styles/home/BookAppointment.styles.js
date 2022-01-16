@@ -7,10 +7,10 @@ export const Wrap = styled.div`
 `;
 
 export const Form = styled.form`
-  width: 500px;
+  width: 600px;
   padding: 30px;
-  height: 800px;
-  background-color: #f7f8f9;
+  padding-top: 0px;
+  height: 800px; 
 `;
 export const TimeColumn = styled(Column)`
   background: white;

@@ -3,6 +3,7 @@ import {GoogleMap, withScriptjs, withGoogleMap,   Marker, InfoWindow } from "rea
 
 export default withScriptjs(withGoogleMap(function Map({children, coords, setCoords, setBounds, click, defaultZoom}) {
     return (
+        
         <>
             <GoogleMap
                 defaultCenter={coords} 

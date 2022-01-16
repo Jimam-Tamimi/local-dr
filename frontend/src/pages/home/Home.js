@@ -27,6 +27,7 @@ import { IoLocationSharp } from "react-icons/io5";
 
 import TextTransition, { presets } from "react-text-transition";
 import { MdFolderSpecial } from "react-icons/md";
+import { RiProfileLine } from "react-icons/ri";
 
 const TEXTS = [
   "Doctor",
@@ -60,9 +61,9 @@ export default function Home() {
       <HeroWrap data-aos="fade-in">
         <Container>
           <Grid>
-            <ColumnOne data-aos="fade-right" direction="column" lg={8} sm={12} align="start">
+            <ColumnOne data-aos="fade-right" direction="column" lg={12} sm={12} align="start">
               <h1 >
-                Find local <TextTransition inline={true} text={TEXTS[index % TEXTS.length]} springConfig={presets.default}/>s <br /> who take your insurance       
+                Find local <TextTransition inline={true} text={TEXTS[index % TEXTS.length]} springConfig={presets.default}/>s <br /> in your place       
               </h1>
               <SearchColumn>
                 <div
@@ -104,20 +105,17 @@ export default function Home() {
                     borderBottomLeftRadius: 0,
                   }}
                 >
-                  <MdFolderSpecial />
+                  <RiProfileLine />
 
                   <input
                     type="text"
-                    placeholder="My Location"
+                    placeholder="Speciality"
                   />
                 </div>
 
                 <button>{changeSearch ? "Find Care" : <FaSearch />}</button>
               </SearchColumn>
             </ColumnOne>
-            <ColumnTwo data-aos="fade-left" sm={0} lg={4}>
-              <img src={hero} alt="hero" />
-            </ColumnTwo>
           </Grid>
         </Container>
       </HeroWrap>

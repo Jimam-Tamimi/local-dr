@@ -5,8 +5,11 @@ export default function Dropdown({show, setShow, children, style}) {
     const dropdownRef = useRef(null)
     useEffect(() => {
         const toggleOpen = (e) => { 
-          if (!dropdownRef.current.contains(e.target) && show) {
-            setShow(false);
+          if (!dropdownRef?.current?.contains(e.target) && show) {
+            try{
+
+              setShow(false);
+            } catch(e) {}
           }
         };
         window.addEventListener("click", toggleOpen);

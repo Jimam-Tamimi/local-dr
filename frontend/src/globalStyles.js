@@ -36,6 +36,8 @@ const GlobalStyle = createGlobalStyle`
  
   }
   html {
+    overflow-x: hidden;
+
     scroll-behavior: smooth;
     @media only screen and (min-width: 768px){
             font-size: 16px;

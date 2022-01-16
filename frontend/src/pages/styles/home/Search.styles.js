@@ -7,7 +7,7 @@ export const ProvidersWrap = styled("div")`
   padding: 1rem 0;
   padding-left: 30px;
   ${Flex}
-  justify-content: space-between;
+  justify-content: center;
   position: relative;
   align-items: flex-start;
   @media screen and (max-width: 830px) {

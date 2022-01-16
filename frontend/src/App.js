@@ -15,9 +15,13 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 
 import { useEffect } from "react";
+import { authenticate } from "./redux/auth/actions";
+import { useDispatch } from "react-redux";
 function App() {
+  const dispatch = useDispatch()
   useEffect(() => {
     AOS.init({once: true, duration: 1000});
+    dispatch(authenticate())
   }, [])
   return (
 
@@ -32,11 +36,11 @@ function App() {
         <PrivateRoute>
         </PrivateRoute>
         <GuestRoute>
+        </GuestRoute>
           <Route exact path='/'  component={Home} />
           <Route exact path='/search/'  component={Search} />
           <Route exact path='/doctor/:id/'  component={BookAppointment} />
           <Route path='/' component={Account} />
-        </GuestRoute>
       </Layout>
 
     </>

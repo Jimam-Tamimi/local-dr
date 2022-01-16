@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 from django.conf import settings
@@ -90,3 +90,8 @@ def resend_verification_code(request):
 
 def vallidateToken(request):
     return Response({"vallied": True, 'message': 'Token is vallied', }, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def isAdmin(request):
+    return Response({"isAdmin": True, 'message': 'User is admin', }, status=status.HTTP_200_OK)

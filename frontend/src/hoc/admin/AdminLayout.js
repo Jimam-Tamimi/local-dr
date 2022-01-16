@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Route, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
@@ -7,11 +7,22 @@ import Dashnav from '../../components/Dashnav/Dashnav'
 import { AdminGlobalStyle } from '../../globalStyles'
 import AdminComponent from './AdminComponent'
 import { AccountWrap, LoginForm } from '../../components/Account/Account.styles'
-import { Button, Grid } from '../../styles/Essentials.styles'
+import { Button, Column, Grid } from '../../styles/Essentials.styles'
 import { FormTitle, Input, InputDiv, Label } from '../../styles/Form.styles'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { checkAdmin } from '../../redux/adminAuth/actions'
+import { login } from '../../redux/auth/actions'
+import SyncLoader from "react-spinners/SyncLoader";
+import DotLoader from "react-spinners/DotLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 export default function AdminLayout({ children }) {
+    const adminAuth = useSelector(state => state.adminAuth)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(checkAdmin())
+        console.log(adminAuth)
+    }, [])
     const location = useLocation()
     const [showDash, setShowDash] = useState(
         window.innerWidth > 850 ? true : false
@@ -20,26 +31,32 @@ export default function AdminLayout({ children }) {
         setShowDash(window.innerWidth > 850 ? true : false)
     }
     const auth = useSelector(state => state.auth)
+
     return (
         <>
             {
                 location.pathname.startsWith("/admin") &&
                 <>
-                        <AdminGlobalStyle />
+                    <AdminGlobalStyle />
                     <AdminComponent >
 
                         <Dashnav setShowDash={setShowDash} showDash={showDash} />
                         <Dashboard setShowDash={setShowDash} showDash={showDash} />
                     </AdminComponent>
                     {
-                        true ?
-                        <Content showDash={showDash}>
-                        {children}
-                        </Content> : 
-                        <AdminLogin />
+                        adminAuth.isAdmin === true ?
+                            <Content showDash={showDash}>
+                                {children}
+                            </Content> : adminAuth.isAdmin === 'loading' ?
+                                <Column style={{
+                                    height: "100vh", position: "absolute", top: 0, left: 0, width: "100vw"
+                                }}>
+                                    <SyncLoader size={30} color="#39b27c" />
+                                </Column>
+                                :
+                                <AdminLogin />
 
-
-}       
+                    }
                 </>
             }
         </>
@@ -54,11 +71,11 @@ const Content = styled.main`
     height: auto;
     min-height: calc(100vh - 60px)  ;
     ${window.onresize = () => {
-       return  window.innerWidth > 850 ? `margin-left: 215px;` : ''
-     }}
+        return window.innerWidth > 850 ? `margin-left: 215px;` : ''
+    }}
     
     transition: var(--main-transition);
-    ${({showDash}) => !showDash && `margin-left: 0px;`}
+    ${({ showDash }) => !showDash && `margin-left: 0px;`}
 
 `
 
@@ -66,11 +83,24 @@ const Content = styled.main`
 
 
 const AdminLogin = () => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    })
+    const { email, password } = formData;
+    const dispatch = useDispatch()
+    const onSubmit = async e => {
+        e.preventDefault();
+        await dispatch(login(email, password))
+        await dispatch(checkAdmin())
+
+    }
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
     return (
         <>
-            <AccountWrap style={{    margin: "auto", height: "100vh", display:'flex', alignItems:'center'}}>
-                <Grid  direction="column">
-                    <LoginForm>
+            <AccountWrap style={{ margin: "auto", height: "100vh", display: 'flex', alignItems: 'center' }}>
+                <Grid direction="column">
+                    <LoginForm onSubmit={onSubmit}>
                         <FormTitle>Enter Email And Password to Login</FormTitle>
                         <InputDiv>
                             <Label>Enter Your Email</Label>
@@ -78,6 +108,9 @@ const AdminLogin = () => {
                                 type="email"
                                 name="email"
                                 placeholder="Enter Your Email"
+                                onChange={onChange}
+
+                                value={email}
                             />
                         </InputDiv>
                         <InputDiv>
@@ -86,6 +119,9 @@ const AdminLogin = () => {
                                 type="password"
                                 name="password"
                                 placeholder="Enter Password"
+                                value={password}
+                                onChange={onChange}
+
                             />
                         </InputDiv>
                         <InputDiv>

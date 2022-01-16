@@ -17,6 +17,11 @@ import Map from '../../components/Map/Map';
 import Marker from "react-google-maps/lib/components/Marker";
 import {Autocomplete} from '@react-google-maps/api'
 import { useEffect } from "react";
+import axios from "axios";
+import alert from  '../../redux/alert/actions'
+import {useDispatch} from 'react-redux'
+
+
 export default function Hospitals() {
   const [showHospitalForm, setShowHospitalForm] = useState(false)
   return (
@@ -116,7 +121,7 @@ export default function Hospitals() {
       </Grid>
 
       <Modal style={{    alignItems: "flex-start"}} zoom show={showHospitalForm} setShow={setShowHospitalForm}>
-        <HospitalsForm />
+        <HospitalsForm setShowHospitalForm={setShowHospitalForm} />
       </Modal>
     </>
   );
@@ -124,7 +129,7 @@ export default function Hospitals() {
 
 
 
-function HospitalsForm() {
+function HospitalsForm({setShowHospitalForm}) {
   const [coords, setCoords] = useState({ lat: 0, lng: 0 })
   const [mark, setMark] = useState({ lat: 0, lng: 0 })
   const [autoComplete, setAutoComplete] = useState(null)
@@ -138,6 +143,7 @@ function HospitalsForm() {
   useEffect(() => {
     setCurrentLocation()
   }, [])
+  const dispatch = useDispatch()
   const onPlaceChanged = () => {
     try{
       console.log(autoComplete.getPlace())
@@ -149,30 +155,70 @@ function HospitalsForm() {
       
     }
   } 
+
+  const [formData, setFormData] = useState({
+    // fields = ['id', 'name', 'email', 'password', 'contact', 'contact_person', 'location']
+    id: "",
+    name: "",
+    email: "",
+    password: "",
+    contact: "",
+    contact_person: "",
+    location: "",
+  })
+  const {name, email, password, contact, contact_person, location} = formData; 
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    setFormData({...formData, location: JSON.stringify(mark)})
+  }, [mark])
+  const onSubmit = async e => {
+    e.preventDefault();
+    console.log(formData)
+    try {
+      const { access, refresh } = JSON.parse(localStorage.getItem('auth'))
+      const config = {
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `JWT ${access}`
+          }
+      }
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formData, config);
+      console.log(res);
+      if(res.status === 201){
+        dispatch(alert('Hospital added successfully', 'success'))
+        setShowHospitalForm(false)
+
+      }
+    } catch (err) {
+      console.log(err.response);
+      dispatch(alert('Failed to add hospital', 'danger'))
+      // setShowHospitalForm(false)
+    }
+  }
   return (
     <>
 
 
-      <Form>
+      <Form onSubmit={onSubmit}>
         <InputDiv>
           <Label>Name *</Label>
-          <Input required name="name" placeholder="Name *" />
+          <Input required onChange={onChange} name="name" placeholder="Name *" />
         </InputDiv>
         <InputDiv>
-          <Label>Username *</Label>
-          <Input required name="username" type="text" placeholder="Username" />
+          <Label>Email *</Label>
+          <Input required name="email" type="email" placeholder="Email"   onChange={onChange}  />
         </InputDiv>
         <InputDiv>
           <Label>Password *</Label>
-          <Input required name="password" type="password" placeholder="Password" />
+          <Input required name="password" type="password" placeholder="Password"  onChange={onChange}  />
         </InputDiv>
         <InputDiv>
           <Label>Contact *</Label>
-          <Input required name="contact" type="tel" placeholder="Contact" />
+          <Input required name="contact" type="tel" placeholder="Contact"  onChange={onChange}  />
         </InputDiv>
         <InputDiv>
           <Label>Contact Person *</Label>
-          <Input required name="contact-person" type="text" placeholder="Contact Person" />
+          <Input required name="contact_person" type="text" placeholder="Contact Person"  onChange={onChange}  />
         </InputDiv>
         <InputDivW   >
 

@@ -7,6 +7,7 @@ export const HeroWrap = styled.div`
   background: var(--secondary-color);
   @media only screen and (max-width: 992px) {
   padding: 50px 0px;
+  padding-top: 0px;
 
   }
 `;
@@ -49,7 +50,7 @@ export const ColumnTwo = styled(Column)`
   }
 `;
 export const SearchColumn = styled.form`
-  width: 100%;
+    width: 100%;
   display: flex;
   position: relative;
   background: white;

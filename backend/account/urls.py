@@ -17,6 +17,7 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSets) 
 
 urlpatterns = [
+    path('is-admin/', isAdmin),
     path('verify/<str:code>/', verify),
     path('resend-verification-code/', resend_verification_code),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

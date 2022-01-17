@@ -19,6 +19,7 @@ import { authenticate, refreshToken } from "./redux/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { checkAdmin } from "./redux/adminAuth/actions";
+import Doctors from "./pages/admin/Doctors";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
@@ -59,6 +60,7 @@ function App() {
         <AdminRoute>
         <Route exact path="/admin/" component={Index} />
         <Route exact path="/admin/hospitals/" component={Hospitals} />
+        <Route exact path="/admin/doctors/" component={Doctors} />
         </AdminRoute>
       </AdminLayout>
       <Layout>

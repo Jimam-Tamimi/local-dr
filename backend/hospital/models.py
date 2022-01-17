@@ -11,14 +11,19 @@ class Hospital(models.Model):
     contact = models.CharField(max_length=20, blank=False, null=False)
     contact_person = models.CharField(max_length=20, blank=False, null=False)
     location = models.TextField(blank=False, null=False)
+    price = models.PositiveIntegerField(default=0, blank=False, null=False)
     
     def __str__(self):
         return self.name
 
 
 
-# class Doctor(models.Model):
-#     # doctor name, spaca, qualification, 
-#     name = models.CharField(max_length=20, null=False, blank=False)
-#     speciality = models.CharField(max_length=50, null=False, blank=False)
-#     qualification = models.CharField(max_length=50, null=False, blank=False)
+class Doctor(models.Model):
+    # doctor name, spaca, qualification, 
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, null=False, blank=False)
+    speciality = models.CharField(max_length=50, null=False, blank=False)
+    qualification = models.CharField(max_length=50, null=False, blank=False)
+    
+    def __str__(self):
+        return self.name

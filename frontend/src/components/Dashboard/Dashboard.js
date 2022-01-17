@@ -25,6 +25,10 @@ export default function Dashboard({showDash, setShowDash}) {
                         <FaSitemap />
                         <p>Hospitals</p>
                 </DashLink>
+                <DashLink to="/admin/doctors/">
+                        <FaSitemap />
+                        <p>Doctor</p>
+                </DashLink>
                 {/* <DashLink to="#">
                         <FaPlusCircle />
                         <p>Add Hospital</p>

@@ -33,7 +33,7 @@ export default function Hospitals() {
       setHospitals(res.data)
     }).catch((err) => {
       dispatch(alert(err.response.data.error, "danger"))
-      console.log(err.response)
+      console.log(err)
     })
   }
   useEffect(() => {
@@ -51,10 +51,22 @@ export default function Hospitals() {
 
     }
   }
-  useEffect(() => {
-    console.log(hospitalId)
-    console.log(showEditForm)
-  }, [showEditForm, hospitalId])
+
+
+  const deleteHospital = async id => {
+    try {
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`)
+      if (res.status === 204) {
+        dispatch(alert("Hospital deleted successfully", "success"))
+        getHospitals()
+      }
+    } catch (err) {
+
+      dispatch(alert("Failed to delete this hospital", "danger"))
+
+    }
+  }
+
 
   const [showHospitalForm, setShowHospitalForm] = useState(false)
   return (
@@ -79,7 +91,8 @@ export default function Hospitals() {
             <Th>Email</Th>
             <Th>Contact</Th>
             <Th>Contact Person</Th>
-            <Th>Action</Th>
+            <Th>Price</Th>
+            <Th>Actions</Th>
           </Tr>
           {
             hospitals.map((hospital, i) => (
@@ -90,10 +103,11 @@ export default function Hospitals() {
                 <Td>{hospital.email}</Td>
                 <Td>{hospital.contact}</Td>
                 <Td>{hospital.contact_person}</Td>
+                <Td>{hospital.price}</Td>
                 <Td>
                   <Actions>
-                    <Button onClick={e => { setHospitalId(hospital.id); setShowEditForm(true) }} sm green>Edit</Button>
-                    <Button sm style={{ background: "#ff3b00", color: "white" }}>
+                    <Button onClick={e => { setHospitalId(hospital.id); setShowEditForm(true) }} sm green>Edit</Button> 
+                    <Button onClick={e => window.confirm(`Are you sure you want to delete ${hospital.name}`) ? deleteHospital(hospital.id) : ''} sm style={{ background: "#ff3b00", color: "white" }}>
                       Delete
                     </Button>
                   </Actions>
@@ -112,7 +126,7 @@ export default function Hospitals() {
       <Modal style={{ alignItems: "flex-start" }} zoom show={showEditForm} setShow={setShowEditForm}  >
         <SetShowEditForm hospitalId={hospitalId} getHospitals={getHospitals} setShowEditForm={setShowEditForm} />
 
-      </Modal>
+      </Modal> 
     </>
   );
 }
@@ -136,7 +150,6 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
   const dispatch = useDispatch()
   const onPlaceChanged = () => {
     try {
-      console.log(autoComplete.getPlace())
       const lat = autoComplete.getPlace().geometry.location.lat();
       const lng = autoComplete.getPlace().geometry.location.lng();
       setMark({ lat, lng })
@@ -156,14 +169,13 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
     contact_person: "",
     location: "",
   })
-  const { name, email, password, contact, contact_person, location } = formData;
+  const { name, email, password, contact, contact_person, location, price } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   useEffect(() => {
     setFormData({ ...formData, location: JSON.stringify(mark) })
   }, [mark])
   const onSubmit = async e => {
     e.preventDefault();
-    console.log(formData)
     try {
       const { access, refresh } = JSON.parse(localStorage.getItem('auth'))
       const config = {
@@ -173,7 +185,6 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
         }
       }
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formData, config);
-      console.log(res);
       if (res.status === 201) {
         dispatch(alert('Hospital added successfully', 'success'))
         setShowHospitalForm(false)
@@ -181,7 +192,6 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
 
       }
     } catch (error) {
-      console.log(error.response);
       for (const err in error.response.data) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
@@ -211,6 +221,10 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
         <InputDiv>
           <Label>Contact Person *</Label>
           <Input required name="contact_person" type="text" placeholder="Contact Person" onChange={onChange} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Price *</Label>
+          <Input required name="price" type="number" placeholder="Contact Person" onChange={onChange} />
         </InputDiv>
         <InputDivW   >
 
@@ -255,11 +269,7 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
       </Form>
     </>
   )
-}
-
-
-
-
+} 
 
 function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
@@ -278,7 +288,6 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
   const onPlaceChanged = () => {
     try {
-      console.log(autoComplete.getPlace())
       const lat = autoComplete.getPlace().geometry.location.lat();
       const lng = autoComplete.getPlace().geometry.location.lng();
       setMark({ lat, lng })
@@ -295,11 +304,11 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
     contact: "",
     contact_person: "",
     location: "",
+    price: '',
   })
   const getHospitalData = async (id) => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/${id}`)
-      console.log(res)
       if (res.status === 200) {
         setFormData(res.data)
         setCoords(JSON.parse(res.data.location))
@@ -310,7 +319,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       dispatch(alert('Error getting hospital data', 'danger'))
     }
   }
-  const { name, email, password, contact, contact_person, location } = formData;
+  const { name, email, password, contact, contact_person, location, price } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   useEffect(() => {
@@ -324,18 +333,17 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
   const onSubmit = async e => {
     e.preventDefault()
-    console.log(formData)
     try {
 
       const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData)
-      console.log(res)
       if (res.status === 200) {
         dispatch(alert('Hospital updated successfully', 'success'))
         setShowEditForm(false)
         getHospitals()
       }
     } catch (error) {
-      console.log(error.response)
+      dispatch(alert('Failed to update hospital', 'danger'))
+
     }
   }
 
@@ -359,6 +367,10 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
         <InputDiv>
           <Label>Contact Person *</Label>
           <Input required name="contact_person" type="text" value={contact_person} placeholder="Contact Person" onChange={onChange} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Price *</Label>
+          <Input required name="price" type="number" value={price} placeholder="Price" onChange={onChange} />
         </InputDiv>
         <InputDivW   >
 
@@ -405,6 +417,4 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
   )
 }
 
-
-
-
+ 

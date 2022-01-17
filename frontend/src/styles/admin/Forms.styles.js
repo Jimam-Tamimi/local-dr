@@ -25,6 +25,9 @@ export const InputDiv = styled.div`
   align-items: flex-start;
   color: rgb(0, 35, 75);
   margin: 20px 0px;
+  & > * {
+    width: 100%;
+  }
   ${({ icon }) =>
     icon &&
     `
@@ -50,7 +53,30 @@ export const InputDiv = styled.div`
     }
 
     `}
+    position: relative;
 `;
 export const FormTitle = styled.h3`
   font-size: 1.6rem;
 `;
+
+
+
+export const DropdownSelectWrap = styled.div`
+    width: 100%;
+    position: absolute;    
+    z-index: 2;
+    min-height: 63px;
+
+    top: 79px;
+    background: white;
+
+    max-height: 180px;
+    overflow-y: scroll;
+`
+
+export const DropdownSelect = styled.div`
+    border: 1px solid #00000033;
+    padding: 8px 15px;
+    cursor: pointer;
+
+`

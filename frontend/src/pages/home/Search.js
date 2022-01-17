@@ -27,7 +27,7 @@ import demoDr2 from "../../assets/images/demo-dr2.png";
 import demoDr3 from "../../assets/images/demo-dr3.png";
 import locationSvg from "../../assets/images/location.svg";
 import activeLocationSvg from "../../assets/images/activeLocation.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SearchColumn } from "../styles/home/Home.styles";
 import { FaSearch } from "react-icons/fa";
 import { SearchColumnNav } from "../../components/Navbar/Navbar.styles";
@@ -48,7 +48,7 @@ setOptions({
   themeVariant: 'light'
 });
 
-export default function Search() {
+export default function Search({ match }) {
   const [providers, setProviders] = useState([
     { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
     // { img: demoDr2, cords: { lat: 40.7350610, lng: -73.945242 } },
@@ -108,6 +108,35 @@ export default function Search() {
     console.log(activeProvider)
   }, [activeProvider])
 
+
+
+
+
+  // backend
+  const location = useLocation()
+  console.log(location)
+
+  const [doctorData, setDoctorData] = useState('')
+  const [locationData, setLocationData] = useState('')
+  const [specialityData, setSpecialityData] = useState('')
+
+  const [doctorList, setDoctorList] = useState([])
+  
+  useEffect(() => {
+    console.log(window.location.search)
+    const search = window.location.search // could be '?foo=bar'
+    const params = new URLSearchParams(search); 
+    setDoctorData(params.get('doctor'))
+    setLocationData(params.get('location'))
+    setSpecialityData(params.get('speciality'))
+
+  }, [])
+  useEffect(() => {
+    console.log(doctorData)
+    console.log(locationData)
+    console.log(specialityData)
+  }, [doctorData, locationData, specialityData])
+
   return (
     <>
       <ProvidersWrap >
@@ -121,8 +150,8 @@ export default function Search() {
 
             <Column justify="start" lg={12} sx={12} style={{ width: "100%" }}>
               <div style={{ position: 'relative', }}>
-                <Tab  onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
-                <Dropdown style={{left: '10px'}} show={showAvailablaity} setShow={setShowAvailablaity}>
+                <Tab onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
+                <Dropdown style={{ left: '10px' }} show={showAvailablaity} setShow={setShowAvailablaity}>
                   <DropdownDiv>
                     <DropdownOption>
                       <input value="10" id="d-10" name="distance" type={'radio'} />
@@ -207,7 +236,7 @@ export default function Search() {
                       </p>
                       <p>Mount Sinai Doctors Health Quarteres NoHo</p>
                       <p>632 Broadway, Ste A</p>
-                      <p className="consultation"><RiMoneyDollarCircleFill style={{fontSize: '1.4rem'}} />Consultation charges may vary</p>
+                      <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
                         <Button style={{ boxShadow: "none" }} sm>
@@ -253,8 +282,8 @@ export default function Search() {
             //     }
             //   </Map>
             // </Column>
-              )
-          }
+          )
+        }
       </ProvidersWrap>
     </>
   );

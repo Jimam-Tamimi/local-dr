@@ -5,10 +5,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
 
 from account.models import MyUser
-
-# Create your models here.
-
-
 class Hospital(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, blank=False, null=False)

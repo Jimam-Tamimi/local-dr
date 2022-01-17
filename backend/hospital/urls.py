@@ -7,5 +7,8 @@ router.register(r'hospitals', HospitalViewSet)
 router.register(r'doctors', DoctorViewSet)
 
 urlpatterns = [
+    path('doctors/recommendations/', doctorRecommendations),
+    path('speciality/recommendations/', specialityRecommendations),
+    path('search/', search),
     
 ] + router.urls

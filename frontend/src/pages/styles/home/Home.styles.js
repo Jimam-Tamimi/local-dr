@@ -66,7 +66,30 @@ export const SearchColumn = styled.form`
   & > div  {
     position: relative;
     padding: 0px 20px;
-
+  }
+  & > div > div {
+    background: white;
+    width: 100%;
+    max-height: 15rem;
+    top: 63px;
+    left: 0;
+    position: absolute;
+    z-index: 1;
+    overflow-y: scroll;
+    padding: 5px 0px;
+  }
+  & > div > div > div {
+    padding: 8px 0px;
+    font-weight: 600;
+    padding-left: 22px;
+    cursor: pointer;
+    transition: var(--main-transition); 
+    font-size: .86rem; 
+    box-shadow: 0px 0px 1px 0px #00000099;
+}
+  }
+  & > div > div > div:hover {
+    background: #FFECF1;
   }
 
   /* & > span {

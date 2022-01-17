@@ -26,16 +26,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { IoLocationSharp } from "react-icons/io5";
 
 import TextTransition, { presets } from "react-text-transition";
-import { MdFolderSpecial } from "react-icons/md";
 import { RiProfileLine } from "react-icons/ri";
+import { Autocomplete } from '@react-google-maps/api'
+import { usePlacesWidget } from "react-google-autocomplete";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-const TEXTS = [
-  "Doctor",
-  "Dentist",
-  "Psychologist",
-  "Dermatologist",
-];
-
+const TEXTS = ["Doctor", "Dentist", "Psychologist", "Dermatologist"];
 
 export default function Home() {
   const [changeSearch, setChangeSearch] = useState(
@@ -50,22 +47,79 @@ export default function Home() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const intervalId = setInterval(() =>
-      setIndex(index => index + 1),
-      2500
-    );
+    const intervalId = setInterval(() => setIndex((index) => index + 1), 2500);
     return () => clearTimeout(intervalId);
   }, []);
+
+
+
+  // hone page search 
+ 
+  const [doctor, setDoctor] = useState('')
+  const [location, setLocation] = useState({})
+  const [speciality, setSpeciality] = useState('')  
+  const history = useHistory()
+  const onSubmit = e => {
+    e.preventDefault();
+    console.log(doctor);
+    console.log(location);
+    console.log(speciality);
+    history.push(`/search?doctor=${doctor}&location=${JSON.stringify(location)}&speciality=${speciality}`)
+  }
+
+  // location
+  const { ref, autocompleteRef } = usePlacesWidget({
+    apiKey: '',
+    onPlaceSelected: (place) => { 
+      setLocation({ lat:place.geometry.location.lat(), lng: place.geometry.location.lng()  })
+    }
+  });
+
+  // doctor recommendation
+  const [doctorRecommendations, setDoctorRecommendations] = useState([]);
+  const getDoctorRecommendations = async (e) => {
+    try{
+      setDoctor(e.target.value )
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/recommendations/?search=${doctor}`)
+      console.log(res);
+      setDoctorRecommendations(res.data);
+    } catch (err) {
+      console.log(err.response);
+    }
+  } 
+  const [specialityRecommendations, setSpecialityRecommendations] = useState([])
+  const getSpecialityRecommendations = async (e) => {
+    try{
+      setSpeciality(e.target.value)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/speciality/recommendations/?search=${doctor}`)
+      console.log(res);
+      setSpecialityRecommendations(res.data);
+    } catch (err) {
+      console.log(err.response);
+    } 
+  } 
   return (
     <>
       <HeroWrap data-aos="fade-in">
         <Container>
           <Grid>
-            <ColumnOne data-aos="fade-right" direction="column" lg={12} sm={12} align="start">
-              <h1 >
-                Find local <TextTransition inline={true} text={TEXTS[index % TEXTS.length]} springConfig={presets.default}/>s <br /> in your place       
+            <ColumnOne
+              data-aos="fade-right"
+              direction="column"
+              lg={12}
+              sm={12}
+              align="start"
+            >
+              <h1>
+                Find local{" "}
+                <TextTransition
+                  inline={true}
+                  text={TEXTS[index % TEXTS.length]}
+                  springConfig={presets.default}
+                />
+                s <br /> in your place
               </h1>
-              <SearchColumn>
+              <SearchColumn onSubmit={onSubmit}>
                 <div
                   style={{
                     width: "50%",
@@ -76,10 +130,22 @@ export default function Home() {
                 >
                   <AiOutlineSearch />
                   <input
-
                     type="text"
                     placeholder={`Search For Doctor or Hospital`}
+                    name={`doctor`}
+                    value={doctor}
+                    onChange={getDoctorRecommendations}
                   />
+                    {
+                      doctorRecommendations.length !==0 ?
+                  <div>
+                    {
+                    doctorRecommendations.map(doctorName => (
+                      <div onClick={e => {setDoctor(doctorName); setDoctorRecommendations([])}}>{doctorName}</div> 
+                      ))
+                    }
+                  </div> :""
+                    } 
                 </div>
 
                 <div
@@ -88,15 +154,13 @@ export default function Home() {
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
                     borderRight: "2px solid #0000001f",
-
                   }}
-                >
-                  <IoLocationSharp />
+                > 
+                  <>
+                    <IoLocationSharp />
 
-                  <input
-                    type="text"
-                    placeholder="My Location"
-                  />
+                    <input ref={ref} name="location" type="text" placeholder="My Location" />
+                  </> 
                 </div>
                 <div
                   style={{
@@ -107,10 +171,17 @@ export default function Home() {
                 >
                   <RiProfileLine />
 
-                  <input
-                    type="text"
-                    placeholder="Speciality"
-                  />
+                  <input name="speciality" value={speciality} onChange={getSpecialityRecommendations} type="text" placeholder="Speciality" />
+                  {
+                      specialityRecommendations.length !==0 ?
+                  <div>
+                    {
+                    specialityRecommendations.map(speciality => (
+                      <div onClick={e => {setSpeciality(speciality); setSpecialityRecommendations([])}}>{speciality}</div> 
+                      ))
+                    }
+                  </div> :""
+                    } 
                 </div>
 
                 <button>{changeSearch ? "Find Care" : <FaSearch />}</button>
@@ -124,7 +195,7 @@ export default function Home() {
         <SmallContainer>
           <Grid direction="column">
             <HeadingColumn data-aos="zoom-in" direction="column" lg={12}>
-              <h1 >
+              <h1>
                 DISCOVER THE <b>ONLINE</b> APPOINTMENT!
               </h1>
               <p>
@@ -151,7 +222,6 @@ export default function Home() {
               </FeatureBox>
               <FeatureBox
                 data-aos="fade-in"
-
                 direction="column"
                 lg={4}
                 sm={6}
@@ -167,7 +237,6 @@ export default function Home() {
               </FeatureBox>
               <FeatureBox
                 data-aos="fade-left"
-
                 direction="column"
                 lg={4}
                 sm={6}

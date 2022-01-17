@@ -55,7 +55,7 @@ export default function Schedule() {
 
     const getProperTime = (time) => {
         console.log(time)
-        if(time === null){
+        if (time === null) {
             return '-'
         }
         let n = new Date('2021-08-21 ' + time)
@@ -64,12 +64,12 @@ export default function Schedule() {
 
         let ampm = hours >= 12 ? 'pm' : 'am'
         hours = n.getHours() > 12 ? n.getHours() - 12 : n.getHours()
-        if(hours === 0){
+        if (hours === 0) {
             hours = 12
         }
         return hours + ':' + minutes + ' ' + ampm
     }
-    
+
     // edit time
     const [showTimeEditForm, setShowTimeEditForm] = useState(false)
     const [doctorId, setDoctorId] = useState(null)

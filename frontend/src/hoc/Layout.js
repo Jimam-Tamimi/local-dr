@@ -1,4 +1,4 @@
-import React, {  } from "react";
+import React, { } from "react";
 import PrivateComponent from "./PrivateComponent";
 import GuestComponent from "./GuestComponent";
 import GlobalStyle from "../globalStyles";
@@ -8,23 +8,22 @@ import { useLocation } from "react-router-dom";
 import AlertComponent from "../components/Alert/AlertComponent";
 
 export default function Layout({ children }) {
-  const location = useLocation() 
-  console.log(location)
+  const location = useLocation()
   return (
     <>
-    {
-      location.pathname.startsWith("/") && !location.pathname.startsWith("/admin") &&
-      <>
-    <GlobalStyle />
-      <PrivateComponent></PrivateComponent>
-        <Navbar />
-        <AlertComponent  />
-        <main style={{minHeight: 'calc(100vh - (100px + 76.3906px))'}}>
-        {children}
-        </main>
-        <Footer/>
-      </>
-    }
+      {
+        location.pathname.startsWith("/") && !location.pathname.startsWith("/admin") &&
+        <>
+          <GlobalStyle />
+          <PrivateComponent></PrivateComponent>
+          <Navbar />
+          <AlertComponent />
+          <main style={{ minHeight: 'calc(100vh - (100px + 76.3906px))' }}>
+            {children}
+          </main>
+          <Footer />
+        </>
+      }
     </>
   );
 }

@@ -17,7 +17,6 @@ if(auth){
 
 const authReducer = (state=initialState, action) => {
     if(action.type === "LOGIN_SUCCESS") {
-        console.log(action)
         const { access, refresh } = action.payload
         state = {
             ...state,
@@ -26,7 +25,6 @@ const authReducer = (state=initialState, action) => {
             isAuthenticated: true, 
         }
         localStorage.setItem('auth', JSON.stringify(state))
-        console.log(state)
         return state
     }
     else if (action.type === "LOGOUT") { 
@@ -37,7 +35,6 @@ const authReducer = (state=initialState, action) => {
             isAuthenticated: false, 
         }
         localStorage.setItem('auth', JSON.stringify(state))
-        console.log(state)
         return state
     }
     else if (action.type === "REFRESH_TOKEN_SUCCESS") { 
@@ -49,7 +46,6 @@ const authReducer = (state=initialState, action) => {
             isAuthenticated: true, 
         }
         localStorage.setItem('auth', JSON.stringify(state))
-        console.log(state)
         return state
     }
     else {

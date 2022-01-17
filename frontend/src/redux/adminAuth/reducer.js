@@ -7,7 +7,6 @@ let initialState = {
 
 const adminAuthReducer = (state = initialState, action) => {
     if (action.type === "IS_ADMIN") {
-        console.log(action)
         state = {
             ...state,
             isAdmin: true,

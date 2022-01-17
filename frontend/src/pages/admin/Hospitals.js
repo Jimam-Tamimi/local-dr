@@ -15,14 +15,47 @@ import Modal from '../../components/Modal/Modal';
 import { Input, InputDiv, Label } from "../../styles/admin/Forms.styles";
 import Map from '../../components/Map/Map';
 import Marker from "react-google-maps/lib/components/Marker";
-import {Autocomplete} from '@react-google-maps/api'
+import { Autocomplete } from '@react-google-maps/api'
 import { useEffect } from "react";
 import axios from "axios";
-import alert from  '../../redux/alert/actions'
-import {useDispatch} from 'react-redux'
+import alert from '../../redux/alert/actions'
+import { useDispatch } from 'react-redux'
 
 
 export default function Hospitals() {
+  const [hospitals, setHospitals] = useState([])
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [hospitalId, setHospitalId] = useState(null)
+  // get hospital data t  rough api
+  const dispatch = useDispatch()
+  const getHospitals = () => {
+    axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/`).then((res) => {
+      setHospitals(res.data)
+    }).catch((err) => {
+      dispatch(alert(err.response.data.error, "danger"))
+      console.log(err.response)
+    })
+  }
+  useEffect(() => {
+    getHospitals()
+  }, [])
+  const filterHospitals = async e => {
+    const search = e.target.value
+    try {
+
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?search=${search}`)
+      if (res.status === 200) {
+        setHospitals(res.data)
+      }
+    } catch (err) {
+
+    }
+  }
+  useEffect(() => {
+    console.log(hospitalId)
+    console.log(showEditForm)
+  }, [showEditForm, hospitalId])
+
   const [showHospitalForm, setShowHospitalForm] = useState(false)
   return (
     <>
@@ -37,91 +70,48 @@ export default function Hospitals() {
       </Grid>
       <Grid style={{ overflowX: "scroll" }} direction="column">
         <OptionsColumn justify="flex-end" style={{ margin: "10px 0px" }}>
-          <Search type="text" placeholder="Search..." />
+          <Search onChange={filterHospitals} type="text" placeholder="Search..." />
         </OptionsColumn>
         <Table>
           <Tr>
-            <Th>Title</Th>
+            <Th>ID</Th>
+            <Th>Name</Th>
             <Th>Email</Th>
-            <Th>Address</Th>
-            <Th>Phone Number</Th>
-            <Th>Actions</Th>
+            <Th>Contact</Th>
+            <Th>Contact Person</Th>
+            <Th>Action</Th>
           </Tr>
-          <Tr>
-            <Td>Alfreds Futterkiste</Td>
-            <Td>Maria Anders</Td>
-            <Td>Germany</Td>
-            <Td>095985834</Td>
-            <Td>
-              <Actions>
-                <Button green>Complete</Button>
-                <Button style={{ background: "#ff3b00", color: "white" }}>
-                  Delete
-                </Button>
-              </Actions>
-            </Td>
-          </Tr> 
-          <Tr>
-            <Td>Alfreds Futterkiste</Td>
-            <Td>Maria Anders</Td>
-            <Td>Germany</Td>
-            <Td>095985834</Td>
-            <Td>
-              <Actions>
-                <Button green>Complete</Button>
-                <Button style={{ background: "#ff3b00", color: "white" }}>
-                  Delete
-                </Button>
-              </Actions>
-            </Td>
-          </Tr> 
-          <Tr>
-            <Td>Alfreds Futterkiste</Td>
-            <Td>Maria Anders</Td>
-            <Td>Germany</Td>
-            <Td>095985834</Td>
-            <Td>
-              <Actions>
-                <Button green>Complete</Button>
-                <Button style={{ background: "#ff3b00", color: "white" }}>
-                  Delete
-                </Button>
-              </Actions>
-            </Td>
-          </Tr> 
-          <Tr>
-            <Td>Alfreds Futterkiste</Td>
-            <Td>Maria Anders</Td>
-            <Td>Germany</Td>
-            <Td>095985834</Td>
-            <Td>
-              <Actions>
-                <Button green>Complete</Button>
-                <Button style={{ background: "#ff3b00", color: "white" }}>
-                  Delete
-                </Button>
-              </Actions>
-            </Td>
-          </Tr> 
-          <Tr>
-            <Td>Alfreds Futterkiste</Td>
-            <Td>Maria Anders</Td>
-            <Td>Germany</Td>
-            <Td>095985834</Td>
-            <Td>
-              <Actions>
-                <Button green>Complete</Button>
-                <Button style={{ background: "#ff3b00", color: "white" }}>
-                  Delete
-                </Button>
-              </Actions>
-            </Td>
-          </Tr> 
+          {
+            hospitals.map((hospital, i) => (
+              <Tr key={hospital.id}>
+
+                <Td>{hospital.id}</Td>
+                <Td>{hospital.name}</Td>
+                <Td>{hospital.email}</Td>
+                <Td>{hospital.contact}</Td>
+                <Td>{hospital.contact_person}</Td>
+                <Td>
+                  <Actions>
+                    <Button onClick={e => { setHospitalId(hospital.id); setShowEditForm(true) }} sm green>Edit</Button>
+                    <Button sm style={{ background: "#ff3b00", color: "white" }}>
+                      Delete
+                    </Button>
+                  </Actions>
+                </Td>
+              </Tr>
+            ))
+          }
+
+
         </Table>
       </Grid>
 
-      <Modal style={{    alignItems: "flex-start"}} zoom show={showHospitalForm} setShow={setShowHospitalForm}>
-        <HospitalsForm setShowHospitalForm={setShowHospitalForm} />
+      <Modal style={{ alignItems: "flex-start" }} zoom show={showHospitalForm} setShow={setShowHospitalForm}>
+        <HospitalsForm getHospitals={getHospitals} setShowHospitalForm={setShowHospitalForm} />
+      </Modal>
+      <Modal style={{ alignItems: "flex-start" }} zoom show={showEditForm} setShow={setShowEditForm}  >
+        <SetShowEditForm hospitalId={hospitalId} getHospitals={getHospitals} setShowEditForm={setShowEditForm} />
+
       </Modal>
     </>
   );
@@ -129,32 +119,32 @@ export default function Hospitals() {
 
 
 
-function HospitalsForm({setShowHospitalForm}) {
+function HospitalsForm({ setShowHospitalForm, getHospitals }) {
   const [coords, setCoords] = useState({ lat: 0, lng: 0 })
   const [mark, setMark] = useState({ lat: 0, lng: 0 })
   const [autoComplete, setAutoComplete] = useState(null)
-  function setCurrentLocation(){
-    
+  function setCurrentLocation() {
+
     navigator.geolocation.getCurrentPosition((location) => {
-      setCoords({lat: location.coords.latitude, lng: location.coords.longitude})
-      setMark({lat: location.coords.latitude, lng: location.coords.longitude})
-    }, () => console.log('error :)'), {timeout:10000})
+      setCoords({ lat: location.coords.latitude, lng: location.coords.longitude })
+      setMark({ lat: location.coords.latitude, lng: location.coords.longitude })
+    }, () => console.log('error :)'), { timeout: 10000 })
   }
   useEffect(() => {
     setCurrentLocation()
   }, [])
   const dispatch = useDispatch()
   const onPlaceChanged = () => {
-    try{
+    try {
       console.log(autoComplete.getPlace())
       const lat = autoComplete.getPlace().geometry.location.lat();
       const lng = autoComplete.getPlace().geometry.location.lng();
-      setMark({lat, lng})
-      setCoords({lat, lng})
+      setMark({ lat, lng })
+      setCoords({ lat, lng })
     } catch {
-      
+
     }
-  } 
+  }
 
   const [formData, setFormData] = useState({
     // fields = ['id', 'name', 'email', 'password', 'contact', 'contact_person', 'location']
@@ -166,10 +156,10 @@ function HospitalsForm({setShowHospitalForm}) {
     contact_person: "",
     location: "",
   })
-  const {name, email, password, contact, contact_person, location} = formData; 
+  const { name, email, password, contact, contact_person, location } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   useEffect(() => {
-    setFormData({...formData, location: JSON.stringify(mark)})
+    setFormData({ ...formData, location: JSON.stringify(mark) })
   }, [mark])
   const onSubmit = async e => {
     e.preventDefault();
@@ -177,22 +167,24 @@ function HospitalsForm({setShowHospitalForm}) {
     try {
       const { access, refresh } = JSON.parse(localStorage.getItem('auth'))
       const config = {
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `JWT ${access}`
-          }
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Authorization': `JWT ${access}`
+        }
       }
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formData, config);
       console.log(res);
-      if(res.status === 201){
+      if (res.status === 201) {
         dispatch(alert('Hospital added successfully', 'success'))
         setShowHospitalForm(false)
+        getHospitals()
 
       }
-    } catch (err) {
-      console.log(err.response);
-      dispatch(alert('Failed to add hospital', 'danger'))
-      // setShowHospitalForm(false)
+    } catch (error) {
+      console.log(error.response);
+      for (const err in error.response.data) {
+        dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
+      }
     }
   }
   return (
@@ -202,27 +194,27 @@ function HospitalsForm({setShowHospitalForm}) {
       <Form onSubmit={onSubmit}>
         <InputDiv>
           <Label>Name *</Label>
-          <Input required onChange={onChange} name="name" placeholder="Name *" />
+          <Input required onChange={onChange} name="name" placeholder="Name" />
         </InputDiv>
         <InputDiv>
           <Label>Email *</Label>
-          <Input required name="email" type="email" placeholder="Email"   onChange={onChange}  />
+          <Input required name="email" type="email" placeholder="Email" onChange={onChange} />
         </InputDiv>
         <InputDiv>
           <Label>Password *</Label>
-          <Input required name="password" type="password" placeholder="Password"  onChange={onChange}  />
+          <Input required name="password" type="password" placeholder="Password" onChange={onChange} />
         </InputDiv>
         <InputDiv>
           <Label>Contact *</Label>
-          <Input required name="contact" type="tel" placeholder="Contact"  onChange={onChange}  />
+          <Input required name="contact" type="tel" placeholder="Contact" onChange={onChange} />
         </InputDiv>
         <InputDiv>
           <Label>Contact Person *</Label>
-          <Input required name="contact_person" type="text" placeholder="Contact Person"  onChange={onChange}  />
+          <Input required name="contact_person" type="text" placeholder="Contact Person" onChange={onChange} />
         </InputDiv>
         <InputDivW   >
 
-          <Autocomplete   onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+          <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
             <>
               <Label htmlFor="add-number">Where do you need blood? *</Label>
               <Input
@@ -258,9 +250,161 @@ function HospitalsForm({setShowHospitalForm}) {
 
         </InputDiv>
         <InputDiv>
-            <Button style={{margin: '10px 0px', marginLeft: 'auto'}} green >Create</Button>
+          <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Create</Button>
         </InputDiv>
       </Form>
     </>
   )
 }
+
+
+
+
+
+function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
+
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 })
+  const [mark, setMark] = useState({ lat: 0, lng: 0 })
+  const [autoComplete, setAutoComplete] = useState(null)
+  const dispatch = useDispatch()
+
+  function setCurrentLocation() {
+
+    navigator.geolocation.getCurrentPosition((location) => {
+      setCoords({ lat: location.coords.latitude, lng: location.coords.longitude })
+      setMark({ lat: location.coords.latitude, lng: location.coords.longitude })
+    }, () => console.log('error :)'), { timeout: 10000 })
+  }
+
+  const onPlaceChanged = () => {
+    try {
+      console.log(autoComplete.getPlace())
+      const lat = autoComplete.getPlace().geometry.location.lat();
+      const lng = autoComplete.getPlace().geometry.location.lng();
+      setMark({ lat, lng })
+      setCoords({ lat, lng })
+    } catch {
+
+    }
+  }
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    contact: "",
+    contact_person: "",
+    location: "",
+  })
+  const getHospitalData = async (id) => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/${id}`)
+      console.log(res)
+      if (res.status === 200) {
+        setFormData(res.data)
+        setCoords(JSON.parse(res.data.location))
+        setMark(JSON.parse(res.data.location))
+      }
+    }
+    catch (error) {
+      dispatch(alert('Error getting hospital data', 'danger'))
+    }
+  }
+  const { name, email, password, contact, contact_person, location } = formData;
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  useEffect(() => {
+    if (hospitalId !== null) {
+      getHospitalData(hospitalId)
+    }
+  }, [hospitalId])
+  useEffect(() => {
+    setFormData({ ...formData, location: JSON.stringify(mark) })
+  }, [mark])
+
+  const onSubmit = async e => {
+    e.preventDefault()
+    console.log(formData)
+    try {
+
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData)
+      console.log(res)
+      if (res.status === 200) {
+        dispatch(alert('Hospital updated successfully', 'success'))
+        setShowEditForm(false)
+        getHospitals()
+      }
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
+
+  return (
+    <>
+
+
+      <Form onSubmit={onSubmit}>
+        <InputDiv>
+          <Label>Name *</Label>
+          <Input required onChange={onChange} value={name} name="name" placeholder="Name" />
+        </InputDiv>
+        <InputDiv>
+          <Label>Email *</Label>
+          <Input required name="email" type="email" value={email} placeholder="Email" onChange={onChange} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Contact *</Label>
+          <Input required name="contact" type="tel" value={contact} placeholder="Contact" onChange={onChange} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Contact Person *</Label>
+          <Input required name="contact_person" type="text" value={contact_person} placeholder="Contact Person" onChange={onChange} />
+        </InputDiv>
+        <InputDivW   >
+
+          <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+            <>
+              <Label htmlFor="add-number">Where do you need blood? *</Label>
+              <Input
+                id="places"
+                placeholder="Search Places..."
+                type="text"
+                onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+              />
+            </>
+          </Autocomplete>
+        </InputDivW>
+        <InputDiv style={{ boxShadow: "0px 0px 15px 2px var(--main-box-shadow-color)" }} height="400px">
+
+          <Map
+            coords={coords}
+            // isMarkerShown
+            googleMapURL=" "
+            loadingElement={<div style={{ height: `400px`, width: '100%' }} />}
+            containerElement={<div style={{ height: `400px`, width: '100%' }} />}
+            mapElement={<div style={{ height: `400px`, width: '100%' }} />}
+            setCoords={setCoords}
+            setMark={setMark}
+            click={e => setMark({ lat: e.latLng.lat(), lng: e.latLng.lng() })}
+            defaultZoom={17}
+          >
+            {
+              mark ? <Marker key={0}
+                position={mark}
+              /> : ''
+            }
+          </Map>
+
+
+        </InputDiv>
+        <InputDiv>
+          <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Save</Button>
+        </InputDiv>
+      </Form>
+    </>
+  )
+}
+
+
+
+

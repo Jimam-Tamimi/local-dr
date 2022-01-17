@@ -7,12 +7,12 @@ export const checkAdmin = () => async dispatch => {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/is-admin/`)
         console.log(res)
         if (res.data.isAdmin) {
-            dispatch({ type: "IS_ADMIN" })
+            dispatch({ type: "IS_ADMIN", payload: { type: res.data.type } })
         } else {
             dispatch({ type: "IS_NOT_ADMIN" })
         }
     } catch (error) {
-        dispatch({ type: "IS_NOT_ADMIN" })
+        dispatch({ type: "IS_NOT_ADMIN", payload: { type: 'user' }})
 
     }
 

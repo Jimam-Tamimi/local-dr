@@ -21,6 +21,7 @@ class CustomUserManager(BaseUserManager):
         user = self.create_user(email, password, **other_fields)
         user.is_staff = True
         user.is_superuser = True
+        
         user.save()
         return user
 
@@ -34,7 +35,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_supperuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-    
+    is_hospital = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
     

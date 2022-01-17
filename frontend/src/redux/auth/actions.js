@@ -99,7 +99,7 @@ export const refreshToken = () => async dispatch => {
     }
 }
 export const logout = () => async dispatch => {
-    dispatch({type: 'LOGOUT'})
+    dispatch({type: 'LOGOUT'}) 
     dispatch(alert(`Logout successful`, 'success'))
 
 }

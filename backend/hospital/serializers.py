@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer
+from account.models import MyUser
 from hospital.models import *
 from rest_framework import serializers
 
@@ -6,10 +7,19 @@ from rest_framework import serializers
 class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
-        fields = ['id', 'name', 'email',  'contact', 'contact_person' ,'price', 'location']
+        fields = ['id', 'name', 'email', 'password',
+                  'contact', 'contact_person', 'price', 'location']
+
+    def create(self, validated_data):
+        user_emails = MyUser.objects.filter(email=validated_data['email'])
+        print(validated_data['password'])
+        if(len(user_emails) > 0):
+            raise serializers.ValidationError("Email already exists")
+        return super().create(validated_data)
+
 
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['id', 'hospital', 'name', 'speciality', 'qualification' ]    
-        
+        fields = ['id', 'hospital', 'name', 'speciality',
+                  'qualification',  "startTime", "endTime"]

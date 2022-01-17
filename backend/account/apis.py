@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from hospital.permission import IsHospital
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 from django.conf import settings
@@ -92,6 +93,11 @@ def vallidateToken(request):
     return Response({"vallied": True, 'message': 'Token is vallied', }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser|IsHospital])
 def isAdmin(request):
-    return Response({"isAdmin": True, 'message': 'User is admin', }, status=status.HTTP_200_OK)
+    if(request.user.is_superuser):
+        return Response({"isAdmin": True, 'type': 'superuser', 'message': 'User is admin', }, status=status.HTTP_200_OK)
+    elif(request.user.is_hospital):
+        return Response({"isAdmin": True, 'type': 'hospital', 'message': 'User is admin', }, status=status.HTTP_200_OK)
+    else:
+        return Response({"isAdmin": False, 'type': 'user', 'message': 'User is admin', }, status=status.HTTP_403_FORBIDDEN)

@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "./hoc/Layout";
 import GuestRoute from './hoc/GuestRoute';
 import PrivateRoute from './hoc/PrivateRoute';
-import {  Route, useLocation } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Account from "./components/Account/Account";
 import Search from "./pages/home/Search";
@@ -20,15 +20,17 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { checkAdmin } from "./redux/adminAuth/actions";
 import Doctors from "./pages/admin/Doctors";
+import Appointments from "./pages/admin/hospital/Appointments";
+import Schedule from "./pages/admin/hospital/Schedule";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
   useEffect(() => {
-    AOS.init({once: true, duration: 1000});
+    AOS.init({ once: true, duration: 1000 });
     dispatch(authenticate())
   }, [])
   const auth = useSelector(state => state.auth)
-  // if(auth.isAuthenticated){
+  if (auth.isAuthenticated) {
     axios.interceptors.request.use(
       async config => {
         const token = await auth.access;
@@ -39,28 +41,40 @@ function App() {
         Promise.reject(error);
       }
     );
-  // }
-  axios.interceptors.response.use(
-    response => response,
-    async error => {
-      if (error.response.status === 401) {
-        await dispatch(refreshToken())
-        if(location.pathname.startsWith('/admin')) {
-          await dispatch(checkAdmin())
+    axios.interceptors.response.use(
+      response => response,
+      async error => {
+        if (error.response.status === 401) {
+          await dispatch(refreshToken())
+          if (location.pathname.startsWith('/admin')) {
+            await dispatch(checkAdmin())
+          }
         }
-      } 
-      return Promise.reject(error);
-    }
-  )
-  
+        return Promise.reject(error);
+      }
+    )
+  }
+
+  const adminAuth = useSelector(state => state.adminAuth)
   return (
 
-    <> 
-          <AdminLayout>
+    <>
+      <AdminLayout>
         <AdminRoute>
-        <Route exact path="/admin/" component={Index} />
-        <Route exact path="/admin/hospitals/" component={Hospitals} />
-        <Route exact path="/admin/doctors/" component={Doctors} />
+          {
+            adminAuth.isAdmin === true && adminAuth.type === 'superuser' ?
+              <>
+                <Route exact path="/admin/" component={Index} />
+                <Route exact path="/admin/hospitals/" component={Hospitals} />
+                <Route exact path="/admin/doctors/" component={Doctors} />
+              </> :
+              adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
+                <>
+                <Route exact path="/admin/appointment/" component={Appointments} />
+                <Route exact path="/admin/schedule/" component={Schedule} />
+
+                </> : ''
+          }
         </AdminRoute>
       </AdminLayout>
       <Layout>
@@ -68,10 +82,10 @@ function App() {
         </PrivateRoute>
         <GuestRoute>
         </GuestRoute>
-          <Route exact path='/'  component={Home} />
-          <Route exact path='/search/'  component={Search} />
-          <Route exact path='/doctor/:id/'  component={BookAppointment} />
-          <Route path='/' component={Account} />
+        <Route exact path='/' component={Home} />
+        <Route exact path='/search/' component={Search} />
+        <Route exact path='/doctor/:id/' component={BookAppointment} />
+        <Route path='/' component={Account} />
       </Layout>
 
     </>

@@ -1,11 +1,17 @@
 from statistics import mode
 from django.db import models
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
+
+from account.models import MyUser
 
 # Create your models here.
 
 
 class Hospital(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, blank=False, null=False)
     email = models.EmailField(unique=True, max_length=100, blank=False, null=False)
     password = models.TextField(blank=False, null=False)
     contact = models.CharField(max_length=20, blank=False, null=False)
@@ -24,6 +30,25 @@ class Doctor(models.Model):
     name = models.CharField(max_length=20, null=False, blank=False)
     speciality = models.CharField(max_length=50, null=False, blank=False)
     qualification = models.CharField(max_length=50, null=False, blank=False)
+    startTime = models.TimeField(blank=True, null=True)
+    endTime = models.TimeField(blank=True, null=True)
     
     def __str__(self):
         return self.name
+    
+    
+@receiver(pre_save, sender=Hospital)
+def create_profile(sender, instance, **kwargs):
+    user = MyUser.objects.create(email=instance.email)
+    print(instance.password)
+    user.set_password(instance.password)
+    user.is_hospital = True
+    user.save()
+    instance.user = user
+    
+    
+@receiver(post_delete, sender=Hospital)
+def create_profile(sender, instance, **kwargs):
+    user = MyUser.objects.create(email=instance.email)
+    user.delete()
+    

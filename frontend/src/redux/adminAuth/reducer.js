@@ -1,7 +1,8 @@
 import axios from "axios"
 
 let initialState = {
-    isAdmin: 'loading'
+    isAdmin: 'loading',
+    type: 'user'
 }
 
 
@@ -10,6 +11,7 @@ const adminAuthReducer = (state = initialState, action) => {
         state = {
             ...state,
             isAdmin: true,
+            type: action.payload.type
         }
         return state
     }

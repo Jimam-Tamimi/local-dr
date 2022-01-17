@@ -28,7 +28,7 @@ class HospitalViewSet(ModelViewSet):
 class DoctorViewSet(ModelViewSet):
     queryset = Doctor.objects.all().order_by('-id')
     serializer_class = DoctorSerializer
-    authentication_classes = [BasicAuthentication]
+    # authentication_classes = [BasicAuthentication]
     permission_classes = [IsAdminUser | IsHospital]
     search_fields = ['id',  'name', 'speciality', 'qualification']
     filter_backends = (filters.SearchFilter,)
@@ -111,30 +111,30 @@ def search(request):
     lng = request.GET.get('lng', '')
     speciality = request.GET.get('speciality', '')
     maxDistance = request.GET.get('max-distance', 30)
-    print(lat, lng)
-
+    print(maxDistance)
     queryset = Doctor.objects.all().order_by('-id')
     queryset = queryset.filter(
         (Q(name__contains=name) | Q(hospital__name__contains=name)))
     queryset = queryset.filter(Q(speciality__contains=speciality))
     serializer = DoctorSerializer(queryset, many=True)
-    allData = serializer.data
-    for data in allData:
+    allData = []
+    for data in serializer.data:
         hospitalID = data['hospital']
-        data['hospital'] = HospitalSerializer(
-            Hospital.objects.get(id=hospitalID)).data
+        
+        data['hospital'] = HospitalSerializer(Hospital.objects.get(id=hospitalID)).data
         if(lat != '' and lng != ''):
             try:
 
                 location1 = {'lat': float(lat), 'lng': float(lng)}
                 location2 = json.loads(data['hospital']['location'])
                 dis = distance(location1, location2)
-                print(dis)
-                print(dis > float(maxDistance))
+                print(dis, 'dis')
                 if(dis > float(maxDistance)):
-                    print(allData)
-                    allData.remove(data)
-                    print(allData)
+    
+                    continue
             except Exception as e:
                 print(e)
+        allData.append(data)
+    print(len(serializer.data))
+    print(len(allData))
     return Response(allData, status=status.HTTP_200_OK)

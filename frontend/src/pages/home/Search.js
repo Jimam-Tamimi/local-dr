@@ -27,7 +27,7 @@ import demoDr2 from "../../assets/images/demo-dr2.png";
 import demoDr3 from "../../assets/images/demo-dr3.png";
 import locationSvg from "../../assets/images/location.svg";
 import activeLocationSvg from "../../assets/images/activeLocation.svg";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { SearchColumn } from "../styles/home/Home.styles";
 import { FaSearch } from "react-icons/fa";
 import { SearchColumnNav } from "../../components/Navbar/Navbar.styles";
@@ -42,6 +42,7 @@ import { Marker } from "react-google-maps";
 
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import Map from "../../components/Map/Map";
+import axios from "axios";
 
 setOptions({
   theme: 'ios',
@@ -114,28 +115,57 @@ export default function Search({ match }) {
 
   // backend
   const location = useLocation()
+  const history = useHistory()
   console.log(location)
-
+  console.log(window.location.search)
+  const search = window.location.search // could be '?foo=bar'
+  const params = new URLSearchParams(search);
   const [doctorData, setDoctorData] = useState('')
-  const [locationData, setLocationData] = useState('')
+  const [locationData, setLocationData] = useState({lat: params.get('lat'), lng: params.get('lng')})
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((location) => {
+      if(location.lng  && locationData.lat){
+        setLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
+      }
+   }, () => console.log('error :)'), { timeout: 10000 })
+  }, [])
+
   const [specialityData, setSpecialityData] = useState('')
+  const [available, setAvailable] = useState('')
+  const [maxDistance, setMaxDistance] = useState(30)
+
 
   const [doctorList, setDoctorList] = useState([])
-  
+
+
   useEffect(() => {
-    console.log(window.location.search)
-    const search = window.location.search // could be '?foo=bar'
-    const params = new URLSearchParams(search); 
+
     setDoctorData(params.get('doctor'))
-    setLocationData(params.get('location'))
-    setSpecialityData(params.get('speciality'))
+
+    setSpecialityData(params.get('speciality') ? params.get('speciality') : '')
+    setAvailable(params.get('available') ? params.get('available') : '')
+    setMaxDistance(params.get('max-distance') ? params.get('max-distance') : 30)
 
   }, [])
+
+  const getDoctorList = async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctorData}&lat=${locationData?.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`)
+      console.log(res.data)
+      if (res.status === 200) {
+        setDoctorList(res.data)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
   useEffect(() => {
     console.log(doctorData)
     console.log(locationData)
     console.log(specialityData)
-  }, [doctorData, locationData, specialityData])
+    getDoctorList()
+    history.push(`/search?doctor=${doctorData}&lat=${locationData.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}/`)
+  }, [doctorData, locationData, specialityData, available, maxDistance])
 
   return (
     <>
@@ -153,14 +183,14 @@ export default function Search({ match }) {
                 <Tab onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
                 <Dropdown style={{ left: '10px' }} show={showAvailablaity} setShow={setShowAvailablaity}>
                   <DropdownDiv>
-                    <DropdownOption>
-                      <input value="10" id="d-10" name="distance" type={'radio'} />
-                      <label for="d-10">10 KM</label>
-                    </DropdownOption>
-                    <DropdownOption>
-                      <input id="d-30" name="distance" type={'radio'} />
-                      <label for="d-30" >30 KM</label>
-                    </DropdownOption>
+                    {
+                      [true, false].map((item, index) => (
+                        <DropdownOption onClick={e => { setAvailable(item) }} key={index}>
+                          <input value={item} checked={item == available} id={`d-${item}`} name="available" type={'radio'} />
+                          <label >{`${item}`}</label>
+                        </DropdownOption>
+                      ))
+                    }
                     <hr />
                     <Button xsm>Apply</Button>
                   </DropdownDiv>
@@ -187,16 +217,15 @@ export default function Search({ match }) {
                 <Tab onClick={e => setShowDistance(!showDistance)}>Distance</Tab>
                 <Dropdown show={showDistance} setShow={setShowDistance}>
                   <DropdownDiv>
-                    <DropdownOption>
-                      <input value="10" id="d-10" name="distance" type={'radio'} />
-                      <label for="d-10">10 KM</label>
-                    </DropdownOption>
-                    <DropdownOption>
-                      <input id="d-30" name="distance" type={'radio'} />
-                      <label for="d-30" >30 KM</label>
-                    </DropdownOption>
-                    <hr />
-                    <Button xsm>Apply</Button>
+                    {
+                      [10, 30, 50, 100].map((item, i) => (
+                        <DropdownOption onClick={e => { setMaxDistance(item) }} key={i} >
+                          <input value={item} checked={item == maxDistance} id={`d-${item}`} name="distance" type={'radio'} />
+                          <label  >{item} KM</label>
+                        </DropdownOption>
+
+                      ))
+                    }
                   </DropdownDiv>
                 </Dropdown>
               </div>
@@ -222,20 +251,20 @@ export default function Search({ match }) {
               hasMore={true}
               loader={<SyncLoader color="var(--info-color)" />}
             >
-              {providers.map(({ img, cords }) => (
-                <ProviderColumn onMouseOut={e => setActiveProvider({})} onMouseOver={e => setActiveProvider(cords)} direction="column" lg={12}>
+              {doctorList.map((doctor, i) => (
+                <ProviderColumn key={i} direction="column" lg={12}>
                   <Column align="start" lg={12}>
                     <LeftCol>
-                      <img src={img} />
+                      <img src={demoDr} />
                     </LeftCol>
                     <RightCol>
                       {/* <Badge style={{}}>Available</Badge> */}
-                      <h2>Dr. Anuradha Kottapalli, MD</h2>
+                      <h2>{doctor.name}</h2>
                       <p>
-                        <b>Primary Care Doctor</b>
+                        <b>{doctor.hospital.name}</b>
                       </p>
-                      <p>Mount Sinai Doctors Health Quarteres NoHo</p>
-                      <p>632 Broadway, Ste A</p>
+                      <p>{doctor.qualification}</p>
+                      <p>{doctor.speciality}</p>
                       <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (

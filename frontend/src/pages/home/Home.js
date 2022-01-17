@@ -56,15 +56,17 @@ export default function Home() {
   // hone page search 
  
   const [doctor, setDoctor] = useState('')
-  const [location, setLocation] = useState({})
+  const [location, setLocation] = useState('')
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((location) => {
+      setLocation({ lat: location.coords.latitude, lng: location.coords.longitude })
+   }, () => console.log('error :)'), { timeout: 10000 })
+  }, [])
   const [speciality, setSpeciality] = useState('')  
   const history = useHistory()
   const onSubmit = e => {
-    e.preventDefault();
-    console.log(doctor);
-    console.log(location);
-    console.log(speciality);
-    history.push(`/search?doctor=${doctor}&location=${JSON.stringify(location)}&speciality=${speciality}`)
+    e.preventDefault(); 
+    history.push(`/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}`)
   }
 
   // location
@@ -91,7 +93,7 @@ export default function Home() {
   const getSpecialityRecommendations = async (e) => {
     try{
       setSpeciality(e.target.value)
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/speciality/recommendations/?search=${doctor}`)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/speciality/recommendations/?search=${speciality}`)
       console.log(res);
       setSpecialityRecommendations(res.data);
     } catch (err) {

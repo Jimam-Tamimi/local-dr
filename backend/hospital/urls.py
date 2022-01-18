@@ -10,6 +10,7 @@ router.register(r'appointments', AppointmentViewSet)
 urlpatterns = [
     path('doctors/recommendations/', doctorRecommendations),
     path('speciality/recommendations/', specialityRecommendations),
+    path('get-doctor-data/<int:id>/', doctorData),
     path('search/', search),
     
 ] + router.urls

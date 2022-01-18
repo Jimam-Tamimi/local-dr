@@ -32,6 +32,8 @@ class Doctor(models.Model):
     
 class Appointment(models.Model):
     name = models.CharField(max_length=20, null=False, blank=False)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, blank=False, null=False)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, blank=False, null=False)
     email = models.EmailField(max_length=100, null=False, blank=False)
     number = models.CharField(max_length=20, null=False, blank=False)
     date = models.DateField(null=False, blank=False)

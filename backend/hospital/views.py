@@ -9,7 +9,7 @@ from hospital.permission import IsHospital
 from .serializers import *
 from .models import *
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAdminUser, AllowAny, DjangoObjectPermissions
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework import status
@@ -66,11 +66,16 @@ class AppointmentViewSet(ModelViewSet):
     queryset = Appointment.objects.all().order_by('-id')
     serializer_class = AppointmentSerializer
     # authentication_classes = [BasicAuthentication]
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     search_fields =  ['id', 'name', 'email', 'number',
                   'date',  "time"]
     filter_backends = (filters.SearchFilter,)
     pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        self.queryset = self.queryset.filter(user=self.request.user)
+        return self.queryset
+
 
     @action(detail=False, methods=['get'])
     def get_booked_times(self, request):
@@ -165,3 +170,17 @@ def search(request):
 
 
     # return Response(allData, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def doctorData(request, id=None):
+    if(id):
+        try:
+            doctor = Doctor.objects.get(id=id)
+        except Doctor.DoesNotExist:
+            return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = DoctorSerializer(doctor)
+        data = serializer.data
+        data['hospital'] = HospitalSerializer(doctor.hospital).data
+        return Response(data, status=status.HTTP_200_OK)
+    else:
+        return Response({"message": "Please provide a doctor id"}, status=status.HTTP_400_BAD_REQUEST)

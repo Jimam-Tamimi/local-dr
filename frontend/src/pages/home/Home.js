@@ -27,7 +27,7 @@ import { IoLocationSharp } from "react-icons/io5";
 
 import TextTransition, { presets } from "react-text-transition";
 import { RiProfileLine } from "react-icons/ri";
-import { Autocomplete } from '@react-google-maps/api'
+import { Autocomplete } from "@react-google-maps/api";
 import { usePlacesWidget } from "react-google-autocomplete";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -51,55 +51,78 @@ export default function Home() {
     return () => clearTimeout(intervalId);
   }, []);
 
+  // hone page search
 
-
-  // hone page search 
- 
-  const [doctor, setDoctor] = useState('')
-  const [location, setLocation] = useState('')
+  const [doctor, setDoctor] = useState("");
+  const [location, setLocation] = useState("");
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((location) => {
-      setLocation({ lat: location.coords.latitude, lng: location.coords.longitude })
-   }, () => console.log('error :)'), { timeout: 10000 })
-  }, [])
-  const [speciality, setSpeciality] = useState('')  
-  const history = useHistory()
-  const onSubmit = e => {
-    e.preventDefault(); 
-    history.push(`/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}`)
-  }
+    navigator.geolocation.getCurrentPosition(
+      (location) => {
+        setLocation({
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
+        });
+      },
+      () => console.log("error :)"),
+      { timeout: 10000 }
+    );
+  }, []);
+  const [speciality, setSpeciality] = useState("");
+  const history = useHistory();
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if(doctor){
+      history.push(
+        `/search?doctor=${doctor}&lat=&lng=&speciality=${speciality}`
+      );
+    } else {
+      history.push(
+        `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}`
+      );
+      
+    }
+  };
 
   // location
   const { ref, autocompleteRef } = usePlacesWidget({
-    apiKey: '',
-    onPlaceSelected: (place) => { 
-      setLocation({ lat:place.geometry.location.lat(), lng: place.geometry.location.lng()  })
-    }
+    apiKey: "",
+    onPlaceSelected: (place) => {
+      setLocation({
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      });
+    },
   });
 
   // doctor recommendation
   const [doctorRecommendations, setDoctorRecommendations] = useState([]);
   const getDoctorRecommendations = async (e) => {
-    try{
-      setDoctor(e.target.value )
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/recommendations/?search=${doctor}`)
+    try {
+      setDoctor(e.target.value);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}api/doctors/recommendations/?search=${doctor}`
+      );
       console.log(res);
       setDoctorRecommendations(res.data);
     } catch (err) {
       console.log(err.response);
     }
-  } 
-  const [specialityRecommendations, setSpecialityRecommendations] = useState([])
+  };
+  const [specialityRecommendations, setSpecialityRecommendations] = useState(
+    []
+  );
   const getSpecialityRecommendations = async (e) => {
-    try{
-      setSpeciality(e.target.value)
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/speciality/recommendations/?search=${speciality}`)
+    try {
+      setSpeciality(e.target.value);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}api/speciality/recommendations/?search=${speciality}`
+      );
       console.log(res);
       setSpecialityRecommendations(res.data);
     } catch (err) {
       console.log(err.response);
-    } 
-  } 
+    }
+  };
   return (
     <>
       <HeroWrap data-aos="fade-in">
@@ -138,16 +161,22 @@ export default function Home() {
                     value={doctor}
                     onChange={getDoctorRecommendations}
                   />
-                    {
-                      doctorRecommendations.length !==0 ?
-                  <div>
-                    {
-                    doctorRecommendations.map(doctorName => (
-                      <div onClick={e => {setDoctor(doctorName); setDoctorRecommendations([])}}>{doctorName}</div> 
-                      ))
-                    }
-                  </div> :""
-                    } 
+                  {doctorRecommendations.length !== 0 ? (
+                    <div>
+                      {doctorRecommendations.map((doctorName) => (
+                        <div
+                          onClick={(e) => {
+                            setDoctor(doctorName);
+                            setDoctorRecommendations([]);
+                          }}
+                        >
+                          {doctorName}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <div
@@ -157,12 +186,17 @@ export default function Home() {
                     borderBottomLeftRadius: 0,
                     borderRight: "2px solid #0000001f",
                   }}
-                > 
+                >
                   <>
                     <IoLocationSharp />
 
-                    <input ref={ref} name="location" type="text" placeholder="My Location" />
-                  </> 
+                    <input
+                      ref={ref}
+                      name="location"
+                      type="text"
+                      placeholder="My Location"
+                    />
+                  </>
                 </div>
                 <div
                   style={{
@@ -173,17 +207,29 @@ export default function Home() {
                 >
                   <RiProfileLine />
 
-                  <input name="speciality" value={speciality} onChange={getSpecialityRecommendations} type="text" placeholder="Speciality" />
-                  {
-                      specialityRecommendations.length !==0 ?
-                  <div>
-                    {
-                    specialityRecommendations.map(speciality => (
-                      <div onClick={e => {setSpeciality(speciality); setSpecialityRecommendations([])}}>{speciality}</div> 
-                      ))
-                    }
-                  </div> :""
-                    } 
+                  <input
+                    name="speciality"
+                    value={speciality}
+                    onChange={getSpecialityRecommendations}
+                    type="text"
+                    placeholder="Speciality"
+                  />
+                  {specialityRecommendations.length !== 0 ? (
+                    <div>
+                      {specialityRecommendations.map((speciality) => (
+                        <div
+                          onClick={(e) => {
+                            setSpeciality(speciality);
+                            setSpecialityRecommendations([]);
+                          }}
+                        >
+                          {speciality}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
                 <button>{changeSearch ? "Find Care" : <FaSearch />}</button>

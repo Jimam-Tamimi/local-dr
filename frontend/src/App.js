@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "./hoc/Layout";
 import GuestRoute from './hoc/GuestRoute';
 import PrivateRoute from './hoc/PrivateRoute';
@@ -30,8 +30,6 @@ function App() {
     dispatch(authenticate())
   }, [])
   const auth = useSelector(state => state.auth)
-
-
   
   if (auth.isAuthenticated) {
     axios.interceptors.request.use(
@@ -63,7 +61,7 @@ function App() {
   return (
 
     <>
-      <AdminLayout>
+      <AdminLayout >
         <AdminRoute>
           {
             adminAuth.isAdmin === true && adminAuth.type === 'superuser' ?

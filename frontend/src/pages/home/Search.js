@@ -44,13 +44,14 @@ import { Marker } from "react-google-maps";
 import '@mobiscroll/react/dist/css/mobiscroll.min.css';
 import Map from "../../components/Map/Map";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 setOptions({
   theme: 'ios',
   themeVariant: 'light'
 });
 
-export default function Search({ match, searchInfo, setSearchInfo }) {
+export default function Search({ match,  }) {
   const [providers, setProviders] = useState([
     { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
     // { img: demoDr2, cords: { lat: 40.7350610, lng: -73.945242 } },
@@ -105,74 +106,67 @@ export default function Search({ match, searchInfo, setSearchInfo }) {
   // backend
   const location = useLocation()
   const history = useHistory()
-  const search = window.location.search // could be '?foo=bar'
-  const params = new URLSearchParams(search);
-  const [doctorData, setDoctorData] = useState('')
-  const [locationData, setLocationData] = useState({ lat: params.get('lat'), lng: params.get('lng') })
+  const searchQ = window.location.search // could be '?foo=bar'
+  const params = new URLSearchParams(searchQ);
+  const [myLocationData, setMyLocationData] = useState({ lat: params.get('lat'), lng: params.get('lng') })
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((location) => {
-      if (location.lng && locationData.lat) {
-        setLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
-      }
-    }, () => console.log('error :)'), { timeout: 10000 })
+
+      navigator.geolocation.getCurrentPosition((location) => {
+        setMyLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
+      }, () => console.log('error :)'), { timeout: 10000 })
   }, [])
 
-  const [specialityData, setSpecialityData] = useState('')
-  const [available, setAvailable] = useState('')
-  const [maxDistance, setMaxDistance] = useState(30)
 
+  const dispatch = useDispatch()
 
-  const [doctorList, setDoctorList] = useState([])
 
 
   useEffect(() => {
-
-    setDoctorData(params.get('doctor'))
-
-    setSpecialityData(params.get('speciality') ? params.get('speciality') : '')
-    setAvailable(params.get('available') ? params.get('available') : '')
-    setMaxDistance(params.get('max-distance') ? params.get('max-distance') : 30)
-
+    dispatch({ type: 'CHANGE_DOCTOR', payload: params.get('doctor') || '' })
+    dispatch({ type: 'CHANGE_SPECIALITY', payload: params.get('speciality') || '' })
+    dispatch({ type: 'CHANGE_AVAILABLE', payload: params.get('available') || '' })
+    dispatch({ type: 'CHANGE_MAX_DISTANCE', payload: params.get('max-distance') || '' })
+    dispatch({ type: 'CHANGE_LAT', payload: params.get('lat') || '' })
+    dispatch({ type: 'CHANGE_LNG', payload: params.get('lng') || '' })
   }, [])
   const [paginationNext, setPaginationNext] = useState('')
   const [count, setCount] = useState(0)
   const fetchMoreData = async () => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
+ 
+      try { 
+        console.log('fetching more data')
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&page=${paginationNext}`)
+        console.log(res.data, 'data frm pagination')
+        if (res.status === 200) {
+
+          setDoctorList([...doctorList, ...res?.data?.results])
+          console.log([...doctorList, ...res?.data?.results])
+          setPaginationNext(res.data.next)
+          console.log(res.data.next, 'next')
 
         }
-      }
-      console.log('fetching more data')
-      const res = await axios.get(paginationNext, config)
-      console.log(res.data, 'data frm pagination')
-      if (res.status === 200) {
-
-        setDoctorList([...doctorList, ...res?.data?.results])
-        console.log([...doctorList, ...res?.data?.results])
-        setPaginationNext(res.data.next)
-        console.log(res.data.next, 'next')
-
-      }
-    } catch (err) {
-      console.log(err)
-    }
+      } catch (err) {
+        console.log(err)
+      } 
   };
   
-  const getDoctorList = async () => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
+  
+  const search = useSelector(state => state.search)
+  const {doctor, speciality, available, distance, lat, lng} = search
 
-        }
-      }
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctorData}&lat=${locationData?.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`, config)
+  const [doctorList, setDoctorList] = useState([])
+  const getDoctorList = async () => {
+    try { 
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
       if (res.status === 200) {
         console.log(res.data, 'data frm search')
         setDoctorList(res?.data?.results)
-        setPaginationNext(res?.data?.next)
+        if(res.data.next) {
+          let next = new URL(res.data.next)
+          let nextQ = next.searchParams.get('page')
+          console.log(nextQ, 'nextQ')
+          setPaginationNext(nextQ)
+        }
         setCount(res?.data?.count)
         console.log(res?.data?.count, 'count')
       }
@@ -182,9 +176,12 @@ export default function Search({ match, searchInfo, setSearchInfo }) {
   }
   useEffect(() => {
     getDoctorList()
-    history.push(`/search?doctor=${doctorData}&lat=${locationData.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`)
+    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
     console.log(paginationNext)
-  }, [doctorData, locationData, specialityData, available, maxDistance])
+  }, [search])
+  useEffect(() => {
+    console.log('state changes')
+  }, [search])
 
   return (
     <>
@@ -204,7 +201,7 @@ export default function Search({ match, searchInfo, setSearchInfo }) {
                   <DropdownDiv>
                     {
                       [true, false].map((item, index) => (
-                        <DropdownOption onClick={e => { setAvailable(item) }} key={index}>
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: item })}} key={index}>
                           <input value={item} checked={item == available} id={`d-${item}`} name="available" type={'radio'} />
                           <label >{`${item}`}</label>
                         </DropdownOption>
@@ -234,8 +231,8 @@ export default function Search({ match, searchInfo, setSearchInfo }) {
                   <DropdownDiv>
                     {
                       [10, 30, 50, 100].map((item, i) => (
-                        <DropdownOption onClick={e => { setMaxDistance(item) }} key={i} >
-                          <input value={item} checked={item == maxDistance} id={`d-${item}`} name="distance" type={'radio'} />
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_DISTANCE', payload: item })}} key={i} >
+                          <input value={item} checked={item == distance} id={`d-${item}`} name="distance" type={'radio'} />
                           <label  >{item} KM</label>
                         </DropdownOption>
 
@@ -263,7 +260,7 @@ export default function Search({ match, searchInfo, setSearchInfo }) {
               }}
               pageStart={0}
               loadMore={fetchMoreData}
-              hasMore={paginationNext ? true : false}
+              hasMore={count <= doctorList.length ? false : true}
               loader={<SyncLoader color="var(--info-color)" />}
             >
               {doctorList?.map((doctor, i) => (

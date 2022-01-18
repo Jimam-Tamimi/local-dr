@@ -23,3 +23,9 @@ class DoctorSerializer(serializers.ModelSerializer):
         model = Doctor
         fields = ['id', 'hospital', 'name', 'speciality',
                   'qualification',  "startTime", "endTime"]
+
+class AppointmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Appointment
+        fields = ['id', 'name', 'email', 'number',
+                  'date',  "time"]

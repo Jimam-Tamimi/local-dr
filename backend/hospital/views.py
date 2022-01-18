@@ -1,4 +1,5 @@
 import json
+from urllib import request
 from django.shortcuts import render
 from django.db.models import Q
 from hospital.helpers import available
@@ -61,6 +62,29 @@ class DoctorViewSet(ModelViewSet):
                 Hospital.objects.get(id=hospitalID)).data
         return Response(allData, status=status.HTTP_200_OK)
 
+class AppointmentViewSet(ModelViewSet):
+    queryset = Appointment.objects.all().order_by('-id')
+    serializer_class = AppointmentSerializer
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = []
+    search_fields =  ['id', 'name', 'email', 'number',
+                  'date',  "time"]
+    filter_backends = (filters.SearchFilter,)
+    pagination_class = PageNumberPagination
+
+    @action(detail=False, methods=['get'])
+    def get_booked_times(self, request):
+        date = request.GET.get('date', None)
+        if(date):
+            appointment = Appointment.objects.filter(date=date)
+            serializer = self.get_serializer(appointment, many=True)
+            tmpData = serializer.data
+            allData = []
+            for data in tmpData:
+                allData.append(data['time'])
+            
+            return Response(allData, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

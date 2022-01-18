@@ -34,17 +34,16 @@ import { IoLocationSharp } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { logout } from "../../redux/auth/actions";
-import { usePlacesWidget } from "react-google-autocomplete";
+import ReactGoogleAutocomplete, { usePlacesWidget } from "react-google-autocomplete";
 import axios from "axios";
 
-export default function Navbar() {
+export default function Navbar({ }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSearch, setShowSearch] = useState(
     window.innerWidth > 995 ? true : false
   )
   const [showNav, setShowNav] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
-
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -80,15 +79,16 @@ export default function Navbar() {
   const history = useHistory()
   // search  
 
-  const search = window.location.search // could be '?foo=bar'
-  const params = new URLSearchParams(search);
-  const [searchLocation, setSearchLocation] = useState({lat: params.get("lat"), lng: params.get('lng') || ''})
+  const searchQ = window.location.search // could be '?foo=bar'
+  const params = new URLSearchParams(searchQ);
   const [searchDoctor, setSearchDoctor] = useState(params.get('doctor') || '')
 
 
   const [doctorRecommendations, setDoctorRecommendations] = useState([]);
   const getDoctorRecommendations = async (e) => {
     try {
+      dispatch({ type: 'CHANGE_DOCTOR', payload: e.target.value })
+
       setSearchDoctor(e.target.value)
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/recommendations/?search=${searchDoctor}`)
       console.log(res);
@@ -97,23 +97,21 @@ export default function Navbar() {
       console.log(err.response);
     }
   }
-  const { ref, autocompleteRef } = usePlacesWidget({
-    apiKey: '',
-    onPlaceSelected: (place) => {
-      setSearchLocation({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() })
-    }
-  });
 
+  const [myLocation, setMyLocation] = useState('')
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((location) => {
-      setSearchLocation({ lat: location.coords.latitude, lng: location.coords.longitude })
+      setMyLocation({ lat: location.coords.latitude, lng: location.coords.longitude })
     }, () => console.log('error :)'), { timeout: 10000 })
   }, [])
-
   const onSubmit = e => {
     e.preventDefault();
-    history.push(`/search?doctor=${searchDoctor}&lat=${searchLocation?.lat}&lng=${searchLocation?.lng}`)
   }
+
+   
+  const search = useSelector(state => state.search)
+  const {doctor, speciality, available, distance, lat, lng} = search
+  
 
   return (
     <>
@@ -163,7 +161,7 @@ export default function Navbar() {
 
                 showSearch ?
                   <Column justify="start" lg={8} sm={3} spacing={10}>
-                    <SearchColumnNav onSubmit={onSubmit}>
+                    <SearchColumnNav    onSubmit={onSubmit}>
                       <div
                         style={{
                           width: "60%",
@@ -174,9 +172,9 @@ export default function Navbar() {
                       >
 
                         <input
-                    name={`doctor`}
-                    value={searchDoctor}
-                    onChange={getDoctorRecommendations}
+                          name={`doctor`}
+                          value={doctor}
+                          onChange={getDoctorRecommendations}
                           type="text"
                           placeholder="Search for a doctor or hospital "
                         />
@@ -185,7 +183,7 @@ export default function Navbar() {
                             <div>
                               {
                                 doctorRecommendations.map(doctorName => (
-                                  <div onClick={e => { setSearchDoctor(doctorName); setDoctorRecommendations([]) }}>{doctorName}</div>
+                                  <div onClick={e => { dispatch({ type: 'CHANGE_DOCTOR', payload: doctorName }); setDoctorRecommendations([]) }}>{doctorName}</div>
                                 ))
                               }
                             </div> : ""
@@ -199,8 +197,10 @@ export default function Navbar() {
                           borderBottomLeftRadius: 0,
                         }}
                       >
+                        <ReactGoogleAutocomplete
+                          onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
+                        />
 
-                        <input ref={ref} name="location" type="text" placeholder="My Location" />
 
 
                       </div>
@@ -259,7 +259,7 @@ export default function Navbar() {
 
               <div
                 style={{
-                  width: "60%",
+                  width: "50%",
                   borderTopRightRadius: 0,
                   borderBottomRightRadius: 0,
                   borderRight: "2px solid #0000001f",
@@ -267,10 +267,31 @@ export default function Navbar() {
               >
                 <AiOutlineSearch />
                 <input
-
                   type="text"
                   placeholder={`Search For Doctor or Hospital`}
+                  name={`doctor`}
+                  value={doctor}
+                  onChange={getDoctorRecommendations}
                 />
+                {doctorRecommendations.length !== 0 ? (
+                  <div>
+                    {doctorRecommendations.map((doctorName, i) => (
+                      <div 
+                      key={i}
+                        onClick={(e) => { 
+                          dispatch({ type: 'CHANGE_DOCTOR', payload: doctorName })
+                          setTimeout(() => {
+                            setDoctorRecommendations([]);
+                          }, );
+                        }}
+                      >
+                        {doctorName}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
               <div
@@ -282,13 +303,13 @@ export default function Navbar() {
               >
                 <IoLocationSharp />
 
-                <input
-                  type="text"
-                  placeholder="My Location"
-                />
+                
+                        <ReactGoogleAutocomplete
+                          onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
+                        />
               </div>
 
-              <button>Find Care</button>
+              {/* <button>Find Care</button> */}
 
             </SearchColumn>
           </SearchModal>

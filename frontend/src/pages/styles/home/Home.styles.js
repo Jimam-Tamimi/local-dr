@@ -66,6 +66,7 @@ export const SearchColumn = styled.form`
   & > div  {
     position: relative;
     padding: 0px 20px;
+
   }
   & > div > div {
     background: white;
@@ -77,6 +78,9 @@ export const SearchColumn = styled.form`
     z-index: 1;
     overflow-y: scroll;
     padding: 5px 0px;
+    @media screen and (max-width: 992px) {
+      top: 100%;
+    }
   }
   & > div > div > div {
     padding: 8px 0px;

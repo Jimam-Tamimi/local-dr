@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.db.models import Q
+from hospital.helpers import available
 from hospital.helpers import distance
 
 from hospital.permission import IsHospital
@@ -99,19 +100,13 @@ def specialityRecommendations(request):
 @permission_classes([AllowAny])
 def search(request):
 
-    def filter_doctor(queryset, name, speciality):
-        tmpQ = []
-        for item in queryset:
-            if(name in item.name or name in item.hospital.name):
-                if(speciality in item.speciality):
-                    tmpQ.append(item)
-        return tmpQ
+ 
     name = request.GET.get('doctor', '')
     lat = request.GET.get('lat', '')
     lng = request.GET.get('lng', '')
     speciality = request.GET.get('speciality', '')
+    isAvailable = request.GET.get('available', '')
     maxDistance = request.GET.get('max-distance', 30)
-    print(maxDistance)
     queryset = Doctor.objects.all().order_by('-id')
     queryset = queryset.filter(
         (Q(name__contains=name) | Q(hospital__name__contains=name)))
@@ -130,11 +125,19 @@ def search(request):
                 dis = distance(location1, location2)
                 print(dis, 'dis')
                 if(dis > float(maxDistance)):
-    
                     continue
+
             except Exception as e:
                 print(e)
-        allData.append(data)
-    print(len(serializer.data))
-    print(len(allData))
-    return Response(allData, status=status.HTTP_200_OK)
+        if((not available(data['startTime'], data['endTime'])) and isAvailable == 'true'):
+            continue
+        data['available'] = available(data['startTime'], data['endTime'])
+        allData.append(data) 
+    
+    paginator = PageNumberPagination()
+    paginator.page_size = 5
+    result_page = paginator.paginate_queryset(allData, request)
+    return paginator.get_paginated_response(result_page)
+
+
+    # return Response(allData, status=status.HTTP_200_OK)

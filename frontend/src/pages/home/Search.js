@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Badge,
   Button,
+  ButtonLink,
   Column,
   Container,
   Grid,
@@ -32,7 +33,7 @@ import { SearchColumn } from "../styles/home/Home.styles";
 import { FaSearch } from "react-icons/fa";
 import { SearchColumnNav } from "../../components/Navbar/Navbar.styles";
 import { Input } from "../../styles/Form.styles";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from 'react-infinite-scroller';
 import SyncLoader from "react-spinners/SyncLoader";
 import { BsShieldFillPlus } from 'react-icons/bs'
 import { IoLocationSharp } from 'react-icons/io5'
@@ -96,18 +97,6 @@ export default function Search({ match }) {
     });
   }, [showSearch]);
 
-  const fetchMoreData = () => {
-    setTimeout(() => {
-      setProviders([...providers,
-      { img: demoDr, cords: { lat: 40.730610, lng: -73.938882 } },
-      { img: demoDr2, cords: { lat: 40.77360610, lng: -73.956242 } },
-      { img: demoDr3, cords: { lat: 40.77630610, lng: -73.934642 } },
-      ]);
-    }, 3000);
-  };
-  useEffect(() => {
-    console.log(activeProvider)
-  }, [activeProvider])
 
 
 
@@ -116,18 +105,16 @@ export default function Search({ match }) {
   // backend
   const location = useLocation()
   const history = useHistory()
-  console.log(location)
-  console.log(window.location.search)
   const search = window.location.search // could be '?foo=bar'
   const params = new URLSearchParams(search);
   const [doctorData, setDoctorData] = useState('')
-  const [locationData, setLocationData] = useState({lat: params.get('lat'), lng: params.get('lng')})
+  const [locationData, setLocationData] = useState({ lat: params.get('lat'), lng: params.get('lng') })
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((location) => {
-      if(location.lng  && locationData.lat){
+      if (location.lng && locationData.lat) {
         setLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
       }
-   }, () => console.log('error :)'), { timeout: 10000 })
+    }, () => console.log('error :)'), { timeout: 10000 })
   }, [])
 
   const [specialityData, setSpecialityData] = useState('')
@@ -147,24 +134,56 @@ export default function Search({ match }) {
     setMaxDistance(params.get('max-distance') ? params.get('max-distance') : 30)
 
   }, [])
+  const [paginationNext, setPaginationNext] = useState('')
+  const [count, setCount] = useState(0)
+  const fetchMoreData = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
 
+        }
+      }
+      console.log('fetching more data')
+      const res = await axios.get(paginationNext, config)
+      console.log(res.data, 'data frm pagination')
+      if (res.status === 200) {
+
+        setDoctorList([...doctorList, ...res?.data?.results])
+        console.log([...doctorList, ...res?.data?.results])
+        setPaginationNext(res.data.next)
+        console.log(res.data.next, 'next')
+
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  };
+  
   const getDoctorList = async () => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctorData}&lat=${locationData?.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`)
-      console.log(res.data)
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+
+        }
+      }
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctorData}&lat=${locationData?.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`, config)
       if (res.status === 200) {
-        setDoctorList(res.data)
+        console.log(res.data, 'data frm search')
+        setDoctorList(res?.data?.results)
+        setPaginationNext(res?.data?.next)
+        setCount(res?.data?.count)
+        console.log(res?.data?.count, 'count')
       }
     } catch (err) {
       console.log(err)
     }
   }
   useEffect(() => {
-    console.log(doctorData)
-    console.log(locationData)
-    console.log(specialityData)
     getDoctorList()
-    history.push(`/search?doctor=${doctorData}&lat=${locationData.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}/`)
+    history.push(`/search?doctor=${doctorData}&lat=${locationData.lat}&lng=${locationData.lng}&speciality=${specialityData}&available=${available}&max-distance=${maxDistance}`)
+    console.log(paginationNext)
   }, [doctorData, locationData, specialityData, available, maxDistance])
 
   return (
@@ -190,9 +209,7 @@ export default function Search({ match }) {
                           <label >{`${item}`}</label>
                         </DropdownOption>
                       ))
-                    }
-                    <hr />
-                    <Button xsm>Apply</Button>
+                    } 
                   </DropdownDiv>
                 </Dropdown>
               </div>
@@ -207,9 +224,7 @@ export default function Search({ match }) {
                     <DropdownOption>
                       <input id="d-30" name="distance" type={'radio'} />
                       <label for="d-30" >30 KM</label>
-                    </DropdownOption>
-                    <hr />
-                    <Button xsm>Apply</Button>
+                    </DropdownOption> 
                   </DropdownDiv>
                 </Dropdown>
               </div>
@@ -231,7 +246,7 @@ export default function Search({ match }) {
               </div>
             </Column>
             <Column>
-              <ProviderHeading>772 providers</ProviderHeading>
+              <ProviderHeading>{count} providers</ProviderHeading>
             </Column>
           </Grid>
 
@@ -246,12 +261,12 @@ export default function Search({ match }) {
                 overflow: "hidden",
                 padding: "10px 0px",
               }}
-              dataLength={providers.length}
-              next={fetchMoreData}
-              hasMore={true}
+              pageStart={0}
+              loadMore={fetchMoreData}
+              hasMore={paginationNext ? true : false}
               loader={<SyncLoader color="var(--info-color)" />}
             >
-              {doctorList.map((doctor, i) => (
+              {doctorList?.map((doctor, i) => (
                 <ProviderColumn key={i} direction="column" lg={12}>
                   <Column align="start" lg={12}>
                     <LeftCol>
@@ -268,14 +283,21 @@ export default function Search({ match }) {
                       <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
-                        <Button style={{ boxShadow: "none" }} sm>
+                        
+                          doctor.available ?
+                        <ButtonLink to={`/doctor/${doctor.id}/`}  style={{ boxShadow: "none" }} sm >
                           Book Appointment
-                        </Button>
+                        </ButtonLink> :
+                        <Button to={`/doctor/${doctor.id}/`}  style={{ boxShadow: "none" }} sm  disabled={true}>
+                          Not Available
+                        </Button> 
+                        
                       )}
                     </RightCol>
                   </Column>
                   {!showButton && (
-                    <Button
+                          doctor.available ?
+                    <ButtonLink to={`/doctor/${doctor.id}/`} 
                       block
                       style={{
                         boxShadow: "none",
@@ -283,6 +305,19 @@ export default function Search({ match }) {
                         margin: "20px 0px 0px 0px",
                       }}
                       sm
+                      disabled={!doctor.available}
+                    >
+                      Book Appointment
+                    </ButtonLink>:
+                    <Button to={`/doctor/${doctor.id}/`} disabled={true} 
+                      block
+                      style={{
+                        boxShadow: "none",
+                        boxShadow: "none",
+                        margin: "20px 0px 0px 0px",
+                      }}
+                      sm
+                      disabled={!doctor.available}
                     >
                       Book Appointment
                     </Button>

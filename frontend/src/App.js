@@ -35,6 +35,7 @@ function App() {
       async config => {
         const token = await auth.access;
         config.headers.authorization = `JWT ${JSON.parse(localStorage.getItem('auth')).access}`;
+       
         return config;
       },
       error => {

@@ -141,6 +141,10 @@ export const Button = styled.button`
     background: #39b27c;
     color: #fff;
   `}
+    ${({disabled}) => disabled && `
+    cursor: not-allowed;
+      opacity: .5;  
+  `}
 `;
 
 export const ButtonLink = styled(Link)`
@@ -172,6 +176,10 @@ export const ButtonLink = styled(Link)`
   ${({green}) => green && `
     background: #39b27c;
     color: #fff;
+  `}
+  ${({disabled}) => disabled && `
+    cursor: not-allowed;
+      opacity: .5;  
   `}
 `;
 

@@ -30,6 +30,9 @@ function App() {
     dispatch(authenticate())
   }, [])
   const auth = useSelector(state => state.auth)
+
+
+  
   if (auth.isAuthenticated) {
     axios.interceptors.request.use(
       async config => {
@@ -84,7 +87,7 @@ function App() {
         <GuestRoute>
         </GuestRoute>
         <Route exact path='/' component={Home} />
-        <Route exact path='/search/' component={Search} />
+        <Route exact   path='/search/' component={Search} />
         <Route exact path='/doctor/:id/' component={BookAppointment} />
         <Route path='/' component={Account} />
       </Layout>

@@ -9,6 +9,7 @@ import AlertComponent from "../components/Alert/AlertComponent";
 
 export default function Layout({ children }) {
   const location = useLocation()
+
   return (
     <>
       {
@@ -16,7 +17,7 @@ export default function Layout({ children }) {
         <>
           <GlobalStyle />
           <PrivateComponent></PrivateComponent>
-          <Navbar />
+          <Navbar  />
           <AlertComponent />
           <main style={{ minHeight: 'calc(100vh - (100px + 76.3906px))' }}>
             {children}

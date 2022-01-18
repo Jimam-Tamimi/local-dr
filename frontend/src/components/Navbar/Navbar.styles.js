@@ -68,7 +68,7 @@ export const Logout = styled.button`
 `
 
 export const SearchColumnNav = styled(SearchColumn)`
- & > input {
+ &  div > input {
     min-height: 46px;
     width: 100%;
     padding: 0px 15px;
@@ -76,6 +76,15 @@ export const SearchColumnNav = styled(SearchColumn)`
     border: 1px solid #0000001f;
     font-weight: 600;
     outline: none;
+  }
+  & > div {
+    padding: 0px 0px;
+  }
+  & > div > div {
+    top: initial;
+    padding-top: 0;
+    padding-bottom: 0;
+
   }
   /* width: 100%; */
 

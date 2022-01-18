@@ -24,7 +24,7 @@ import logo from "../../assets/images/logo.svg";
 import { useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { SearchColumn } from "../../pages/styles/home/Home.styles";
 import { FaSearch } from "react-icons/fa";
 import { BsSearch } from "react-icons/bs";
@@ -34,6 +34,8 @@ import { IoLocationSharp } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { logout } from "../../redux/auth/actions";
+import { usePlacesWidget } from "react-google-autocomplete";
+import axios from "axios";
 
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -75,6 +77,44 @@ export default function Navbar() {
 
   const dispatch = useDispatch()
 
+  const history = useHistory()
+  // search  
+
+  const search = window.location.search // could be '?foo=bar'
+  const params = new URLSearchParams(search);
+  const [searchLocation, setSearchLocation] = useState({lat: params.get("lat"), lng: params.get('lng') || ''})
+  const [searchDoctor, setSearchDoctor] = useState(params.get('doctor') || '')
+
+
+  const [doctorRecommendations, setDoctorRecommendations] = useState([]);
+  const getDoctorRecommendations = async (e) => {
+    try {
+      setSearchDoctor(e.target.value)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/recommendations/?search=${searchDoctor}`)
+      console.log(res);
+      setDoctorRecommendations(res.data);
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+  const { ref, autocompleteRef } = usePlacesWidget({
+    apiKey: '',
+    onPlaceSelected: (place) => {
+      setSearchLocation({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() })
+    }
+  });
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((location) => {
+      setSearchLocation({ lat: location.coords.latitude, lng: location.coords.longitude })
+    }, () => console.log('error :)'), { timeout: 10000 })
+  }, [])
+
+  const onSubmit = e => {
+    e.preventDefault();
+    history.push(`/search?doctor=${searchDoctor}&lat=${searchLocation?.lat}&lng=${searchLocation?.lng}`)
+  }
+
   return (
     <>
       <NavWrap className={location.pathname === "/" && "bg-color"}>
@@ -94,7 +134,7 @@ export default function Navbar() {
                 <MobileMenu>
                   <GiHamburgerMenu onClick={e => setShowNav(!showNav)} style={{ fontSize: "28px", color: "var(--primary-text-color)", cursor: "pointer", }} />
                   <MobileMenuDiv ref={navRef} show={showNav} >
-                    <ImCross  onClick={e => setShowNav(false)} style={{position: "absolute", left: 20, top: 20}} />
+                    <ImCross onClick={e => setShowNav(false)} style={{ position: "absolute", left: 20, top: 20 }} />
                     <Account>
                       {auth.isAuthenticated ?
                         <>
@@ -119,30 +159,51 @@ export default function Navbar() {
 
             }
             {
-              location.pathname.startsWith('/search')  && (
+              location.pathname.startsWith('/search') && (
 
                 showSearch ?
                   <Column justify="start" lg={8} sm={3} spacing={10}>
-                    <SearchColumnNav>
-                      <input
+                    <SearchColumnNav onSubmit={onSubmit}>
+                      <div
                         style={{
                           width: "60%",
                           borderTopRightRadius: 0,
                           borderBottomRightRadius: 0,
                           borderRight: "2px solid #0000001f",
                         }}
-                        type="text"
-                        placeholder="Search for a doctor or hospital "
-                      />
-                      <input
+                      >
+
+                        <input
+                    name={`doctor`}
+                    value={searchDoctor}
+                    onChange={getDoctorRecommendations}
+                          type="text"
+                          placeholder="Search for a doctor or hospital "
+                        />
+                        {
+                          doctorRecommendations.length !== 0 ?
+                            <div>
+                              {
+                                doctorRecommendations.map(doctorName => (
+                                  <div onClick={e => { setSearchDoctor(doctorName); setDoctorRecommendations([]) }}>{doctorName}</div>
+                                ))
+                              }
+                            </div> : ""
+                        }
+
+                      </div>
+                      <div
                         style={{
                           width: "40%",
                           borderTopLeftRadius: 0,
                           borderBottomLeftRadius: 0,
                         }}
-                        type="text"
-                        placeholder="My Location"
-                      />
+                      >
+
+                        <input ref={ref} name="location" type="text" placeholder="My Location" />
+
+
+                      </div>
                       <button>
                         <FaSearch />
                       </button>

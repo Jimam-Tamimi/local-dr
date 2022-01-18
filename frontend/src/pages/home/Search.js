@@ -50,7 +50,7 @@ setOptions({
   themeVariant: 'light'
 });
 
-export default function Search({ match }) {
+export default function Search({ match, searchInfo, setSearchInfo }) {
   const [providers, setProviders] = useState([
     { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
     // { img: demoDr2, cords: { lat: 40.7350610, lng: -73.945242 } },

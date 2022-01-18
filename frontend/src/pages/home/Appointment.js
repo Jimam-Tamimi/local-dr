@@ -17,7 +17,7 @@ import { Datepicker, setOptions } from "@mobiscroll/react";
 import "react-calendar/dist/Calendar.css";
 import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import alert from "../../redux/alert/actions";
 setOptions({
     theme: "ios",
@@ -27,9 +27,17 @@ export default function BookAppointment({ match }) {
     const [times, setTimes] = useState([]);
     const [selectedTime, setSelectedTime] = useState("");
     const [bookedTime, setBookedTime] = useState([]);
+    const newDate = new Date();
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        number: "",
+        date: `${newDate.getFullYear()}-${newDate.getMonth()+1}-${newDate.getDate()}`,
+        time: "",
+        doctor: "",
+    });
     const dispatch = useDispatch();
- 
-    
     useEffect(() => {
         let hour = 7;
         let minute = 0;
@@ -57,7 +65,25 @@ export default function BookAppointment({ match }) {
         }
         setTimes(tempTimes);
 
-        
+        axios
+            .get(`${process.env.REACT_APP_API_URL}api/appointments/${match?.params?.id}/`)
+            .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                    setFormData({
+                        ...formData,
+                        name: res.data.name,
+                        email: res.data.email,
+                        number: res.data.number,
+                        date: res.data.date,
+                        time: res.data.time,
+                        doctor: res.data.doctor,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
     }, []);
 
     const getTimeFromString = (time) => {
@@ -73,42 +99,12 @@ export default function BookAppointment({ match }) {
         console.log(t);
         return t;
     };
-    const newDate = new Date();
-    const auth = useSelector(state => state.auth)
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        number: "",
-        date: `${newDate.getFullYear()}-${newDate.getMonth()+1}-${newDate.getDate()}`,
-        time: "",
-        doctor: match?.params?.id,
-        user: auth.id,
-    });
-    const { name, email, number, date, time, doctor } = formData;
-    const onChange = (e) =>
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    const onSubmit = async (e) => {
-        e.preventDefault();
-        console.log(formData);
-        try {
-            const res = await axios.post(
-                `${process.env.REACT_APP_API_URL}api/appointments/`,
-                formData
-            );
-            //   console.log(res);
-            if (res.status === 201) {
-                dispatch(alert("Appointment booked successfully", "success"));
-            }
-        } catch (err) {
-            console.log(err.response);
-            dispatch(alert("Failed to book appointment", "danger"));
-        }
 
-        
-    };
+    const { name, email, number, date, time, hospital, doctor } = formData;
+     
     const [doctorData, setDoctorData] = useState(null)
     useEffect(() => {
-            axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res)=>{
+            axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${doctor}/`).then((res)=>{
                 console.log(res.data);
                 if(res.status === 200){
                     setDoctorData(res.data);
@@ -117,42 +113,18 @@ export default function BookAppointment({ match }) {
 
                 console.log(err.response);
             })
-     }, []);
+     }, [doctor]);
 
-    const timeInBookedTime = (time) => {
-        console.log(bookedTime.includes(JSON.stringify(time)), 'bookedTime');
-        console.log(JSON.stringify(time), 'bookedTime');
-        console.log(bookedTime, 'bookedTime');
+    const timeInBookedTime = (time) => { 
         return bookedTime.includes(JSON.stringify(time));
     }
 
-    useEffect(() => {
-        try{
-            axios.get(`${process.env.REACT_APP_API_URL}api/appointments/get_booked_times/?date=${date}`).then(res => {
-                console.log(res)
-                if(res.status === 200){
-                    let tempBookedTime = [];
-                    res.data.map((time) =>
-                        tempBookedTime.push(JSON.stringify(getTimeFromString(time)))
-                    );
-                    setBookedTime(tempBookedTime);
+    
  
-                }
-            })
-        } catch(err){
-
-        }
-
-    }, [date])
-
-    useEffect(() => {
-        console.log(bookedTime, 'bookedTime');
-    }, [bookedTime])
     return (
         <>
             <Wrap>
                 <Form
-                    onSubmit={onSubmit}
                     style={{ marginBottom: "20px", height: "auto" }}
                 >
                     <Grid direction="row" justify="start">
@@ -174,9 +146,9 @@ export default function BookAppointment({ match }) {
 
                         <Input
                             value={name}
-                            onChange={onChange}
                             placeholder="Name"
                             name="name"
+                            disabled
                         />
                     </InputDiv>
                     <InputDiv>
@@ -184,59 +156,42 @@ export default function BookAppointment({ match }) {
 
                         <Input
                             value={email}
-                            onChange={onChange}
                             placeholder="Email"
                             name="email"
+                            disabled
                         />
                     </InputDiv>
                     <InputDiv>
                         <Label>Number</Label>
                         <Input
                             value={number}
-                            onChange={onChange}
                             placeholder="Number"
                             name="number"
+                            disabled
                         />
                     </InputDiv>
-                    <div>
-                        <InputDiv>
-                            <Label>Date</Label>
-                            <Datepicker
-                                controls={["calendar"]}
-                                display="inline"
-                                colors={"#000024"}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        date: `${e.value.getFullYear()}-${e.value.getMonth()+1}-${e.value .getDate()}`
-                                    }) 
-                                }
-                            />
-                        </InputDiv>
-                        <InputDiv>
-                            <Label>Select Time</Label>
-                            <Grid
-                                style={{ maxHeight: "290px", overflowY: "scroll" }}
-                                justify="space-between"
-                                lg={4}
-                                spacing={10}
-                            >
-                                {times.map((time, i) => (
-                                    <TimeColumn key={i}
-                                    disabled={bookedTime.includes(JSON.stringify(time))}
-                                    selected={selectedTime === JSON.stringify(time)}
-                                    onClick={(e) => {{
-                                        timeInBookedTime(time) ? console.log('') : setSelectedTime(JSON.stringify(time)); setFormData({ ...formData, time: `${time.timeOffset ==='PM'? time.hour+ 12:time.hour}:${time.minute}:00` })
-                                    }}}
-                                  >
-                                    {time.hour}:{time.minute} {time.timeOffset}
-                                  </TimeColumn> 
-                                ))}
-                            </Grid>
-                        </InputDiv>
-                    </div>
+                    <InputDiv>
+                        <Label>Date</Label>
+                        <Input
+                            value={date}
+                            placeholder="Date"
+                            name="date"
+                            disabled
+                            type='date'
 
-                    <Button block>Submit</Button>
+                        />
+                    </InputDiv>
+                    <InputDiv>
+                        <Label>Time</Label>
+                        <Input
+                            value={time}
+                            placeholder="Time"
+                            name="time"
+                            disabled
+                            type='time'
+                        />
+                    </InputDiv>
+                    
                 </Form>
             </Wrap>
         </>

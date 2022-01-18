@@ -22,6 +22,7 @@ import { checkAdmin } from "./redux/adminAuth/actions";
 import Doctors from "./pages/admin/Doctors";
 import Appointments from "./pages/admin/hospital/Appointments";
 import Schedule from "./pages/admin/hospital/Schedule";
+import HomeAppointments from "./pages/home/Appointment";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
@@ -87,6 +88,7 @@ function App() {
         <Route exact path='/' component={Home} />
         <Route exact   path='/search/' component={Search} />
         <Route exact path='/doctor/:id/' component={BookAppointment} />
+        <Route exact path='/appointment/:id/' component={HomeAppointments} />
         <Route path='/' component={Account} />
       </Layout>
 

@@ -29,7 +29,7 @@ export const Menu = styled.div`
  margin: 5px 0px;
  & > p {
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 500;
  }
  cursor: pointer;
  padding: 3px 3px;
@@ -41,10 +41,29 @@ export const Menu = styled.div`
 `
 
 export const DropdownDiv = styled.div`
-    width: 308px;
-    min-height: 100px;
+    width: 208px;
+    /* min-height: 100px; */
     background-color: white;
     box-shadow: 0px 0px 8px 2px #00000036;
+    padding: 5px 0px;
+    ${Flex}
+    flex-direction: column;
+    & > p, & >  a {
+      text-align: center;
+    font-weight: 600;
+    padding: 5px 0px;
+    width: 100%;
+
+    cursor: pointer;
+      transition: var(--main-transition);
+      margin: 2px 0px;
+
+    }
+    & > p:hover, & > a:hover {
+      background: #f5f8fa;
+
+    }
+ 
 `
 
 export const Logout = styled.button`
@@ -63,7 +82,8 @@ export const Logout = styled.button`
     background: var(--info-color);
     color: var(--info-text-color);
     position: absolute;
-    bottom: 0;
+    bottom: -31px;
+
 
 `
 

@@ -27,7 +27,7 @@ export default function Account() {
   }, [location]);
   useEffect(() => {
     if (!showModal && params.get("show-account") === "true") {
-      history.goBack();
+      history.push(location.pathname);
     }
   }, [showModal]);
 
@@ -69,13 +69,14 @@ function Login({ setForm }) {
   })
   const { email, password } = loginFormData;
   const history = useHistory()
+  const location = useLocation()
   const onLoginFormChange = (e) => setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value })
   const loginSubmit = e => {
     e.preventDefault();
     console.log(loginFormData)
     let action = dispatch(login(email, password))
     console.log(action, 'action')
-    action.then(res => { res && history.push('/'); setLoginFormData({ email: '', password: '' }) })
+    action.then(res => { res && history.push(location.pathname); setLoginFormData({ email: '', password: '' }) })
   }
 
   return (

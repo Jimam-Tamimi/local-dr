@@ -6,7 +6,7 @@ import { Button, ButtonLink, Container, Grid } from '../../../styles/Essentials.
 import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../../styles/Table.styles';
 import { HeadingColumn } from '../../styles/admin/Hospitals.styles';
 
-export default function Appointments() {
+export default function CompletedAppointments() {
   const [appointments, setAppointments] = useState([]);
   const getAppointments = async () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}api/appointments/`);
@@ -42,29 +42,12 @@ export default function Appointments() {
       console.log(err)
     }
   }
-  const completeAppointment = async (id) => {
-    if(window.confirm('Are you sure you want to complete this appointment')){
-        try {
-          const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`, {
-            status: 'completed'
-          })
-          if (res.status === 200) {
-            dispatch(alert('Appointment completed successfully', 'success'))
-            getAppointments()
-            
-          }
-        } catch (err) {
-            dispatch(alert('Failed to complete appointment ', 'danger'))
-    
-          console.log(err)
-        }
-    }
 
-  }
   const deleteAppointment = async (id) => {
     if(window.confirm('Are you sure you want to delete this appointment')){
       try {
         const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`)
+
         if (res.status === 204) {
           dispatch(alert('Appointment deleted successfully', 'success'))
           getAppointments()
@@ -102,7 +85,7 @@ export default function Appointments() {
             </Tr>
             {
               appointments.map((appointment, i) => (
-                  appointment.status !== 'completed'?
+                  appointment.status === 'completed'?
                 <Tr key={i}>
 
                   <Td>{appointment?.id}</Td>
@@ -114,11 +97,9 @@ export default function Appointments() {
                   <Td>{appointment?.status}</Td>
                   <Td>
                       <Actions>
-                        <Button onClick={e => completeAppointment(appointment.id)} green>Complete</Button>
                         <Button onClick={e => deleteAppointment(appointment.id)} danger>Delete</Button>
                       </Actions>
                   </Td>
-
                 </Tr>:' '
 
               ))

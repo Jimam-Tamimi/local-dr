@@ -87,6 +87,7 @@ export default function BookAppointment({ match }) {
     const { name, email, number, date, time, doctor } = formData;
     const onChange = (e) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    const history = useHistory();
     const onSubmit = async (e) => {
         e.preventDefault();
         console.log(formData);
@@ -95,13 +96,18 @@ export default function BookAppointment({ match }) {
                 `${process.env.REACT_APP_API_URL}api/appointments/`,
                 formData
             );
-            //   console.log(res);
+              console.log(res);
             if (res.status === 201) {
                 dispatch(alert("Appointment booked successfully", "success"));
+                history.push(`/appointments/${res?.data?.id}`)
             }
-        } catch (err) {
-            console.log(err.response);
-            dispatch(alert("Failed to book appointment", "danger"));
+        } catch (error) {
+            console.log(error.response);
+            if (error.response) {
+                for (const err in error.response.data) {
+                    dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
+                }
+            }
         }
 
         

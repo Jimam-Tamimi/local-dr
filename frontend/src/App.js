@@ -23,6 +23,8 @@ import Doctors from "./pages/admin/Doctors";
 import Appointments from "./pages/admin/hospital/Appointments";
 import Schedule from "./pages/admin/hospital/Schedule";
 import HomeAppointments from "./pages/home/Appointment";
+import YourAppointments from "./pages/home/YourAppointments";
+import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
@@ -74,6 +76,7 @@ function App() {
               adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
                 <>
                 <Route exact path="/admin/appointment/" component={Appointments} />
+                <Route exact path="/admin/appointment/completed/" component={CompletedAppointments} />
                 <Route exact path="/admin/schedule/" component={Schedule} />
 
                 </> : ''
@@ -82,13 +85,14 @@ function App() {
       </AdminLayout>
       <Layout>
         <PrivateRoute>
+          <Route exact path='/doctor/:id/' component={BookAppointment} />
+          <Route exact path='/appointments/:id/' component={HomeAppointments} />
+          <Route exact path='/your-appointments/' component={YourAppointments} />
         </PrivateRoute>
         <GuestRoute>
         </GuestRoute>
         <Route exact path='/' component={Home} />
         <Route exact   path='/search/' component={Search} />
-        <Route exact path='/doctor/:id/' component={BookAppointment} />
-        <Route exact path='/appointment/:id/' component={HomeAppointments} />
         <Route path='/' component={Account} />
       </Layout>
 

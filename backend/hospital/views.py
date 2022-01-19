@@ -62,20 +62,36 @@ class DoctorViewSet(ModelViewSet):
                 Hospital.objects.get(id=hospitalID)).data
         return Response(allData, status=status.HTTP_200_OK)
 
+
 class AppointmentViewSet(ModelViewSet):
     queryset = Appointment.objects.all().order_by('-id')
     serializer_class = AppointmentSerializer
     # authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    search_fields =  ['id', 'name', 'email', 'number',
-                  'date',  "time"]
+    search_fields = ['id', 'name', 'doctor__name', 'email', 'number',
+                     'date',  "time", 'status']
     filter_backends = (filters.SearchFilter,)
-    pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        self.queryset = self.queryset.filter(user=self.request.user)
-        return self.queryset
+        if(self.request.user.is_superuser):
+            return super().get_queryset()
+        elif(self.request.user.is_hospital):
+            queryset = self.queryset.filter(
+                doctor__hospital__user=self.request.user)
+            return queryset
+        elif(self.request.user.is_authenticated):
+            self.queryset = self.queryset.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        time = request.data['time']
+        date = request.data['date']
+        appointment = Appointment.objects.filter(time=time, date=date)
+        if(len(appointment) != 0):
+            return Response({"message": "Appointment On This Time Not Available. Please change your time"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().create(request, *args, **kwargs)
+    
+    
 
     @action(detail=False, methods=['get'])
     def get_booked_times(self, request):
@@ -87,9 +103,10 @@ class AppointmentViewSet(ModelViewSet):
             allData = []
             for data in tmpData:
                 allData.append(data['time'])
-            
+
             return Response(allData, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -129,7 +146,6 @@ def specialityRecommendations(request):
 @permission_classes([AllowAny])
 def search(request):
 
- 
     name = request.GET.get('doctor', '')
     lat = request.GET.get('lat', '')
     lng = request.GET.get('lng', '')
@@ -144,8 +160,9 @@ def search(request):
     allData = []
     for data in serializer.data:
         hospitalID = data['hospital']
-        
-        data['hospital'] = HospitalSerializer(Hospital.objects.get(id=hospitalID)).data
+
+        data['hospital'] = HospitalSerializer(
+            Hospital.objects.get(id=hospitalID)).data
         if(lat != '' and lng != ''):
             try:
 
@@ -161,15 +178,16 @@ def search(request):
         if((not available(data['startTime'], data['endTime'])) and isAvailable == 'true'):
             continue
         data['available'] = available(data['startTime'], data['endTime'])
-        allData.append(data) 
-    
+        allData.append(data)
+
     paginator = PageNumberPagination()
     paginator.page_size = 5
     result_page = paginator.paginate_queryset(allData, request)
     return paginator.get_paginated_response(result_page)
 
-
     # return Response(allData, status=status.HTTP_200_OK)
+
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def doctorData(request, id=None):

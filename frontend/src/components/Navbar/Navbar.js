@@ -36,6 +36,8 @@ import { ImCross } from "react-icons/im";
 import { logout } from "../../redux/auth/actions";
 import ReactGoogleAutocomplete, { usePlacesWidget } from "react-google-autocomplete";
 import axios from "axios";
+import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../styles/Table.styles';
+
 
 export default function Navbar({ }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -108,10 +110,10 @@ export default function Navbar({ }) {
     e.preventDefault();
   }
 
-   
+
   const search = useSelector(state => state.search)
-  const {doctor, speciality, available, distance, lat, lng} = search
-  
+  const { doctor, speciality, available, distance, lat, lng } = search
+
 
   return (
     <>
@@ -140,7 +142,10 @@ export default function Navbar({ }) {
                             <Button style={{ textDecoration: 'underline', fontWeight: 600 }}>Logout</Button>
                           </Menu>
                           <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
-                            <p to="/your-appointments/" style={{ textDecoration: 'underline', fontWeight: 600 }}>Your Appointments</p>
+                            <Link to="/" style={{ textDecoration: 'underline', fontWeight: 600 }}>Home</Link>
+                          </Menu>
+                          <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
+                            <Link to="/your-appointments/" style={{ textDecoration: 'underline', fontWeight: 600 }}>Your Appointments</Link>
                           </Menu>
                         </> :
                         <Link to="?show-account=true">
@@ -161,7 +166,7 @@ export default function Navbar({ }) {
 
                 showSearch ?
                   <Column justify="start" lg={8} sm={3} spacing={10}>
-                    <SearchColumnNav    onSubmit={onSubmit}>
+                    <SearchColumnNav onSubmit={onSubmit}>
                       <div
                         style={{
                           width: "60%",
@@ -232,7 +237,8 @@ export default function Navbar({ }) {
                     </Menu>
                     <Dropdown show={showDropdown}>
                       <DropdownDiv >
-                        <Logout onClick={e => dispatch(logout())}>Logout</Logout>
+                        <Link to="/your-appointments/">Your Appointments</Link>
+                        <p onClick={e => dispatch(logout())}>Logout</p>
                       </DropdownDiv>
                     </Dropdown>
                   </Account>) : (
@@ -276,13 +282,13 @@ export default function Navbar({ }) {
                 {doctorRecommendations.length !== 0 ? (
                   <div>
                     {doctorRecommendations.map((doctorName, i) => (
-                      <div 
-                      key={i}
-                        onClick={(e) => { 
+                      <div
+                        key={i}
+                        onClick={(e) => {
                           dispatch({ type: 'CHANGE_DOCTOR', payload: doctorName })
                           setTimeout(() => {
                             setDoctorRecommendations([]);
-                          }, );
+                          });
                         }}
                       >
                         {doctorName}
@@ -303,10 +309,10 @@ export default function Navbar({ }) {
               >
                 <IoLocationSharp />
 
-                
-                        <ReactGoogleAutocomplete
-                          onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
-                        />
+
+                <ReactGoogleAutocomplete
+                  onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
+                />
               </div>
 
               {/* <button>Find Care</button> */}

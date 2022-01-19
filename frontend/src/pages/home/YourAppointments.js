@@ -1,12 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
-import alert from '../../../redux/alert/actions';
-import { Button, ButtonLink, Container, Grid } from '../../../styles/Essentials.styles';
-import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../../styles/Table.styles';
-import { HeadingColumn } from '../../styles/admin/Hospitals.styles';
+import { Button, ButtonLink, Container, Grid } from '../../styles/Essentials.styles';
+import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../styles/Table.styles';
 
-export default function Appointments() {
+export default function YourAppointments() {
   const [appointments, setAppointments] = useState([]);
   const getAppointments = async () => {
     const res = await axios.get(`${process.env.REACT_APP_API_URL}api/appointments/`);
@@ -31,7 +28,7 @@ export default function Appointments() {
     let d = (new Date (new Date().toDateString() + ' ' + time));
     return `${d.getHours()}:${d.getMinutes()} ${d.getHours() >= 12 ? 'PM' : 'AM'}`;
   }
-  const dispatch = useDispatch()
+
   const filterAppointments = async (e) => {
     try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/appointments/?search=${e.target.value}`);
@@ -42,49 +39,11 @@ export default function Appointments() {
       console.log(err)
     }
   }
-  const completeAppointment = async (id) => {
-    if(window.confirm('Are you sure you want to complete this appointment')){
-        try {
-          const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`, {
-            status: 'completed'
-          })
-          if (res.status === 200) {
-            dispatch(alert('Appointment completed successfully', 'success'))
-            getAppointments()
-            
-          }
-        } catch (err) {
-            dispatch(alert('Failed to complete appointment ', 'danger'))
-    
-          console.log(err)
-        }
-    }
-
-  }
-  const deleteAppointment = async (id) => {
-    if(window.confirm('Are you sure you want to delete this appointment')){
-      try {
-        const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`)
-        if (res.status === 204) {
-          dispatch(alert('Appointment deleted successfully', 'success'))
-          getAppointments()
-          
-        }
-      } catch (err) {
-          dispatch(alert('Failed to delete appointment ', 'danger'))
-  
-        console.log(err)
-      }
-  }
-  }
 
   return (
     <>
-            <Grid style={{ border: "1px solid #eff2f7" }}>
-                <HeadingColumn justify="space-between">
-                    <h1>All Appointments</h1>
-                </HeadingColumn>
-            </Grid>
+      <Container>
+
         <Grid style={{ overflowX: "scroll" }} direction="column">
           <OptionsColumn justify="flex-end" style={{ margin: "10px 0px" }}>
             <Search onChange={filterAppointments} type="text" placeholder="Search..." />
@@ -102,7 +61,6 @@ export default function Appointments() {
             </Tr>
             {
               appointments.map((appointment, i) => (
-                  appointment.status !== 'completed'?
                 <Tr key={i}>
 
                   <Td>{appointment?.id}</Td>
@@ -112,14 +70,9 @@ export default function Appointments() {
                   <Td>{getDateFromStr(appointment?.date)}</Td>
                   <Td>{getTimeFromStr(appointment?.time)}</Td>
                   <Td>{appointment?.status}</Td>
-                  <Td>
-                      <Actions>
-                        <Button onClick={e => completeAppointment(appointment.id)} green>Complete</Button>
-                        <Button onClick={e => deleteAppointment(appointment.id)} danger>Delete</Button>
-                      </Actions>
-                  </Td>
+                  <Td><ButtonLink to={`/appointments/${appointment.id}`} sm>View</ButtonLink></Td>
 
-                </Tr>:' '
+                </Tr>
 
               ))
             }
@@ -127,6 +80,7 @@ export default function Appointments() {
 
           </Table>
         </Grid>
+      </Container>
 
     </>
   )

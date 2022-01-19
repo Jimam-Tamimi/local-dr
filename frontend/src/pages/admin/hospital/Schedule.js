@@ -73,6 +73,21 @@ export default function Schedule() {
     // edit time
     const [showTimeEditForm, setShowTimeEditForm] = useState(false)
     const [doctorId, setDoctorId] = useState(null)
+
+    const clearTime = async id => {
+        try {
+            const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${id}/`, {
+                startTime: null,
+                endTime: null
+            })
+            if (res.status === 200) {
+                getDoctors()
+            }
+        } catch (error) {
+
+        }
+    }
+    
     return (
         <>
             <Grid style={{ border: "1px solid #eff2f7" }}>
@@ -105,6 +120,7 @@ export default function Schedule() {
                                 <Td>
                                     <Actions>
                                         <Button onClick={e => { setShowTimeEditForm(true); setDoctorId(doctor.id) }} sm green>Edit Time</Button>
+                                        <Button onClick={e => {  clearTime(doctor.id) }} sm >Clear Time</Button>
 
                                     </Actions>
                                 </Td>

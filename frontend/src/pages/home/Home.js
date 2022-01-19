@@ -72,12 +72,13 @@ export default function Home() {
   const onSubmit = (e) => {
     e.preventDefault();
     if(doctor){
+
       history.push(
         `/search?doctor=${doctor}&lat=&lng=&speciality=${speciality}`
       );
     } else {
       history.push(
-        `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}`
+        `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}  `
       );
       
     }

@@ -68,9 +68,10 @@ class DoctorViewSet(ModelViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
-        serializers = self.get_serializer(
-            self.filter_queryset(self.get_queryset()), many=True)
-        allData = serializers.data
+        queryset = self.get_queryset()
+        queryset = queryset.filter(hospital__deactivated=False)
+        serializer = self.get_serializer(queryset, many=True)
+        allData = serializer.data
         for data in allData:
             hospitalID = data['hospital']
             data['hospital'] = HospitalSerializer(
@@ -147,7 +148,7 @@ def doctorRecommendations(request):
     print(search)
     if(search is None):
         return Response({"message": "Please provide a search query"}, status=status.HTTP_400_BAD_REQUEST)
-    queryset = Doctor.objects.all().order_by('-id')
+    queryset = Doctor.objects.filter(hospital__deactivated=False).order_by('-id')
     queryset = queryset.filter(name__contains=search)
     data = []
     for item in queryset:
@@ -164,7 +165,7 @@ def specialityRecommendations(request):
     print(search)
     if(search is None):
         return Response({"message": "Please provide a search query"}, status=status.HTTP_400_BAD_REQUEST)
-    queryset = Doctor.objects.all().order_by('-id')
+    queryset = Doctor.objects.filter(hospital__deactivated=False).order_by('-id')
     queryset = queryset.filter(speciality__contains=search)
     data = []
     for item in queryset:
@@ -183,7 +184,7 @@ def search(request):
     speciality = request.GET.get('speciality', '')
     isAvailable = request.GET.get('available', '')
     maxDistance = request.GET.get('max-distance', 30)
-    queryset = Doctor.objects.all().order_by('-id')
+    queryset = Doctor.objects.filter(hospital__deactivated=False).order_by('-id')
     queryset = queryset.filter(
         (Q(name__contains=name) | Q(hospital__name__contains=name)))
     queryset = queryset.filter(Q(speciality__contains=speciality))

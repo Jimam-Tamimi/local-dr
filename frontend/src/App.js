@@ -25,12 +25,15 @@ import Schedule from "./pages/admin/hospital/Schedule";
 import HomeAppointments from "./pages/home/Appointment";
 import YourAppointments from "./pages/home/YourAppointments";
 import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments";
+import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
   useEffect(() => {
     AOS.init({ once: true, duration: 1000 });
     dispatch(authenticate())
+    dispatch(checkAdmin());
+
   }, [])
   const auth = useSelector(state => state.auth)
   
@@ -49,7 +52,7 @@ function App() {
     axios.interceptors.response.use(
       response => response,
       async error => {
-        if (error.response.status === 401) {
+        if (error?.response?.status === 401) {
           await dispatch(refreshToken())
           if (location.pathname.startsWith('/admin')) {
             await dispatch(checkAdmin())
@@ -72,6 +75,7 @@ function App() {
                 <Route exact path="/admin/" component={Index} />
                 <Route exact path="/admin/hospitals/" component={Hospitals} />
                 <Route exact path="/admin/doctors/" component={Doctors} />
+                <Route exact path="/admin/hospital/deactivated/" component={DeactivatedHospital} />
               </> :
               adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
                 <>

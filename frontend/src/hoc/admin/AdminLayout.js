@@ -27,9 +27,7 @@ export default function AdminLayout({ children }) {
   const location = useLocation();
   const auth = useSelector((state) => state.auth);
   useEffect(() => {
-    if(location.pathname.startsWith("/admin")){
-        dispatch(checkAdmin());
-    }
+ 
   }, []);
   const [showDash, setShowDash] = useState(
     window.innerWidth > 850 ? true : false

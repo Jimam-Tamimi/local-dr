@@ -26,7 +26,14 @@ export const ProviderColumn = styled(Column)`
 export const LeftCol = styled.div`
   margin-right: 40px;
   & > img {
-    width: 100%;
+    width: 8.5rem;
+    height: 8.5rem;
+    OBJECT-FIT: COVER;
+    border-radius: 100%;
+    @media screen and (max-width: 615px) {
+      width: 6.5rem;
+    height: 6.5rem;
+  }
   }
   width: 210px;
 
@@ -50,6 +57,8 @@ export const RightCol = styled.div`
     text-decoration: underline;
     position: absolute;
     right: 0;
+    bottom: 0px;
+
     @media screen and (max-width: 715px) {
       font-size: 0.8rem;
     }
@@ -83,7 +92,7 @@ export const RightCol = styled.div`
   & > button {
     position: absolute;
     right: 28px;
-    bottom: -32px;
+    bottom: 0px;
     @media screen and (max-width: 615px) {
       position: relative;
       right: 0px;

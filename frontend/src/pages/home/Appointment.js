@@ -129,7 +129,7 @@ export default function BookAppointment({ match }) {
                 >
                     <Grid direction="row" justify="start">
                         <ProfileColumn justify="start" lg={3} sx={4}>
-                            <img src={demoDr2} />
+                        <img src={doctorData?.image&& `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`} />
                         </ProfileColumn>
 
                         <ProfileColumn direction="column" align="start" lg={9} sx={8}>

@@ -30,10 +30,16 @@ export default function Dashboard({showDash, setShowDash}) {
                           <FaSitemap />
                           <p>Hospitals</p>
                   </DashLink>
-                  <DashLink to="/admin/doctors/">
+                  <DashLink to="/admin/hospital/deactivated/">
+                          <FaSitemap />
+                          <p>Deactivated Hospitals</p>
+                  </DashLink>
+                  
+                  <DashLink exact to="/admin/doctors/">
                           <FaSitemap />
                           <p>Doctor</p>
                   </DashLink>
+ 
                 </> : 
                 adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
                 <>

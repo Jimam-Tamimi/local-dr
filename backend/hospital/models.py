@@ -6,13 +6,15 @@ from account.models import MyUser
 class Hospital(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, blank=False, null=False)
+    image = models.ImageField(upload_to='hospital/', blank=True, null=True)
+
     email = models.EmailField(unique=True, max_length=100, blank=False, null=False)
     password = models.TextField(blank=False, null=False)
     contact = models.CharField(max_length=20, blank=False, null=False)
     contact_person = models.CharField(max_length=20, blank=False, null=False)
     location = models.TextField(blank=False, null=False)
     price = models.PositiveIntegerField(default=0, blank=False, null=False)
-    
+    deactivated = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
@@ -22,6 +24,7 @@ class Doctor(models.Model):
     # doctor name, spaca, qualification, 
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     name = models.CharField(max_length=20, null=False, blank=False)
+    image = models.ImageField(upload_to='doctor/', blank=True, null=True)
     speciality = models.CharField(max_length=50, null=False, blank=False)
     qualification = models.CharField(max_length=50, null=False, blank=False)
     startTime = models.TimeField(blank=True, null=True)

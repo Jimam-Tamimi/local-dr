@@ -34,6 +34,20 @@ export const Td = styled.td`
     padding: 10px;
     vertical-align: middle;
     height: 55px;
+    ${({img}) => img && `    
+    & > div {
+      display: flex;
+      align-items: center;
+    }
+    & > div >img {
+
+      width: 4.5rem;
+    height: 4.5rem;
+    margin-right: 15px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    `}
 `;
 
 

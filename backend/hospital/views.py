@@ -16,6 +16,7 @@ from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
 # Create your views here.
 
 
@@ -25,7 +26,19 @@ class HospitalViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     search_fields = ['id', 'name', 'email', 'contact', 'contact_person']
     filter_backends = (filters.SearchFilter,)
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
+    
+    def get_queryset(self):
+        deactivated = self.request.query_params.get('deactivated', None)
+        if(deactivated=='true'):
+            self.queryset = self.queryset.filter(deactivated=True)
+            return self.queryset
+        elif(deactivated=='false'):
+            self.queryset = self.queryset.filter(deactivated=False)
+            return self.queryset
+            
+        return super().get_queryset()
 
 class DoctorViewSet(ModelViewSet):
     queryset = Doctor.objects.all().order_by('-id')
@@ -35,6 +48,8 @@ class DoctorViewSet(ModelViewSet):
     search_fields = ['id',  'name', 'speciality', 'qualification']
     filter_backends = (filters.SearchFilter,)
     pagination_class = PageNumberPagination
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
 
     def get_queryset(self):
         print(self.request.user)
@@ -73,14 +88,22 @@ class AppointmentViewSet(ModelViewSet):
     filter_backends = (filters.SearchFilter,)
 
     def get_queryset(self):
+        print(self.queryset)
         if(self.request.user.is_superuser):
+
+            print(self.queryset, 'is superuser')
             return super().get_queryset()
         elif(self.request.user.is_hospital):
-            queryset = self.queryset.filter(
+            
+            self.queryset = self.queryset.filter(
                 doctor__hospital__user=self.request.user)
-            return queryset
+            print(self.queryset, 'is hospital')
+            return self.queryset
         elif(self.request.user.is_authenticated):
+            
             self.queryset = self.queryset.filter(user=self.request.user)
+            print(self.queryset, 'is user')
+            return self.queryset
 
     def create(self, request, *args, **kwargs):
         time = request.data['time']
@@ -91,7 +114,15 @@ class AppointmentViewSet(ModelViewSet):
 
         return super().create(request, *args, **kwargs)
     
-    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        tmpData = serializer.data
+        data = []
+        for d in tmpData:
+            d['doctor'] = DoctorSerializer(Doctor.objects.get(id=d['doctor'])).data
+            data.append(d)
+        return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
     def get_booked_times(self, request):

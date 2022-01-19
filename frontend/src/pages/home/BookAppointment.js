@@ -154,6 +154,16 @@ export default function BookAppointment({ match }) {
     useEffect(() => {
         console.log(bookedTime, 'bookedTime');
     }, [bookedTime])
+    useEffect(() => {
+        if(adminAuth.type !== 'user'){
+            history.goBack()
+            dispatch(alert('You are loggedin as hospital admin. PLease login as an user to visit this page', 'danger'))
+        }
+    }, [])
+
+    const adminAuth = useSelector(state => state.adminAuth)
+    
+    
     return (
         <>
             <Wrap>
@@ -163,7 +173,7 @@ export default function BookAppointment({ match }) {
                 >
                     <Grid direction="row" justify="start">
                         <ProfileColumn justify="start" lg={3} sx={4}>
-                            <img src={demoDr2} />
+                            <img src={doctorData?.image&& `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`} />
                         </ProfileColumn>
 
                         <ProfileColumn direction="column" align="start" lg={9} sx={8}>

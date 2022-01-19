@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { Button, ButtonLink, Column, Grid } from "../../styles/Essentials.styles";
 import {
@@ -20,7 +20,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
-import { Select } from "@mobiscroll/react";
+import Dropzone from 'react-dropzone'
+import {useCallback} from 'react'
 
 export default function Doctors() {
 
@@ -28,12 +29,12 @@ export default function Doctors() {
   const [showEditForm, setShowEditForm] = useState(false)
   const [doctorId, setDoctorId] = useState(null)
 
- 
-  
+
+
   // get doctors data trough api
 
-  
-  
+
+
   const dispatch = useDispatch()
   const getDoctors = () => {
     axios.get(`${process.env.REACT_APP_API_URL}api/doctors/`).then((res) => {
@@ -111,8 +112,8 @@ export default function Doctors() {
               <Tr key={doctor.id}>
 
                 <Td>{doctor.id}</Td>
-                <Td>{doctor.hospital.name}</Td>
-                <Td>{doctor.name}</Td>
+                <Td img={true}> <div> {doctor.hospital.image&& <img src={`${process.env.REACT_APP_MEDIA_URL}${doctor.hospital.image}`} /> } {doctor.hospital.name} </div></Td>
+                <Td img={true}> <div> { doctor.image && <img src={doctor.image} />} {doctor.name}</div></Td>
                 <Td>{doctor.speciality}</Td>
                 <Td>{doctor.qualification}</Td>
                 <Td>
@@ -156,19 +157,34 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
   })
   const [doctorHospitalId, setDoctorHospitalId] = useState(null)
   const { id, name, speciality, qualification } = formData;
+  const [profImage, setProfImage] = useState(null)
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      let data = { name, speciality, qualification, hospital: doctorHospitalId }
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/doctors/`, data);
+      let formData = new FormData();
+      formData.append('name', name);
+      formData.append('speciality', speciality);
+      formData.append('qualification', qualification);
+      formData.append('hospital', doctorHospitalId);
+      formData.append('image', profImage);
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+                    
+        }
+      }  
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/doctors/`, formData,  config);
+      
       if (res.status === 201) {
         dispatch(alert('Doctor added successfully', 'success'))
         setShowDoctorForm(false)
         getDoctors()
 
       }
-    } catch (error) {
+    } catch (error) { 
+
       for (const err in error.response.data) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
@@ -183,7 +199,7 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
         setHospitals(res.data)
       }
     } catch (err) {
-
+      
     }
   }
 
@@ -191,6 +207,24 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
     console.log(doctorHospitalId)
   }, [doctorHospitalId])
 
+
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+        setProfImage(file)
+      }
+      reader.readAsArrayBuffer(file)
+    })
+    
+  }, [])
+  
   return (
     <>
 
@@ -225,6 +259,18 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
           <Label>Qualification *</Label>
           <Input required name="qualification" type="text" placeholder="Qualification" onChange={onChange} />
         </InputDiv>
+        <InputDiv   >
+          <Label>Profile Image *</Label>
+          <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>        </InputDiv>
 
         <InputDiv>
           <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Add</Button>
@@ -247,6 +293,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
   const [doctorHospitalId, setDoctorHospitalId] = useState(null)
   const [hospitalName, setHospitalName] = useState('')
 
+  const [profImage, setProfImage] = useState(null)
 
 
   const { name, speciality, qualification } = formData;
@@ -254,8 +301,20 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      let data = { name, speciality, qualification, hospital: doctorHospitalId }
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, data);
+      let formData = new FormData();
+      formData.append('name', name);
+      formData.append('speciality', speciality);
+      formData.append('qualification', qualification);
+      formData.append('hospital', doctorHospitalId);
+      formData.append('image', profImage);
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+                    
+        }
+      }  
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, formData,  config);
       if (res.status === 200) {
         dispatch(alert('Doctor Updated successfully', 'success'))
         setShowEditForm(false)
@@ -284,7 +343,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
   }
 
   useEffect(() => {
-    if (doctorId!==null) {  
+    if (doctorId !== null) {
       axios.get(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`).then(res => {
         setFormData({ ...formData, name: res.data.name, speciality: res.data.speciality, qualification: res.data.qualification })
         setDoctorHospitalId(res.data.hospital.id)
@@ -300,6 +359,25 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
     console.log(hospitalName)
 
   }, [formData])
+
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+        setProfImage(file)
+      }
+      reader.readAsArrayBuffer(file)
+    })
+    
+  }, [])
+  
+  
   return (
     <>
 
@@ -334,7 +412,18 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
           <Label>Qualification *</Label>
           <Input required name="qualification" type="text" placeholder="Qualification" onChange={onChange} value={qualification} />
         </InputDiv>
-
+        <InputDiv   >
+          <Label>Profile Image *</Label>
+          <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>        </InputDiv>
         <InputDiv>
           <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Add</Button>
         </InputDiv>

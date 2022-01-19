@@ -65,7 +65,7 @@ export default function Appointments() {
     if(window.confirm('Are you sure you want to delete this appointment')){
       try {
         const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`)
-        if (res.status === 204) {
+        if (res.status === 204  ) {
           dispatch(alert('Appointment deleted successfully', 'success'))
           getAppointments()
           
@@ -92,6 +92,7 @@ export default function Appointments() {
           <Table>
             <Tr>
               <Th>ID</Th>
+              <Th>Doctor</Th>
               <Th>Name</Th>
               <Th>Email</Th>
               <Th>Number</Th>
@@ -106,6 +107,8 @@ export default function Appointments() {
                 <Tr key={i}>
 
                   <Td>{appointment?.id}</Td>
+                  <Td img={true}> <div> { appointment?.doctor.image && <img src={`${process.env.REACT_APP_MEDIA_URL}${appointment?.doctor.image}`} />} {appointment?.doctor.name}</div></Td>
+
                   <Td>{appointment?.name}</Td>
                   <Td>{appointment?.email}</Td>
                   <Td>{appointment?.number}</Td>

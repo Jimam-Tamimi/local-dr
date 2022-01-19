@@ -28,6 +28,15 @@ export const InputDiv = styled.div`
   & > * {
     width: 100%;
   }
+  & > section> div > p {
+
+    width: 100%;
+    text-align: center;
+    padding: 23px;
+    border: 1px solid #00000030;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   ${({ icon }) =>
     icon &&
     `

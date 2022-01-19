@@ -20,7 +20,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
-
+import Dropzone from 'react-dropzone'
+import {useCallback} from 'react'
 
 export default function Hospitals() {
   const [hospitals, setHospitals] = useState([])
@@ -29,7 +30,8 @@ export default function Hospitals() {
   // get hospital data t  rough api
   const dispatch = useDispatch()
   const getHospitals = () => {
-    axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/`).then((res) => {
+    // axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?deactivated=false`).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?deactivated=false`).then((res) => {
       setHospitals(res.data)
     }).catch((err) => {
       dispatch(alert(err.response.data.error, "danger"))
@@ -43,7 +45,7 @@ export default function Hospitals() {
     const search = e.target.value
     try {
 
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?search=${search}`)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?search=${search}&?deactivated=false`)
       if (res.status === 200) {
         setHospitals(res.data)
       }
@@ -53,16 +55,16 @@ export default function Hospitals() {
   }
 
 
-  const deleteHospital = async id => {
+  const deactivateHospital = async id => {
     try {
-      const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`)
-      if (res.status === 204) {
-        dispatch(alert("Hospital deleted successfully", "success"))
+      const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`, {deactivated:true})
+      
+      if (res.status === 200) {
+        dispatch(alert("Hospital deactivated successfully", "success"))
         getHospitals()
       }
-    } catch (err) {
-
-      dispatch(alert("Failed to delete this hospital", "danger"))
+    } catch (err) {      
+      dispatch(alert("Failed to deactivate this hospital", "danger"))
 
     }
   }
@@ -98,8 +100,9 @@ export default function Hospitals() {
             hospitals.map((hospital, i) => (
               <Tr key={hospital.id}>
 
-                <Td>{hospital.id}</Td>
-                <Td>{hospital.name}</Td>
+                <Td>{hospital.id}</Td> 
+                <Td img={true}> <div> { hospital.image && <img src={hospital.image} />} {hospital.name}</div></Td>
+
                 <Td>{hospital.email}</Td>
                 <Td>{hospital.contact}</Td>
                 <Td>{hospital.contact_person}</Td>
@@ -107,8 +110,8 @@ export default function Hospitals() {
                 <Td>
                   <Actions>
                     <Button onClick={e => { setHospitalId(hospital.id); setShowEditForm(true) }} sm green>Edit</Button> 
-                    <Button onClick={e => window.confirm(`Are you sure you want to delete ${hospital.name}`) ? deleteHospital(hospital.id) : ''} sm style={{ background: "#ff3b00", color: "white" }}>
-                      Delete
+                    <Button onClick={e => window.confirm(`Are you sure you want to deactivate ${hospital.name}`) ? deactivateHospital(hospital.id) : ''} sm style={{ background: "#ff3b00", color: "white" }}>
+                      Deactivate
                     </Button>
                   </Actions>
                 </Td>
@@ -137,6 +140,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
   const [coords, setCoords] = useState({ lat: 0, lng: 0 })
   const [mark, setMark] = useState({ lat: 0, lng: 0 })
   const [autoComplete, setAutoComplete] = useState(null)
+  const [profImage, setProfImage] = useState(null)
+
   function setCurrentLocation() {
 
     navigator.geolocation.getCurrentPosition((location) => {
@@ -176,15 +181,25 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
   }, [mark])
   const onSubmit = async e => {
     e.preventDefault();
-    try {
-      const { access, refresh } = JSON.parse(localStorage.getItem('auth'))
+    try { 
+      let formDataV = new FormData();
+      formDataV.append('name', name);
+      formDataV.append('email', email);
+      formDataV.append('password', password);
+      formDataV.append('contact', contact);
+      formDataV.append('contact_person', contact_person);
+      formDataV.append('location', JSON.stringify(mark));
+      formDataV.append('price', price);
+      formDataV.append('image', profImage);
+
+
       const config = {
         headers: {
-          'Content-Type': 'application/json',
-          // 'Authorization': `JWT ${access}`
+          'Content-Type': 'multipart/form-data'
+                    
         }
-      }
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formData, config);
+      }  
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formDataV, config);
       if (res.status === 201) {
         dispatch(alert('Hospital added successfully', 'success'))
         setShowHospitalForm(false)
@@ -192,11 +207,33 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
 
       }
     } catch (error) {
+      console.log(error?.response);
+      
       for (const err in error.response.data) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
     }
   }
+
+  
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+        setProfImage(file)
+      } 
+      reader.readAsArrayBuffer(file)
+    })
+    
+    
+  }, [])
+  
   return (
     <>
 
@@ -227,6 +264,18 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
           <Input required name="price" type="number" placeholder="Contact Person" onChange={onChange} />
         </InputDiv>
         <InputDivW   >
+        <InputDiv   >
+          <Label>Profile Image *</Label>
+          <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>        </InputDiv>
 
           <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
             <>
@@ -334,8 +383,25 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
   const onSubmit = async e => {
     e.preventDefault()
     try {
+      let formData = new FormData();
+      formData.append('name', name);  
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('contact', contact);
+      formData.append('contact_person', contact_person);
+      formData.append('location', JSON.stringify(mark));
+      formData.append('price', price);
+      formData.append('image', profImage);
 
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData)
+
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+                    
+        }
+      }  
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData, config)
       if (res.status === 200) {
         dispatch(alert('Hospital updated successfully', 'success'))
         setShowEditForm(false)
@@ -346,6 +412,28 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
     }
   }
+
+
+  const [profImage, setProfImage] = useState(null)
+
+  
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+        setProfImage(file)
+      }
+      reader.readAsArrayBuffer(file)
+    })
+    
+  }, [])
+  
 
   return (
     <>
@@ -373,6 +461,19 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
           <Input required name="price" type="number" value={price} placeholder="Price" onChange={onChange} />
         </InputDiv>
         <InputDivW   >
+
+        <InputDiv   >
+          <Label>Profile Image *</Label>
+          <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>        </InputDiv>
 
           <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
             <>

@@ -159,7 +159,7 @@ export default function Search({ match,  }) {
     try { 
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
       if (res.status === 200) {
-        console.log(res.data, 'data frm search')
+        console.log(res, 'data frm search')
         setDoctorList(res?.data?.results)
         if(res.data.next) {
           let next = new URL(res.data.next)
@@ -267,7 +267,7 @@ export default function Search({ match,  }) {
                 <ProviderColumn key={i} direction="column" lg={12}>
                   <Column align="start" lg={12}>
                     <LeftCol>
-                      <img src={demoDr} />
+                      <img src={doctor.image&&`${process.env.REACT_APP_MEDIA_URL}${doctor.image}`} alt="doctor image" />
                     </LeftCol>
                     <RightCol>
                       {/* <Badge style={{}}>Available</Badge> */}

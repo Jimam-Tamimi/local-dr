@@ -30,8 +30,11 @@ export const TimeColumn = styled(Column)`
 export const ProfileColumn = styled(Column)`
     color: var(--primary-text-color);
   & > img {
-    width: 100px;
+    width: 7rem;
+    height: 7rem;
     margin-right: 10px;
+    border-radius: 100%;
+    object-fit: cover;
   } 
   & > h3 {
     font-size: 1.5rem;

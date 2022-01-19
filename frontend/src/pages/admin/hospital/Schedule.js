@@ -26,8 +26,15 @@ export default function Schedule() {
     const [doctors, setDoctors] = useState([])
     const getDoctors = async () => {
         try {
+            
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+                    
+        }
+      }  
 
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/`, config)
             console.log(res)
             if (res.status === 200) {
                 setDoctors(res.data)
@@ -41,6 +48,12 @@ export default function Schedule() {
         const search = e.target.value
         try {
 
+            const config = {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                            
+                }
+              }  
             const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/?search=${search}`)
             if (res.status === 200) {
                 setDoctors(res.data)
@@ -75,6 +88,7 @@ export default function Schedule() {
     const [doctorId, setDoctorId] = useState(null)
 
     const clearTime = async id => {
+         
         try {
             const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${id}/`, {
                 startTime: null,
@@ -153,7 +167,8 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
         console.log(formData)
         e.preventDefault()
         try {
-            const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, formData)
+            
+            const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, formData, )
             console.log(res)
             if (res.status === 200) {
                 dispatch(alert('Doctor Time Updated', 'success'))

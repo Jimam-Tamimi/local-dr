@@ -135,7 +135,7 @@ export default function Search({ match,  }) {
  
       try { 
         console.log('fetching more data')
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&page=${paginationNext}`)
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&page=${paginationNext}`)
         console.log(res.data, 'data frm pagination')
         if (res.status === 200) {
 
@@ -157,7 +157,7 @@ export default function Search({ match,  }) {
   const [doctorList, setDoctorList] = useState([])
   const getDoctorList = async () => {
     try { 
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
       if (res.status === 200) {
         console.log(res, 'data frm search')
         setDoctorList(res?.data?.results)

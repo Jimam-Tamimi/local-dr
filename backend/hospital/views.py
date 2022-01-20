@@ -1,10 +1,11 @@
 import json
+from os import environ
 from urllib import request
 from django.shortcuts import render
 from django.db.models import Q
 from hospital.helpers import available
 from hospital.helpers import distance
-
+import razorpay
 from hospital.permission import IsHospital
 from .serializers import *
 from .models import *
@@ -234,3 +235,59 @@ def doctorData(request, id=None):
         return Response(data, status=status.HTTP_200_OK)
     else:
         return Response({"message": "Please provide a doctor id"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+@api_view(['POST'])
+def start_payment(request):
+    amount = 10
+    name = 'name'
+    PUBLIC_KEY = environ
+    client = razorpay.Client(auth=(environ['RAZOR_KEY_ID'], environ['RAZOR_KEY_SECRET']))
+    payment = client.order.create({"amount": int(amount) * 100, 
+                                   "currency": "INR", 
+                                   "payment_capture": "1"})
+    return Response(payment, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def handle_payment_success(request):
+    res = json.loads(request.data["response"])
+    ord_id = ""
+    raz_pay_id = ""
+    raz_signature = ""
+    
+    # res.keys() will give us list of keys in res
+
+    for key in res.keys():
+        if key == 'razorpay_order_id':
+            ord_id = res[key]
+        elif key == 'razorpay_payment_id':
+            raz_pay_id = res[key]
+        elif key == 'razorpay_signature':
+            raz_signature = res[key]
+            
+    data = {
+        'razorpay_order_id': ord_id,
+        'razorpay_payment_id': raz_pay_id,
+        'razorpay_signature': raz_signature
+    }
+    
+    client = razorpay.Client(auth=(environ['RAZOR_KEY_ID'], environ['RAZOR_KEY_SECRET']))
+
+    check = client.utility.verify_payment_signature(data)
+
+    # checking if the transaction is valid or not if it is "valid" then check will return None
+    if check is not None:
+        print("Redirect to error url or error page")
+        return Response({'error': 'Something went wrong'})
+    
+
+    # if payment is successful that means check is None then we will turn isPaid=True
+    print('payment successful')
+    
+    res_data = {
+        'message': 'payment successfully received!'
+    }
+
+    return Response(res_data)

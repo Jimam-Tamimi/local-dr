@@ -26,6 +26,7 @@ import HomeAppointments from "./pages/home/Appointment";
 import YourAppointments from "./pages/home/YourAppointments";
 import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments";
 import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
+import Payment from "./pages/home/Payment";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
@@ -92,6 +93,7 @@ function App() {
           <Route exact path='/doctor/:id/' component={BookAppointment} />
           <Route exact path='/appointments/:id/' component={HomeAppointments} />
           <Route exact path='/your-appointments/' component={YourAppointments} />
+          <Route exact path='/payment/:id/' component={Payment} />
         </PrivateRoute>
         <GuestRoute>
         </GuestRoute>

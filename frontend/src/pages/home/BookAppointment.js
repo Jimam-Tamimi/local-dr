@@ -28,37 +28,8 @@ export default function BookAppointment({ match }) {
     const [selectedTime, setSelectedTime] = useState("");
     const [bookedTime, setBookedTime] = useState([]);
     const dispatch = useDispatch();
- 
-    
-    useEffect(() => {
-        let hour = 7;
-        let minute = 0;
-        let tempTimes = [];
-        let timeOffset = "AM";
-        while (true) {
-            if (minute === 60) {
-                hour++;
-                minute = 0;
-            }
-            if (hour === 12 && minute === 0 && timeOffset === "AM") {
-                minute = 0;
-                timeOffset = "PM";
-            }
-            if (hour === 12 && minute === 50 && timeOffset === "PM") {
-                hour = 1;
-                minute = 0;
-            }
-            if (hour === 11 && minute === 40 && timeOffset === "PM") {
-                break;
-            }
-            tempTimes.push({ hour, minute, timeOffset });
 
-            minute = minute + 10;
-        }
-        setTimes(tempTimes);
 
-        
-    }, []);
 
     const getTimeFromString = (time) => {
         const timeArray = time.split(":");
@@ -79,7 +50,7 @@ export default function BookAppointment({ match }) {
         name: "",
         email: "",
         number: "",
-        date: `${newDate.getFullYear()}-${newDate.getMonth()+1}-${newDate.getDate()}`,
+        date: `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`,
         time: "",
         doctor: match?.params?.id,
         user: auth.id,
@@ -96,10 +67,10 @@ export default function BookAppointment({ match }) {
                 `${process.env.REACT_APP_API_URL}api/appointments/`,
                 formData
             );
-              console.log(res);
+            console.log(res);
             if (res.status === 201) {
                 dispatch(alert("Appointment booked successfully", "success"));
-                history.push(`/appointments/${res?.data?.id}`)
+                history.push(`/payment/${res?.data?.id}/`)
             }
         } catch (error) {
             console.log(error.response);
@@ -110,20 +81,27 @@ export default function BookAppointment({ match }) {
             }
         }
 
-        
+
     };
     const [doctorData, setDoctorData] = useState(null)
     useEffect(() => {
-            axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res)=>{
-                console.log(res.data);
-                if(res.status === 200){
-                    setDoctorData(res.data);
-                }
-            }).then((err)=>{
+        console.log(adminAuth.type);
+        
 
-                console.log(err.response);
-            })
-     }, []);
+        axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
+            console.log(res.data);
+            if (res.status === 200) {
+                setDoctorData(res.data);
+                if(res.data.endTime!==null && res.data.startTime!==null){
+                    setActiveTime(res.data)
+                }
+            }
+        }).then((err) => {
+            console.log(err?.response);
+            console.log(err);
+        })
+    }, []);
+    const adminAuth = useSelector(state => state.adminAuth)
 
     const timeInBookedTime = (time) => {
         console.log(bookedTime.includes(JSON.stringify(time)), 'bookedTime');
@@ -132,20 +110,79 @@ export default function BookAppointment({ match }) {
         return bookedTime.includes(JSON.stringify(time));
     }
 
+        useEffect(() => {
+            if(adminAuth.type !== 'user'){
+                dispatch(alert('You are not loggedin as an admin. Please login as an user', 'danger'))
+                history.push('?show-account=true')
+            }
+        }, [adminAuth])
+
+
+    const setActiveTime = (data) => {
+        let activeHour = null
+        let activeMinute = null
+        activeHour = parseInt(data.startTime?.split(':')[0])
+        activeMinute = parseInt(data.startTime?.split(':')[1])
+        let hour = activeHour ? activeHour : 7;
+        let minute = activeMinute ? Number.isInteger((activeMinute / 10)) ? activeMinute : (parseInt(activeMinute / 10) + 1) * 10 : 0;
+        // let minute = 0;
+        let tempTimes = [];
+        let timeOffset = "AM";
+
+
+        let endTime = data.endTime?.split(':')
+        let endHour = parseInt(endTime[0])
+        let endMinute = parseInt(endTime[1])
+        endMinute = endMinute ? Number.isInteger((endMinute / 10)) ? endMinute : (parseInt(endMinute / 10) + 1) * 10 : 40;
+        let endTimeOffset = endHour? endHour > 12 ? "PM" : "AM": "PM";
+        let endTimeHour = endHour ? endHour > 12 ? endHour - 12 : endHour : 11;
+        console.log({endTimeHour, endTimeOffset, endMinute, endHour});
+        console.log({hour, minute, timeOffset});
+        
+        if(endHour < hour){
+            return
+        }
+        while (true) {
+            if (minute === 60) {
+                hour++;
+                minute = 0;
+            }
+            if (hour === 12 && minute === 0 && timeOffset === "AM") {
+                minute = 0;
+                timeOffset = "PM";
+            }
+            if (hour === 12 && minute === 50 && timeOffset === "PM") {
+                hour = 1;
+                minute = 0;
+            }
+            console.log({hour, endTimeHour, endTimeOffset, endMinute, endHour});
+            
+            if (hour === endTimeHour && minute === endMinute && timeOffset === endTimeOffset) {
+                break;
+            }
+
+            tempTimes.push({ hour, minute, timeOffset });
+
+            minute = minute + 10;
+        }
+        setTimes(tempTimes);
+
+    }
+
     useEffect(() => {
-        try{
+        try {
             axios.get(`${process.env.REACT_APP_API_URL}api/appointments/get_booked_times/?date=${date}`).then(res => {
                 console.log(res)
-                if(res.status === 200){
+                if (res.status === 200) {
                     let tempBookedTime = [];
                     res.data.map((time) =>
                         tempBookedTime.push(JSON.stringify(getTimeFromString(time)))
                     );
                     setBookedTime(tempBookedTime);
- 
+
                 }
             })
-        } catch(err){
+        } catch (err) {
 
         }
 
@@ -155,15 +192,14 @@ export default function BookAppointment({ match }) {
         console.log(bookedTime, 'bookedTime');
     }, [bookedTime])
     useEffect(() => {
-        if(adminAuth.type !== 'user'){
+        if (adminAuth.type !== 'user') {
             history.goBack()
             dispatch(alert('You are loggedin as hospital admin. PLease login as an user to visit this page', 'danger'))
         }
     }, [])
 
-    const adminAuth = useSelector(state => state.adminAuth)
-    
-    
+
+
     return (
         <>
             <Wrap>
@@ -173,7 +209,7 @@ export default function BookAppointment({ match }) {
                 >
                     <Grid direction="row" justify="start">
                         <ProfileColumn justify="start" lg={3} sx={4}>
-                            <img src={doctorData?.image&& `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`} />
+                            <img src={doctorData?.image && `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`} />
                         </ProfileColumn>
 
                         <ProfileColumn direction="column" align="start" lg={9} sx={8}>
@@ -193,6 +229,7 @@ export default function BookAppointment({ match }) {
                             onChange={onChange}
                             placeholder="Name"
                             name="name"
+                            required
                         />
                     </InputDiv>
                     <InputDiv>
@@ -203,6 +240,8 @@ export default function BookAppointment({ match }) {
                             onChange={onChange}
                             placeholder="Email"
                             name="email"
+                            required
+
                         />
                     </InputDiv>
                     <InputDiv>
@@ -212,6 +251,8 @@ export default function BookAppointment({ match }) {
                             onChange={onChange}
                             placeholder="Number"
                             name="number"
+                            required
+
                         />
                     </InputDiv>
                     <div>
@@ -224,8 +265,8 @@ export default function BookAppointment({ match }) {
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        date: `${e.value.getFullYear()}-${e.value.getMonth()+1}-${e.value .getDate()}`
-                                    }) 
+                                        date: `${e.value.getFullYear()}-${e.value.getMonth() + 1}-${e.value.getDate()}`
+                                    })
                                 }
                             />
                         </InputDiv>
@@ -239,14 +280,16 @@ export default function BookAppointment({ match }) {
                             >
                                 {times.map((time, i) => (
                                     <TimeColumn key={i}
-                                    disabled={bookedTime.includes(JSON.stringify(time))}
-                                    selected={selectedTime === JSON.stringify(time)}
-                                    onClick={(e) => {{
-                                        timeInBookedTime(time) ? console.log('') : setSelectedTime(JSON.stringify(time)); setFormData({ ...formData, time: `${time.timeOffset ==='PM'? time.hour+ 12:time.hour}:${time.minute}:00` })
-                                    }}}
-                                  >
-                                    {time.hour}:{time.minute} {time.timeOffset}
-                                  </TimeColumn> 
+                                        disabled={bookedTime.includes(JSON.stringify(time))}
+                                        selected={selectedTime === JSON.stringify(time)}
+                                        onClick={(e) => {
+                                            {
+                                                timeInBookedTime(time) ? console.log('') : setSelectedTime(JSON.stringify(time)); setFormData({ ...formData, time: `${time.timeOffset === 'PM' ? time.hour + 12 : time.hour}:${time.minute}:00` })
+                                            }
+                                        }}
+                                    >
+                                        {time.hour}:{time.minute} {time.timeOffset}
+                                    </TimeColumn>
                                 ))}
                             </Grid>
                         </InputDiv>

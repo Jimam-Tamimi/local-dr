@@ -12,5 +12,7 @@ urlpatterns = [
     path('speciality/recommendations/', specialityRecommendations),
     path('get-doctor-data/<int:id>/', doctorData),
     path('search/', search),
+    path('razorpay/pay/', start_payment, name="payment"),
+    path('razorpay/payment/success/', handle_payment_success, name="payment_success")
     
 ] + router.urls

@@ -42,7 +42,7 @@ class Appointment(models.Model):
     date = models.DateField(null=False, blank=False)
     time = models.TimeField(null=False, blank=False)
     status = models.CharField(max_length=20, default="in progress", null=False, blank=False,choices=[('in progress','in progress'),('completed','completed')])
-    
+    isPaid = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name

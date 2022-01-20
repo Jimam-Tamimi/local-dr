@@ -26,13 +26,13 @@ SECRET_KEY = 'django-insecure-61wefwm46qr9e*)4cicc&vr#0-@0xk5yaui%1o7i_tw^59&!%j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "channels",
+    # "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "hospital", 
     "account", 
+    
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join('build')],
+        'DIRS': [os.path.join(BASE_DIR , 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,8 +77,8 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = 'core.asgi.application'
-# WSGI_APPLICATION = 'core.wsgi.application'
+# ASGI_APPLICATION = 'core.asgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -191,3 +192,10 @@ BASE_URL = "http://127.0.0.1:3000/"
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+
+
+
+os.environ['RAZOR_KEY_ID'] = 'rzp_test_S12YbY2Trf6xYD' 
+os.environ['RAZOR_KEY_SECRET'] = 'HAldYJG4BYTUAZOYfnueSH6l'
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000/']

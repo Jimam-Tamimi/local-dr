@@ -26,7 +26,7 @@ def available(begin_time, end_time, check_time=None):
     # If check time is not given, default to current UTC time
     if(begin_time and end_time):
             
-        check_time = check_time or datetime.now(timezone.get_current_timezone()).time()
+        check_time = check_time or timezone.localtime(timezone.now()).time()
         begin_time = datetime.strptime(begin_time, '%H:%M:%S').time()
         end_time = datetime.strptime(end_time, '%H:%M:%S').time()
         print(begin_time, end_time, check_time)

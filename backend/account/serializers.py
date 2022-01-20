@@ -1,4 +1,3 @@
-from typing_extensions import Required
 from django.db.models import fields
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.serializers import ModelSerializer, ValidationError

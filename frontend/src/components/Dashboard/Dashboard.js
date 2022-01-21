@@ -55,6 +55,10 @@ export default function Dashboard({showDash, setShowDash}) {
                           <FaSitemap />
                           <p>Completed Appointments</p>
                   </DashLink>
+                  <DashLink exact to="/">
+                          <FaSitemap />
+                          <p>Completed </p>
+                  </DashLink>
                 </> : ''
               }
                 {/* <DashLink to="#">

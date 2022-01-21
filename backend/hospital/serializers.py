@@ -25,8 +25,8 @@ class DoctorSerializer(serializers.ModelSerializer):
                   'qualification',  "startTime", "endTime"]
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    
+    isPaid = serializers.BooleanField(read_only=True)
     class Meta:
         model = Appointment
         fields = ['id', 'name', 'user', 'doctor', 'email', 'number',
-                  'date',  "time", 'status']
+                  'date',  "time", 'status', 'isPaid']

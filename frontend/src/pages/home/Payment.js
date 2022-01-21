@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios, { Axios } from 'axios';
+import {useHistory} from 'react-router-dom'
+
 export default function Payment({ match }) {
     const [name, setName] = useState("");
     const [amount, setAmount] = useState("");
@@ -13,13 +15,17 @@ export default function Payment({ match }) {
 
             // we will send the response we've got from razorpay to the backend to validate the payment
             bodyData.append("response", JSON.stringify(response));
-            await axios.post(`${process.env.REACT_APP_API_URL}api/razorpay/payment/success/`, bodyData)
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/razorpay/payment/success/`, bodyData)
             console.log("Everything is OK!");
-            setName("");
-            setAmount("");
+            // redirect to the appointment page
+            if(res.status == 200){
+                history.push(`/appointments/${res.data.appointment.id}/`)
+            }
+
         } catch (error) {
-            console.error(error.response);
-        }
+            console.error(error?.response);
+            history.goBack()
+        }   
     };
 
     // this will load a script tag which will open up Razorpay payment card to make transactions
@@ -28,7 +34,7 @@ export default function Payment({ match }) {
         script.src = "https://checkout.razorpay.com/v1/checkout.js";
         document.body.appendChild(script);
     };
-
+    const history = useHistory()
     const showRazorpay = async () => {
         const res = await loadScript();
 
@@ -42,9 +48,11 @@ export default function Payment({ match }) {
         try {
             data = await axios.post(`${process.env.REACT_APP_API_URL}api/razorpay/pay/`, bodyData)
             console.log(data);
-        } catch (error) {
-            console.log(error?.response);
-            console.log(error);
+            
+        } catch (error) { 
+            if(error?.response?.status === 400){
+                history.goBack();
+            }
         }
 
 

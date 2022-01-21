@@ -15,7 +15,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'; // You can also use <link> for styles
 
 import { useEffect } from "react";
-import { authenticate, refreshToken } from "./redux/auth/actions";
+import { authenticate, logout, refreshToken } from "./redux/auth/actions";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { checkAdmin } from "./redux/adminAuth/actions";
@@ -33,10 +33,13 @@ function App() {
   useEffect(() => {
     AOS.init({ once: true, duration: 1000 });
     dispatch(authenticate())
-    dispatch(checkAdmin());
-
+    
   }, [])
+  
   const auth = useSelector(state => state.auth)
+  useEffect(() => {
+    dispatch(checkAdmin());
+  }, [auth]);
   
   if (auth.isAuthenticated) {
     axios.interceptors.request.use(
@@ -55,9 +58,7 @@ function App() {
       async error => {
         if (error?.response?.status === 401) {
           await dispatch(refreshToken())
-          if (location.pathname.startsWith('/admin')) {
-            await dispatch(checkAdmin())
-          }
+          await dispatch(checkAdmin()) 
         }
         return Promise.reject(error);
       }
@@ -65,6 +66,29 @@ function App() {
   }
 
   const adminAuth = useSelector(state => state.adminAuth)
+
+    useEffect(() => {
+      console.log(adminAuth);
+
+      const removeAdminAuth = ( ) => {
+        localStorage.setItem('test', JSON.stringify({...adminAuth}))
+          if(adminAuth.type != 'user'){
+            console.log('jimam');
+            localStorage.removeItem('auth')
+          }
+      }
+    
+      window.addEventListener('unload', e => { 
+        removeAdminAuth()
+      })  
+      return () => {
+        window.removeEventListener('unload', e => { 
+          removeAdminAuth()
+        })  
+      }    
+    }, [adminAuth.type]);
+    
+  
   return (
 
     <>

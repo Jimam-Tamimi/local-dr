@@ -17,6 +17,14 @@ from .serializers import *
 from account.threads import SendEmail
 from account.helpers import sendVerificationEmail
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
+
+
 # Create your views here.
 
 User = get_user_model()
@@ -101,3 +109,12 @@ def isAdmin(request):
         return Response({"isAdmin": True, 'type': 'hospital', 'message': 'User is admin', }, status=status.HTTP_200_OK)
     else:
         return Response({"isAdmin": False, 'type': 'user', 'message': 'User is admin', }, status=status.HTTP_403_FORBIDDEN)
+    
+    
+    
+class TokenObtainPairViewEdit(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
+    
+from rest_framework_simplejwt.tokens import AccessToken

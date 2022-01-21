@@ -62,7 +62,7 @@ export default function Navbar({ }) {
   const location = useLocation();
 
   const auth = useSelector((state) => state.auth);
-
+  const adminAuth = useSelector((state) => state.adminAuth);
   const navRef = useRef(null);
   useEffect(() => {
     const toggleOpen = (e) => {
@@ -144,9 +144,12 @@ export default function Navbar({ }) {
                           <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
                             <Link to="/" style={{ textDecoration: 'underline', fontWeight: 600 }}>Home</Link>
                           </Menu>
+                          {
+                            adminAuth.type === 'user' &&
                           <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
                             <Link to="/your-appointments/" style={{ textDecoration: 'underline', fontWeight: 600 }}>Your Appointments</Link>
                           </Menu>
+                          }
                         </> :
                         <Link to="?show-account=true">
                           <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
@@ -235,9 +238,15 @@ export default function Navbar({ }) {
                       <p>Account</p>
                       <IoIosArrowDown />
                     </Menu>
+                    {
+
+                    }
                     <Dropdown show={showDropdown}>
                       <DropdownDiv >
+                      {
+                            adminAuth.type === 'user' &&
                         <Link to="/your-appointments/">Your Appointments</Link>
+                      }
                         <p onClick={e => dispatch(logout())}>Logout</p>
                       </DropdownDiv>
                     </Dropdown>

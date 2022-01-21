@@ -98,7 +98,7 @@ class AppointmentViewSet(ModelViewSet):
         elif(self.request.user.is_hospital):
             
             self.queryset = self.queryset.filter(
-                doctor__hospital__user=self.request.user)
+                doctor__hospital__user=self.request.user, isPaid=True)
             print(self.queryset, 'is hospital')
             return self.queryset
         elif(self.request.user.is_authenticated):
@@ -250,6 +250,8 @@ def start_payment(request):
         return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
     
     
+    if(appointment.isPaid):
+        return Response({"message": "Already paid", 'type': 'paid'}, status=status.HTTP_400_BAD_REQUEST)
     
     amount = appointment.doctor.hospital.price
     
@@ -314,7 +316,8 @@ def handle_payment_success(request):
     appointment.isPaid = True
     appointment.save()
     res_data = {
-        'message': 'payment successfully received!'
+        'message': 'payment successfully received!',
+        'appointment': AppointmentSerializer(appointment).data
     }
 
     return Response(res_data)

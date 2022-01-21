@@ -57,6 +57,7 @@ export default function YourAppointments() {
               <Th>Date</Th>
               <Th>Time</Th>
               <Th>Status</Th>
+              <Th>Payment Status</Th>
               <Th>Action</Th>
             </Tr>
             {
@@ -70,7 +71,12 @@ export default function YourAppointments() {
                   <Td>{getDateFromStr(appointment?.date)}</Td>
                   <Td>{getTimeFromStr(appointment?.time)}</Td>
                   <Td>{appointment?.status}</Td>
-                  <Td><ButtonLink to={`/appointments/${appointment.id}`} sm>View</ButtonLink></Td>
+                  <Td>{appointment?.isPaid ? 'Paid': 'Unpaid'}</Td>
+                  {
+                    appointment?.isPaid ? 
+                    <Td><ButtonLink to={`/appointments/${appointment.id}`} sm>View</ButtonLink></Td>
+                     : <Td><ButtonLink to={`/payment/${appointment.id}`} sm>Pay</ButtonLink></Td>
+                  }
 
                 </Tr>
 

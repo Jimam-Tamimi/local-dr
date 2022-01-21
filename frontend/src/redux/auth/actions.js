@@ -63,12 +63,8 @@ export const authenticate = () => async dispatch => {
     if(auth?.isAuthenticated) {
         let data = { token: auth.access }
         try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/token/verify/`, data, config)
+ 
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/token/verify/`, data)
 
         } catch (error) {
         }

@@ -14,7 +14,7 @@ import { Button, Column, Grid } from "../../styles/Essentials.styles";
 import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAdmin } from "../../redux/adminAuth/actions";
-import { login, refreshToken } from "../../redux/auth/actions";
+import { login, logout, refreshToken } from "../../redux/auth/actions";
 import SyncLoader from "react-spinners/SyncLoader";
 import DotLoader from "react-spinners/DotLoader";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -35,8 +35,7 @@ export default function AdminLayout({ children }) {
   window.onresize = () => {
     setShowDash(window.innerWidth > 850 ? true : false);
   };
-
-  
+ 
 
   return (
     <>

@@ -5,7 +5,7 @@ export default function Payment({ match }) {
     const [amount, setAmount] = useState("");
     const [appointmentData, setAppointmentData] = useState(null);
 
-    
+
     const handlePaymentSuccess = async (response) => {
         console.log(response);
         try {
@@ -16,7 +16,7 @@ export default function Payment({ match }) {
             await axios.post(`${process.env.REACT_APP_API_URL}api/razorpay/payment/success/`, bodyData)
             console.log("Everything is OK!");
             setName("");
-            setAmount(""); 
+            setAmount("");
         } catch (error) {
             console.error(error.response);
         }
@@ -37,6 +37,7 @@ export default function Payment({ match }) {
         // we will pass the amount and product name to the backend using form data
         bodyData.append("amount", amount.toString());
         bodyData.append("name", name);
+        bodyData.append("appointment_id", match.params.id);
         let data = undefined
         try {
             data = await axios.post(`${process.env.REACT_APP_API_URL}api/razorpay/pay/`, bodyData)
@@ -55,12 +56,12 @@ export default function Payment({ match }) {
         var options = {
             key_id: `${process.env.REACT_APP_RAZOR_KEY_ID}`,
             key_secret: `${process.env.REACT_APP_RAZOR_KEY_SECRET}`,
-            amount: data?.data.amount,
+            amount: data?.data?.payment?.amount,
             currency: "INR",
             name: "Local Doctor",
             description: "Test teansaction",
             image: "", // add image url
-            order_id: data?.data?.id,
+            order_id: data?.data?.payment?.id,
             handler: function (response) {
                 // we will handle success by calling handlePayment method and
                 // will pass the response that we've got from razorpay

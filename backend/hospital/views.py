@@ -241,14 +241,33 @@ def doctorData(request, id=None):
 
 @api_view(['POST'])
 def start_payment(request):
-    amount = 10
-    name = 'name'
-    PUBLIC_KEY = environ
+    appointment_id = request.data.get('appointment_id', None)
+    if(appointment_id is None):
+        return Response({"message": "Please provide an appointment id"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        appointment = Appointment.objects.get(id=appointment_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+    
+    amount = appointment.doctor.hospital.price
+    
     client = razorpay.Client(auth=(environ['RAZOR_KEY_ID'], environ['RAZOR_KEY_SECRET']))
     payment = client.order.create({"amount": int(amount) * 100, 
                                    "currency": "INR", 
                                    "payment_capture": "1"})
-    return Response(payment, status=status.HTTP_200_OK)
+    appointment.payment_id = payment['id']
+    appointment.save()
+    appointment_data = AppointmentSerializer(appointment).data
+    
+    data = {
+        'appointment': appointment_data,
+        'payment': payment
+        
+    }
+    
+    return Response(data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def handle_payment_success(request):
@@ -256,6 +275,7 @@ def handle_payment_success(request):
     ord_id = ""
     raz_pay_id = ""
     raz_signature = ""
+
     
     # res.keys() will give us list of keys in res
 
@@ -266,7 +286,12 @@ def handle_payment_success(request):
             raz_pay_id = res[key]
         elif key == 'razorpay_signature':
             raz_signature = res[key]
-            
+    
+    try:
+        appointment = Appointment.objects.get(payment_id=ord_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
+    
     data = {
         'razorpay_order_id': ord_id,
         'razorpay_payment_id': raz_pay_id,
@@ -286,6 +311,8 @@ def handle_payment_success(request):
     # if payment is successful that means check is None then we will turn isPaid=True
     print('payment successful')
     
+    appointment.isPaid = True
+    appointment.save()
     res_data = {
         'message': 'payment successfully received!'
     }

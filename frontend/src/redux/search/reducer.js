@@ -5,6 +5,7 @@ let initialState = {
     available: '',
     distance: 30,
     speciality: '',
+    location_name: '',
 
 } 
 
@@ -47,6 +48,13 @@ const searchReducer = (state=initialState, action) => {
         state = {
             ...state,
             speciality: action.payload
+        }
+        return state
+    }
+    else if(action.type === "CHANGE_LOCATION_NAME"){
+        state = {
+            ...state,
+            location_name: action.payload
         }
         return state
     }

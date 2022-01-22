@@ -66,7 +66,24 @@ export const SearchColumn = styled.form`
   & > div  {
     position: relative;
     padding: 0px 20px;
+  }
+  & > div > div.location-input  {
+     top: 0;
+     position: unset;
 
+         padding: 0px 0px;
+         overflow-y: unset;
+
+
+  }
+  & > div > div > input  {
+    border: none;
+      width: 100% !important;
+    font-size: 1rem;
+    padding: 1.3rem 2.1rem;
+    font-weight: 600;
+    outline: none;
+    border-radius: 4px;
   }
   & > div > div {
     background: white;

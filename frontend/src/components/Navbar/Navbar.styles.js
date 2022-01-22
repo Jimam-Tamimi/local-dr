@@ -112,6 +112,24 @@ export const SearchColumnNav = styled(SearchColumn)`
   & > button {
     font-size: 15px;
   }
+
+  & > div > div > input {
+    width: 100% !important;
+    font-size: 1rem;
+    padding: 0px 15px;
+    font-weight: 600;
+    outline: none;
+    border-radius: 4px;
+    min-height: 46px;
+    width: 100%;
+    padding: 0px 15px;
+    font-size: 1rem;
+    border: 1px solid #0000001f;
+    font-weight: 600;
+    outline: none;
+  }
+  
+  
 `
 
 export const SearchMobileColumn = styled.div`

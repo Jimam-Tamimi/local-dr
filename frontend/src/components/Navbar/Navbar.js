@@ -37,6 +37,7 @@ import { logout } from "../../redux/auth/actions";
 import ReactGoogleAutocomplete, { usePlacesWidget } from "react-google-autocomplete";
 import axios from "axios";
 import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../styles/Table.styles';
+import { Autocomplete } from "@react-google-maps/api";
 
 
 export default function Navbar({ }) {
@@ -112,8 +113,28 @@ export default function Navbar({ }) {
 
 
   const search = useSelector(state => state.search)
-  const { doctor, speciality, available, distance, lat, lng } = search
+  const { doctor, speciality, available, distance, lat, lng, location_name } = search
+ 
+  const [autoComplete, setAutoComplete] = useState(null)
+  const onPlaceChanged = () => {
+    try {
+      const lat = autoComplete.getPlace().geometry.location.lat();
+      const lng = autoComplete.getPlace().geometry.location.lng();
+      dispatch({ type: 'CHANGE_LAT', payload:lat }); dispatch({ type: 'CHANGE_LNG', payload: lng })
+      dispatch({ type: 'CHANGE_LOCATION_NAME', payload: autoComplete.getPlace().formatted_address })
 
+    } catch {
+
+    }
+  }
+  const onMapChange = (e) => {
+    console.log(e);
+    dispatch({ type: 'CHANGE_LOCATION_NAME', payload: e.currentTarget.value })
+    if(e.currentTarget.value === ''){
+      dispatch({ type: 'CHANGE_LAT', payload:'' }); dispatch({ type: 'CHANGE_LNG', payload: '' })
+
+    }
+  }
 
   return (
     <>
@@ -205,10 +226,20 @@ export default function Navbar({ }) {
                           borderBottomLeftRadius: 0,
                         }}
                       >
-                        <ReactGoogleAutocomplete
-                          onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
-                        />
+                        <Autocomplete  className="location-input" onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+                      <>
 
+                        <input 
+                          name="location"
+                          value={location_name}
+
+                          type="text"
+                          placeholder="My Location"
+                          onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+                          onChange={onMapChange}
+                        />
+                      </>
+                    </Autocomplete>
 
 
                       </div>
@@ -319,9 +350,22 @@ export default function Navbar({ }) {
                 <IoLocationSharp />
 
 
-                <ReactGoogleAutocomplete
-                  onPlaceSelected={(place) => { dispatch({ type: 'CHANGE_LAT', payload: place.geometry.location.lat() }); dispatch({ type: 'CHANGE_LNG', payload: place.geometry.location.lng() }) }}
-                />
+                <Autocomplete className="location-input" onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+                      <>
+
+                        <input
+                          id="locationM"
+                          name="location"
+                          type="text"
+                          value={location_name}
+                          placeholder="My Location"
+                          onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+                          onChange={onMapChange}
+
+                        />
+                      </>
+                    </Autocomplete>
+                
               </div>
 
               {/* <button>Find Care</button> */}

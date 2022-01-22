@@ -28,9 +28,9 @@ import { IoLocationSharp } from "react-icons/io5";
 import TextTransition, { presets } from "react-text-transition";
 import { RiProfileLine } from "react-icons/ri";
 import { Autocomplete } from "@react-google-maps/api";
-import { usePlacesWidget } from "react-google-autocomplete";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { Label } from "../../styles/Form.styles";
 
 const TEXTS = ["Doctor", "Dentist", "Psychologist", "Dermatologist"];
 
@@ -59,8 +59,8 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(
       (location) => {
         setLocation({
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
+          lat: '',
+          lng: '',
         });
       },
       () => console.log("error :)"),
@@ -71,29 +71,19 @@ export default function Home() {
   const history = useHistory();
   const onSubmit = (e) => {
     e.preventDefault();
-    if(doctor){
+    if (doctor) {
 
       history.push(
-        `/search?doctor=${doctor}&lat=&lng=&speciality=${speciality}`
+        `/search?doctor=${doctor}&lat=&lng=&speciality=${speciality}&&location-name=${LocationName}`
       );
     } else {
       history.push(
-        `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}  `
+        `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}&location-name=${LocationName}`
       );
-      
+
     }
   };
 
-  // location
-  const { ref, autocompleteRef } = usePlacesWidget({
-    apiKey: "",
-    onPlaceSelected: (place) => {
-      setLocation({
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-      });
-    },
-  });
 
   // doctor recommendation
   const [doctorRecommendations, setDoctorRecommendations] = useState([]);
@@ -124,6 +114,25 @@ export default function Home() {
       console.log(err.response);
     }
   };
+
+  const [autoComplete, setAutoComplete] = useState(null)
+  const [LocationName, setLocationName] = useState('');
+  const onPlaceChanged = () => {
+    try {
+      const lat = autoComplete.getPlace().geometry.location.lat();
+      const lng = autoComplete.getPlace().geometry.location.lng();
+      console.log(autoComplete.getPlace());
+      setLocationName(autoComplete.getPlace().formatted_address);
+      setLocation({
+        lat: lat,
+        lng: lng
+      });
+      
+    } catch {
+
+    }
+  }
+
   return (
     <>
       <HeroWrap data-aos="fade-in">
@@ -190,13 +199,18 @@ export default function Home() {
                 >
                   <>
                     <IoLocationSharp />
+                    <Autocomplete className="location-input" onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+                      <>
 
-                    <input
-                      ref={ref}
-                      name="location"
-                      type="text"
-                      placeholder="My Location"
-                    />
+                        <input
+                          name="location"
+                          type="text"
+                          placeholder="My Location"
+                          onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+                        />
+                      </>
+                    </Autocomplete>
+
                   </>
                 </div>
                 <div

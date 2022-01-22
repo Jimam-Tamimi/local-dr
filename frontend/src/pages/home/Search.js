@@ -40,17 +40,11 @@ import { IoLocationSharp } from 'react-icons/io5'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { Datepicker, Page, setOptions } from '@mobiscroll/react';
 import { Marker } from "react-google-maps";
-
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+ 
 import Map from "../../components/Map/Map";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-
-setOptions({
-  theme: 'ios',
-  themeVariant: 'light'
-});
-
+ 
 export default function Search({ match,  }) {
   const [providers, setProviders] = useState([
     { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
@@ -128,6 +122,7 @@ export default function Search({ match,  }) {
     dispatch({ type: 'CHANGE_MAX_DISTANCE', payload: params.get('max-distance') || '' })
     dispatch({ type: 'CHANGE_LAT', payload: params.get('lat') || '' })
     dispatch({ type: 'CHANGE_LNG', payload: params.get('lng') || '' })
+    dispatch({ type: 'CHANGE_LOCATION_NAME', payload: params.get('location-name') || '' })
   }, [])
   const [paginationNext, setPaginationNext] = useState('')
   const [count, setCount] = useState(0)
@@ -152,7 +147,7 @@ export default function Search({ match,  }) {
   
   
   const search = useSelector(state => state.search)
-  const {doctor, speciality, available, distance, lat, lng} = search
+  const {doctor, speciality, available, distance, lat, lng, location_name} = search
 
   const [doctorList, setDoctorList] = useState([])
   const getDoctorList = async () => {
@@ -176,7 +171,7 @@ export default function Search({ match,  }) {
   }
   useEffect(() => {
     getDoctorList()
-    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
+    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`)
     console.log(paginationNext)
   }, [search])
   useEffect(() => {

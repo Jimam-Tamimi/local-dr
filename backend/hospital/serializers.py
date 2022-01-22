@@ -5,6 +5,8 @@ from rest_framework import serializers
 
 
 class HospitalSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(max_length=None, use_url=True, allow_empty_file=True, required=False)
+
     class Meta:
         model = Hospital
         fields = ['id', 'name', 'image', 'email', 'password',
@@ -27,8 +29,8 @@ class DoctorScheduleSerializer(serializers.ModelSerializer):
 
 class DoctorSerializer(serializers.ModelSerializer):
 
-    doctor_schedule = DoctorScheduleSerializer(many=True) 
-    
+    doctor_schedule = DoctorScheduleSerializer(many=True, read_only=True) 
+    image = serializers.ImageField(max_length=None, use_url=True, required=False)
     class Meta:
         model = Doctor
         fields = ['id', 'hospital', 'image', 'name', 'speciality',

@@ -1,5 +1,4 @@
-from math import sin, cos, sqrt, atan2, radians
-from msilib import init_database
+from math import sin, cos, sqrt, atan2, radians 
 
 # approximate radius of earth in km
 

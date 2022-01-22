@@ -357,7 +357,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
   })
   const getHospitalData = async (id) => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/${id}`)
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`)
       if (res.status === 200) {
         setFormData(res.data)
         setCoords(JSON.parse(res.data.location))
@@ -391,23 +391,27 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       formData.append('contact_person', contact_person);
       formData.append('location', JSON.stringify(mark));
       formData.append('price', price);
-      formData.append('image', profImage);
+      if(profImage){
+        formData.append('image', profImage);
+      }
 
 
 
       const config = {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          // 'Content-Type': 'multipart/form-data'
                     
         }
       }  
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData, config)
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData)
+      console.log(res);
       if (res.status === 200) {
         dispatch(alert('Hospital updated successfully', 'success'))
         setShowEditForm(false)
         getHospitals()
       }
     } catch (error) {
+      console.log(error.response);
       dispatch(alert('Failed to update hospital', 'danger'))
 
     }

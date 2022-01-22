@@ -9,7 +9,7 @@ export default function AlertComponent() {
     return (
         <>
             <AlertCont>
-                {
+                {/* {
                     alerts.map(({message, alertType, id}) => {
                         return (
                             <AlertCompo key={id} alertType={alertType}>
@@ -20,7 +20,7 @@ export default function AlertComponent() {
                             </AlertCompo>
                         )
                     })
-                }
+                } */}
                 
                 
                 

@@ -28,7 +28,7 @@ class HospitalViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     search_fields = ['id', 'name', 'email', 'contact', 'contact_person']
     filter_backends = (filters.SearchFilter,)
-    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    parser_classes = [FormParser, JSONParser, MultiPartParser ]
 
     
     def get_queryset(self):
@@ -58,6 +58,10 @@ class DoctorViewSet(ModelViewSet):
         if(not self.request.user.is_superuser):
             queryset = self.queryset.filter(hospital__user=self.request.user)
             return queryset
+        elif(self.request.user.is_hospital):
+            self.queryset = self.queryset.filter(doctor__hospital__user=self.request.user) 
+            print(self.queryset, 'is hospital')
+            return self.queryset
         return super().get_queryset()
      
 

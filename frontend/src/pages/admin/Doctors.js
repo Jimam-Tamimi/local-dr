@@ -306,7 +306,9 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
       formData.append('speciality', speciality);
       formData.append('qualification', qualification);
       formData.append('hospital', doctorHospitalId);
-      formData.append('image', profImage);
+      if(profImage){
+        formData.append('image', profImage);
+      }
 
       const config = {
         headers: {

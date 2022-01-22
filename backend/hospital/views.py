@@ -1,5 +1,6 @@
 import json
 from os import environ
+from pydoc import doc
 from urllib import request
 from django.shortcuts import render
 from django.db.models import Q
@@ -14,7 +15,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
@@ -44,9 +45,9 @@ class HospitalViewSet(ModelViewSet):
 class DoctorViewSet(ModelViewSet):
     queryset = Doctor.objects.all().order_by('-id')
     serializer_class = DoctorSerializer
-    # authentication_classes = [BasicAuthentication]
     permission_classes = [IsAdminUser | IsHospital]
     search_fields = ['id',  'name', 'speciality', 'qualification']
+    # authentication_classes = [BasicAuthentication]
     filter_backends = (filters.SearchFilter,)
     pagination_class = PageNumberPagination
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -58,6 +59,7 @@ class DoctorViewSet(ModelViewSet):
             queryset = self.queryset.filter(hospital__user=self.request.user)
             return queryset
         return super().get_queryset()
+     
 
     def retrieve(self, request, *args, **kwargs):
 
@@ -69,8 +71,8 @@ class DoctorViewSet(ModelViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        queryset = queryset.filter(hospital__deactivated=False)
+        queryset = self.queryset.filter(hospital__deactivated=False)
+        queryset = self.filter_queryset(queryset)
         serializer = self.get_serializer(queryset, many=True)
         allData = serializer.data
         for data in allData:
@@ -78,8 +80,39 @@ class DoctorViewSet(ModelViewSet):
             data['hospital'] = HospitalSerializer(
                 Hospital.objects.get(id=hospitalID)).data
         return Response(allData, status=status.HTTP_200_OK)
+    
+@api_view([ 'POST' , "DELETE"])
+@permission_classes([IsAdminUser | IsHospital])
+def schedule_doctor(request, id=None):
+    if(request.method == 'POST'):
+        data = request.data
+        date = data['date']
+        time = data['times']
+        try:
+            doctor = Doctor.objects.get(id=id)
+        except Doctor.DoesNotExist:
+            return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
+        for ds in doctor.doctor_schedule.filter(date=date):
+            ds.delete()
+        
+        doctor_schedule = DoctorSchedule.objects.create(date=date, time=time)
+        
+        doctor.doctor_schedule.add(doctor_schedule)
+        doctor.save()
+        
+        return Response({"message": "Doctor schedule added successfully"}, status=status.HTTP_200_OK)
+             
+    if(request.method == "DELETE"):
+        try:
+            doctorSchedule = DoctorSchedule.objects.get(id=id)
+        except Doctor.DoesNotExist:
+            return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
+        doctorSchedule.delete()
+        return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
+        
+        
 class AppointmentViewSet(ModelViewSet):
     queryset = Appointment.objects.all().order_by('-id')
     serializer_class = AppointmentSerializer

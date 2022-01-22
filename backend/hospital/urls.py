@@ -13,6 +13,7 @@ urlpatterns = [
     path('get-doctor-data/<int:id>/', doctorData),
     path('search/', search),
     path('razorpay/pay/', start_payment, name="payment"),
-    path('razorpay/payment/success/', handle_payment_success, name="payment_success")
+    path('razorpay/payment/success/', handle_payment_success, name="payment_success"),
+    path(r'schedule-doctor/<int:id>/', schedule_doctor),
     
 ] + router.urls

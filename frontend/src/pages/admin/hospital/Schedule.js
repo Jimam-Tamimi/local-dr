@@ -20,6 +20,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import alert from '../../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
+import { TimeColumn } from "../../styles/home/BookAppointment.styles";
+import { Date, Time, Times, TimeSchedule, TimeScheduleWrap } from "../../styles/admin/Schedule.styles";
 
 
 export default function Schedule() {
@@ -101,7 +103,8 @@ export default function Schedule() {
 
         }
     }
-    
+    const [showScheduledTime, setShowScheduledTime] = useState(false);
+    const [selectedTime, setSelectedTime] = useState(null);
     return (
         <>
             <Grid style={{ border: "1px solid #eff2f7" }}>
@@ -119,7 +122,7 @@ export default function Schedule() {
                         <Th>Name</Th>
                         <Th>Speciality</Th>
                         <Th>Qualification</Th>
-                        <Th>StartTime - EndTime</Th>
+                        <Th>Schedule</Th>
                         <Th>Actions</Th>
                     </Tr>
                     {
@@ -130,14 +133,20 @@ export default function Schedule() {
                                 <Td>{doctor.name}</Td>
                                 <Td>{doctor.speciality}</Td>
                                 <Td>{doctor.qualification}</Td>
-                                <Td>{getProperTime(doctor.startTime)} - {getProperTime(doctor.endTime)}</Td>
+                                <Td>
+                                    {
+                                        doctor?.doctor_schedule?.map(time => (
+                                            <p>{time.date}</p>
+                                        ))
+                                    } 
+
+                                </Td>
                                 <Td>
                                     <Actions>
                                         <Button onClick={e => { setShowTimeEditForm(true); setDoctorId(doctor.id) }} sm green>Edit Time</Button>
-                                        <Button onClick={e => {  clearTime(doctor.id) }} sm >Clear Time</Button>
-
+                                        <Button onClick={e => { setShowScheduledTime(true); setSelectedTime(doctor.id)}} sm green>Scheduled Time</Button>
                                     </Actions>
-                                </Td>
+                                </Td>       
                             </Tr>
                         ))
                     }
@@ -149,6 +158,9 @@ export default function Schedule() {
             <Modal zoom show={showTimeEditForm} setShow={setShowTimeEditForm}>
                 <ScheduleTime getDoctors={getDoctors} doctorId={doctorId} setShowTimeEditForm={setShowTimeEditForm} />
             </Modal>
+            <Modal zoom show={showScheduledTime} setShow={setShowScheduledTime}>
+                <ShowSchedule doctors={doctors} setSelectedTime={setSelectedTime}  getDoctors={getDoctors} selectedTime={selectedTime} />
+            </Modal>
         </>
     );
 }
@@ -157,10 +169,12 @@ export default function Schedule() {
 
 function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
     const [formData, setFormData] = useState({
-        startTime: "",
-        endTime: "",
+        date: "",
+        times: [],
     })
-    const { startTime, endTime } = formData
+
+    
+    const { date, times } = formData
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
     const dispatch = useDispatch()
     const onSubmit = async e => {
@@ -168,12 +182,16 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
         e.preventDefault()
         try {
             
-            const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, formData, )
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${doctorId}/`, formData, )
             console.log(res)
             if (res.status === 200) {
                 dispatch(alert('Doctor Time Updated', 'success'))
                 setShowTimeEditForm(false)
                 getDoctors()
+                setFormData({
+                    date: "",
+                    times: [],
+                })
             }
         } catch (error) {
 
@@ -182,23 +200,136 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
             console.log(error.response)
         }
     }
+
+
+    
+    function getAllTime(){
+        let hour = 7
+        let minutes = 0
+        let times = []
+        let timeOffset = 'AM'
+
+        let endHour = 11
+        let endMinutes = 30 + 10
+        while (true) {
+                    
+            if(hour === endHour && minutes === endMinutes && timeOffset === 'PM'){
+                break
+            }
+            if(hour ==13){
+                hour = 1
+            }
+            
+            if(minutes == 60) {
+                minutes = 0
+                hour++
+            }
+            if(hour == 12){
+                timeOffset = 'PM'
+            }
+            times.push(`${hour}:${minutes} ${timeOffset}`)
+
+            minutes += 10
+
+
+                
+        }
+        return times
+
+    }
+    
+    
     return (
         <>
             <Form onSubmit={onSubmit}>
                 <InputDiv>
-                    <Label>Start Time *</Label>
-                    <Input name="startTime" onChange={onChange} type='time' required placeholder="Start Time" value={startTime} />
+                    <Label>Date *</Label>
+                    <Input name="date" onChange={onChange} type='date' required placeholder="Date" value={date} />
 
                 </InputDiv>
                 <InputDiv>
-                    <Label>End Time *</Label>
-                    <Input required name="endTime" type="time" placeholder="Start Time" onChange={onChange} value={endTime} />
-                </InputDiv>
-
+                            <Label>Select Time</Label>
+                            <Grid
+                                style={{ maxHeight: "290px", overflowY: "scroll" }}
+                                justify="space-between"
+                                lg={4}
+                                spacing={10}
+                            >
+                                {getAllTime().map((t, i) => (
+                                    <TimeColumn key={i}
+                                        selected={times.includes(t)}
+                                        onClick={(e) => {
+                                                // times.includes(t) ? console.log('') : setFormData({ ...formData, times: [...times, times] })
+                                                times.includes(t)? setFormData({ ...formData, times: times.filter(item => item != t) }) :  setFormData({ ...formData, times: [...times, t] }); console.log(formData);
+                                        }}
+                                    >
+                                        {t}
+                                    </TimeColumn>
+                                ))}
+                            </Grid>
+                        </InputDiv>
                 <InputDiv>
                     <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Save</Button>
                 </InputDiv>
             </Form>
         </>
     )
+}
+
+
+
+ 
+
+function ShowSchedule({selectedTime, getDoctors, doctors, setSelectedTime}) {  
+    const [doctor, setDoctor] = useState(null);
+    useEffect(async () => {
+        setDoctor( await  doctors.find(d => d.id === selectedTime))
+        console.log(doctors);
+        console.log(selectedTime);
+        console.log(doctor?.doctor_schedule);  
+    }, [selectedTime, doctors]);
+    
+    function convertStrToTimeList(str) {
+        return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
+    }
+
+    const dispatch = useDispatch()
+    const clearTime = async (tid) => {
+        if(window.confirm('Are you sure you want to clear time?')){
+            try {
+                const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${tid}/`)
+                console.log(res)
+                if (res.status === 200) {
+                    dispatch(alert('Doctor Time Cleared', 'success'))
+                    getDoctors()
+                }
+            } catch (error) {
+
+                dispatch(alert('Failed to clear doctor time', 'danger'))
+
+                console.log(error.response)
+            }
+        }
+    }
+    
+  return ( 
+    <TimeScheduleWrap  >
+{
+    doctor?.doctor_schedule?.map(time => (
+        <TimeSchedule>
+            <Button onClick={e => clearTime(time.id)} danger sm block style={{margin: '5px 0px'}}>Clear </Button>
+            <Date>{time.date}</Date>
+            <Times>
+                {
+                    convertStrToTimeList(time.time).map((t, i) => (
+                        <Time>{t}</Time>
+                    ))
+                }
+            </Times>
+        </TimeSchedule>   
+    ))
+} 
+
+    </TimeScheduleWrap>
+  );
 }

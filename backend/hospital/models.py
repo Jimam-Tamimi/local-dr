@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete, pre_save, post_delete
+from django.forms import CharField
 
 from account.models import MyUser
 class Hospital(models.Model):
@@ -19,6 +20,10 @@ class Hospital(models.Model):
         return self.name
 
 
+class DoctorSchedule(models.Model):
+    date = models.DateField(blank=False, null=False)
+    time = models.TextField(blank=False, null=False)
+      
 
 class Doctor(models.Model):
     # doctor name, spaca, qualification, 
@@ -27,11 +32,12 @@ class Doctor(models.Model):
     image = models.ImageField(upload_to='doctor/', blank=True, null=True)
     speciality = models.CharField(max_length=50, null=False, blank=False)
     qualification = models.CharField(max_length=50, null=False, blank=False)
-    startTime = models.TimeField(blank=True, null=True)
-    endTime = models.TimeField(blank=True, null=True)
+    doctor_schedule = models.ManyToManyField(DoctorSchedule, blank=True, null=True)
+
     
     def __str__(self):
         return self.name
+  
     
 class Appointment(models.Model):
     name = models.CharField(max_length=20, null=False, blank=False)

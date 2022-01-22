@@ -18,11 +18,21 @@ class HospitalSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+
+class DoctorScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DoctorSchedule
+        fields = ['id', 'date', 'time']
+
+
 class DoctorSerializer(serializers.ModelSerializer):
+
+    doctor_schedule = DoctorScheduleSerializer(many=True) 
+    
     class Meta:
         model = Doctor
         fields = ['id', 'hospital', 'image', 'name', 'speciality',
-                  'qualification',  "startTime", "endTime"]
+                  'qualification',  'doctor_schedule']
 
 class AppointmentSerializer(serializers.ModelSerializer):
     isPaid = serializers.BooleanField(read_only=True)

@@ -81,8 +81,8 @@ class DoctorViewSet(ModelViewSet):
                 Hospital.objects.get(id=hospitalID)).data
         return Response(allData, status=status.HTTP_200_OK)
     
-@api_view([ 'POST' , "DELETE"])
-@permission_classes([IsAdminUser | IsHospital])
+@api_view([ 'POST' , "DELETE", "GET"])
+@permission_classes([IsAdminUser | IsHospital | IsAuthenticated])
 def schedule_doctor(request, id=None):
     if(request.method == 'POST'):
         data = request.data
@@ -111,6 +111,40 @@ def schedule_doctor(request, id=None):
 
         doctorSchedule.delete()
         return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
+        
+    if(request.method == "GET"):
+        try:
+            doctor = Doctor.objects.get(id=id)
+        except Doctor.DoesNotExist:
+            return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        doctorSchedule = doctor.doctor_schedule.all()
+        serializer = DoctorScheduleSerializer(doctorSchedule, many=True)
+        tmpData = serializer.data
+        data = []
+        appointments = Appointment.objects.filter(doctor=doctor)
+        def getAppointmentTime(appointment):
+            return appointment.time.strftime("%I:%M %p")
+        def getStrFromTimeList(time):
+            return time.replace("'", "").replace("[", "").replace(']', '').split(', ') 
+            
+        for d in tmpData:
+            date = d['date']
+            time  = getStrFromTimeList(d['time'])
+            breaker = False
+            for appointment in appointments:
+                if(str(appointment.date) == date and  getAppointmentTime(appointment) in time):
+                    print(time)
+                    print(getAppointmentTime(appointment))
+                    # print(getStrFromTimeList(time).remove(getAppointmentTime(appointment)))
+                    time.remove(getAppointmentTime(appointment))
+
+            d['time'] = str(time)
+             
+            data.append(d)
+            
+        print(data) 
+        return Response(data, status=status.HTTP_200_OK)
         
         
 class AppointmentViewSet(ModelViewSet):
@@ -151,7 +185,7 @@ class AppointmentViewSet(ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(self.filter_queryset(queryset), many=True)
         tmpData = serializer.data
         data = []
         for d in tmpData:
@@ -159,19 +193,7 @@ class AppointmentViewSet(ModelViewSet):
             data.append(d)
         return Response(data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'])
-    def get_booked_times(self, request):
-        date = request.GET.get('date', None)
-        if(date):
-            appointment = Appointment.objects.filter(date=date)
-            serializer = self.get_serializer(appointment, many=True)
-            tmpData = serializer.data
-            allData = []
-            for data in tmpData:
-                allData.append(data['time'])
 
-            return Response(allData, status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -224,11 +246,11 @@ def search(request):
     queryset = queryset.filter(Q(speciality__contains=speciality))
     serializer = DoctorSerializer(queryset, many=True)
     allData = []
-    for data in serializer.data:
+    for data in serializer.data:  
         hospitalID = data['hospital']
-
         data['hospital'] = HospitalSerializer(
             Hospital.objects.get(id=hospitalID)).data
+        print(len(data['doctor_schedule']))
         if(lat != '' and lng != ''):
             try:
 
@@ -241,9 +263,12 @@ def search(request):
 
             except Exception as e:
                 print(e)
-        if((not available(data['startTime'], data['endTime'])) and isAvailable == 'true'):
+        # if((not available(data['startTime'], data['endTime'])) and isAvailable == 'true'):
+        #     continue
+        if(len(data['doctor_schedule']) == 0 and isAvailable == 'true'):
             continue
-        data['available'] = available(data['startTime'], data['endTime'])
+        # data['available'] = available(data['startTime'], data['endTime'])
+        data['available'] = len(data['doctor_schedule']) != 0
         allData.append(data)
 
     paginator = PageNumberPagination()
@@ -264,6 +289,7 @@ def doctorData(request, id=None):
             return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
         serializer = DoctorSerializer(doctor)
         data = serializer.data
+        
         data['hospital'] = HospitalSerializer(doctor.hospital).data
         return Response(data, status=status.HTTP_200_OK)
     else:

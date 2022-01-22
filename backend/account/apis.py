@@ -112,9 +112,3 @@ def isAdmin(request):
     
     
     
-class TokenObtainPairViewEdit(TokenObtainPairView):
-    def post(self, request, *args, **kwargs):
-
-        return super().post(request, *args, **kwargs)
-    
-from rest_framework_simplejwt.tokens import AccessToken

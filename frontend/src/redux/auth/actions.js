@@ -98,6 +98,8 @@ export const refreshToken = () => async dispatch => {
 }
 export const logout = () => async dispatch => {
     dispatch({type: 'LOGOUT'}) 
+    dispatch({ type: "IS_NOT_ADMIN",  payload: { type: 'user' } })
+
     dispatch(alert(`Logout successful`, 'success'))
 
 }

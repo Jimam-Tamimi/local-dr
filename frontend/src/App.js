@@ -39,7 +39,7 @@ function App() {
   const auth = useSelector(state => state.auth)
   useEffect(() => {
     dispatch(checkAdmin());
-  }, [auth]);
+  }, []);
   
   if (auth.isAuthenticated) {
     axios.interceptors.request.use(
@@ -58,7 +58,6 @@ function App() {
       async error => {
         if (error?.response?.status === 401) {
           await dispatch(refreshToken())
-          await dispatch(checkAdmin()) 
         }
         return Promise.reject(error);
       }

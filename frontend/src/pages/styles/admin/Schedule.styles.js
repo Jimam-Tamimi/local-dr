@@ -29,5 +29,10 @@ export const Time = styled.div`
 border: 1px solid #00000024;
 text-align: center;
 padding: 2px 0px;
+transition: var(--main-transition);
+&.active {
+    background-color: var(--primary-color);
+    border-color: transparent;
+}
 
 `

@@ -4,7 +4,7 @@ import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import {
     Form,
     ProfileColumn,
-    Time,
+    
     TimeColumn,
     Wrap,
 } from "../styles/home/BookAppointment.styles";
@@ -19,14 +19,13 @@ import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import alert from "../../redux/alert/actions";
+import { logout } from "../../redux/auth/actions";
+import { Date as DateComponent, Times, TimeSchedule, TimeScheduleWrap, Time, } from "../styles/admin/Schedule.styles";
 setOptions({
     theme: "ios",
     themeVariant: "light",
 });
-export default function BookAppointment({ match }) {
-    const [times, setTimes] = useState([]);
-    const [selectedTime, setSelectedTime] = useState("");
-    const [bookedTime, setBookedTime] = useState([]);
+export default function BookAppointment({ match }) { 
     const dispatch = useDispatch();
 
 
@@ -34,12 +33,9 @@ export default function BookAppointment({ match }) {
     const getTimeFromString = (time) => {
         const timeArray = time.split(":");
         let t = {
-            hour:
-                parseInt(timeArray[0]) > 12
-                    ? parseInt(timeArray[0]) - 12
-                    : parseInt(timeArray[0]),
-            minute: parseInt(timeArray[1]),
-            timeOffset: timeArray[0] > 12 ? "PM" : "AM",
+            hour: parseInt(timeArray[0]),
+            minute: parseInt(timeArray[1].split(" ")[0]),
+            timeOffset: timeArray[1].split(" ")[1].replaceAll(",", ""),
         };
         console.log(t);
         return t;
@@ -84,121 +80,65 @@ export default function BookAppointment({ match }) {
 
     };
     const [doctorData, setDoctorData] = useState(null)
+     
+    const adminAuth = useSelector(state => state.adminAuth)
+ 
     useEffect(() => {
+        if (adminAuth.type !== 'user') {
+            history.push('?show-account=true')
+        }
+    }, [adminAuth])
+
+    const [activeTime, setActiveTime] = useState([]);
+    useEffect( async () => {
         console.log(adminAuth.type);
         
 
         axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
             console.log(res.data);
             if (res.status === 200) {
-                setDoctorData(res.data);
-                if(res.data.endTime!==null && res.data.startTime!==null){
-                    setActiveTime(res.data)
-                }
+                setDoctorData(res.data); 
             }
         }).then((err) => {
             console.log(err?.response);
             console.log(err);
         })
-    }, []);
-    const adminAuth = useSelector(state => state.adminAuth)
 
-    const timeInBookedTime = (time) => {
-        console.log(bookedTime.includes(JSON.stringify(time)), 'bookedTime');
-        console.log(JSON.stringify(time), 'bookedTime');
-        console.log(bookedTime, 'bookedTime');
-        return bookedTime.includes(JSON.stringify(time));
-    }
-
-        useEffect(() => {
-            if(adminAuth.type !== 'user'){
-                dispatch(alert('You are not loggedin as an admin. Please login as an user', 'danger'))
-                history.push('?show-account=true')
-            }
-        }, [adminAuth])
-
-
-    const setActiveTime = (data) => {
-        let activeHour = null
-        let activeMinute = null
-        activeHour = parseInt(data.startTime?.split(':')[0])
-        activeMinute = parseInt(data.startTime?.split(':')[1])
-        let hour = activeHour ? activeHour : 7;
-        let minute = activeMinute ? Number.isInteger((activeMinute / 10)) ? activeMinute : (parseInt(activeMinute / 10) + 1) * 10 : 0;
-        // let minute = 0;
-        let tempTimes = [];
-        let timeOffset = "AM";
-
-
-        let endTime = data.endTime?.split(':')
-        let endHour = parseInt(endTime[0])
-        let endMinute = parseInt(endTime[1])
-        endMinute = endMinute ? Number.isInteger((endMinute / 10)) ? endMinute : (parseInt(endMinute / 10) + 1) * 10 : 40;
-        let endTimeOffset = endHour? endHour > 12 ? "PM" : "AM": "PM";
-        let endTimeHour = endHour ? endHour > 12 ? endHour - 12 : endHour : 11;
-        console.log({endTimeHour, endTimeOffset, endMinute, endHour});
-        console.log({hour, minute, timeOffset});
-        
-        if(endHour < hour){
-            return
-        }
-        while (true) {
-            if (minute === 60) {
-                hour++;
-                minute = 0;
-            }
-            if (hour === 12 && minute === 0 && timeOffset === "AM") {
-                minute = 0;
-                timeOffset = "PM";
-            }
-            if (hour === 12 && minute === 50 && timeOffset === "PM") {
-                hour = 1;
-                minute = 0;
-            }
-            console.log({hour, endTimeHour, endTimeOffset, endMinute, endHour});
-            
-            if (hour === endTimeHour && minute === endMinute && timeOffset === endTimeOffset) {
-                break;
-            }
-
-            tempTimes.push({ hour, minute, timeOffset });
-
-            minute = minute + 10;
-        }
-        setTimes(tempTimes);
-
-    }
-
-    useEffect(() => {
         try {
-            axios.get(`${process.env.REACT_APP_API_URL}api/appointments/get_booked_times/?date=${date}`).then(res => {
-                console.log(res)
-                if (res.status === 200) {
-                    let tempBookedTime = [];
-                    res.data.map((time) =>
-                        tempBookedTime.push(JSON.stringify(getTimeFromString(time)))
-                    );
-                    setBookedTime(tempBookedTime);
 
-                }
-            })
-        } catch (err) {
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${match.params?.id}/`)
+            console.log(res);
+            if (res.status == 200) {
+                setActiveTime(res.data)
+            }
+        }
+        catch (error) {
 
         }
 
-    }, [date])
 
-    useEffect(() => {
-        console.log(bookedTime, 'bookedTime');
-    }, [bookedTime])
+
+    }, []);
+
+
+
+
     useEffect(() => {
         if (adminAuth.type !== 'user') {
-            history.goBack()
-            dispatch(alert('You are loggedin as hospital admin. PLease login as an user to visit this page', 'danger'))
+            dispatch(logout())
         }
     }, [])
 
+    
+    function convertStrToTimeList(str) {
+        return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
+    }
 
+    function getTime(time){
+        time = getTimeFromString(time)
+        console.log(time);
+        return (time.timeOffset === 'PM' ? time.hour + 12 : time.hour) + ':' + time.minute + ':00' 
+    }
 
     return (
         <>
@@ -255,45 +195,27 @@ export default function BookAppointment({ match }) {
 
                         />
                     </InputDiv>
-                    <div>
-                        <InputDiv>
-                            <Label>Date</Label>
-                            <Datepicker
-                                controls={["calendar"]}
-                                display="inline"
-                                colors={"#000024"}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        date: `${e.value.getFullYear()}-${e.value.getMonth() + 1}-${e.value.getDate()}`
-                                    })
-                                }
-                            />
-                        </InputDiv>
-                        <InputDiv>
-                            <Label>Select Time</Label>
-                            <Grid
-                                style={{ maxHeight: "290px", overflowY: "scroll" }}
-                                justify="space-between"
-                                lg={4}
-                                spacing={10}
-                            >
-                                {times.map((time, i) => (
-                                    <TimeColumn key={i}
-                                        disabled={bookedTime.includes(JSON.stringify(time))}
-                                        selected={selectedTime === JSON.stringify(time)}
-                                        onClick={(e) => {
+                    <InputDiv>
+
+                        <TimeScheduleWrap  >
+                            {
+                                activeTime?.map(time => (
+                                    <TimeSchedule> 
+                                        <DateComponent>{time.date}</DateComponent>
+                                        <Times>
                                             {
-                                                timeInBookedTime(time) ? console.log('') : setSelectedTime(JSON.stringify(time)); setFormData({ ...formData, time: `${time.timeOffset === 'PM' ? time.hour + 12 : time.hour}:${time.minute}:00` })
+                                                convertStrToTimeList(time.time).map((t, i) => (
+                                                    <Time className={formData.date===time.date && formData.time === getTime(t)? 'active': ''} key={i} style={{cursor: 'pointer'}} onClick={e => {setFormData({...formData, date: time.date, time: getTime(t)}); console.log(formData);}} >{t}</Time>
+                                                ))
                                             }
-                                        }}
-                                    >
-                                        {time.hour}:{time.minute} {time.timeOffset}
-                                    </TimeColumn>
-                                ))}
-                            </Grid>
-                        </InputDiv>
-                    </div>
+                                        </Times>
+                                    </TimeSchedule>
+                                ))
+                            }
+
+                        </TimeScheduleWrap>
+
+                    </InputDiv>
 
                     <Button block>Submit</Button>
                 </Form>

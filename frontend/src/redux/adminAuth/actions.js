@@ -9,7 +9,7 @@ export const checkAdmin = () => async dispatch => {
         if (res.data.isAdmin) {
             dispatch({ type: "IS_ADMIN", payload: { type: res.data.type } })
         } else {
-            dispatch({ type: "IS_NOT_ADMIN" })
+            dispatch({ type: "IS_NOT_ADMIN",  payload: { type: res.data.type } })
         }
     } catch (error) {
         dispatch({ type: "IS_NOT_ADMIN", payload: { type: 'user' }})

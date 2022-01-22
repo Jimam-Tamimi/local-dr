@@ -19,6 +19,8 @@ const adminAuthReducer = (state = initialState, action) => {
         state = {
             ...state,
             isAdmin: false,
+            type: action.payload.type
+
         }
         return state
     }

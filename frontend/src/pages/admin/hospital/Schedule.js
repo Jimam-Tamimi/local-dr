@@ -227,7 +227,7 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
             if(hour == 12){
                 timeOffset = 'PM'
             }
-            times.push(`${hour}:${minutes} ${timeOffset}`)
+            times.push(`${(hour + '').length == 1 ? "0" + hour : hour}:${minutes} ${timeOffset}`)
 
             minutes += 10
 

@@ -15,5 +15,7 @@ urlpatterns = [
     path('razorpay/pay/', start_payment, name="payment"),
     path('razorpay/payment/success/', handle_payment_success, name="payment_success"),
     path(r'schedule-doctor/<int:id>/', schedule_doctor),
+    path(r'get_doctor_name/', get_doctor_name), 
+    path(r'get_notifications/', get_notifications),
     
 ] + router.urls

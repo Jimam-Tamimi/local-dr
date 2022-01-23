@@ -10,7 +10,7 @@ class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = ['id', 'name', 'image', 'email', 'password',
-                  'contact', 'contact_person', 'price', 'location', 'deactivated']
+                  'contact', 'contact_person', 'price', 'location', 'locationName', 'deactivated']
 
     def create(self, validated_data):
         user_emails = MyUser.objects.filter(email=validated_data['email'])
@@ -38,7 +38,14 @@ class DoctorSerializer(serializers.ModelSerializer):
 
 class AppointmentSerializer(serializers.ModelSerializer):
     isPaid = serializers.BooleanField(read_only=True)
+    # doctor = DoctorSerializer(read_only=True)
     class Meta:
         model = Appointment
         fields = ['id', 'name', 'user', 'doctor', 'email', 'number',
                   'date',  "time", 'status', 'isPaid']
+
+class NotificationSerializer(serializers.ModelSerializer): 
+    appointment = AppointmentSerializer(read_only=True)
+    class Meta:
+        model = Notification
+        fields = ['id', 'appointment', 'isRead',  ]

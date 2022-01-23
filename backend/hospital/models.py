@@ -14,13 +14,12 @@ class Hospital(models.Model):
     contact = models.CharField(max_length=20, blank=False, null=False)
     contact_person = models.CharField(max_length=20, blank=False, null=False)
     location = models.TextField(blank=False, null=False)
+    locationName = models.CharField(max_length=200, default='', blank=True, null=True)
     price = models.PositiveIntegerField(default=0, blank=False, null=False)
     deactivated = models.BooleanField(default=False)
     def __str__(self):
         return self.name
-    
-    def __unicode__(self):
-        return (self.name)
+     
 
 
 class DoctorSchedule(models.Model):
@@ -53,14 +52,23 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, default="in progress", null=False, blank=False,choices=[('in progress','in progress'),('completed','completed')])
     payment_id = models.CharField(max_length=250, null=True, blank=True)
     isPaid = models.BooleanField(default=False)
+    amount = models.PositiveIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):
         return self.name
     
 
+class Payment(models.Model):
+    payment_id = models.CharField(max_length=250, null=False, blank=False)
+    amount = models.PositiveIntegerField(default=0, blank=False, null=False)
+    appointment = models.ForeignKey(Appointment, on_delete=models.SET_NULL, blank=True, null=True)
+    isPaid = models.BooleanField(default=False)
     
     
     
+class Notification(models.Model):
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, blank=False, null=False) 
+    isRead = models.BooleanField(default=False)
     
 @receiver(pre_save, sender=Hospital)
 def create_profile(sender, instance, **kwargs):

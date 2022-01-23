@@ -1,6 +1,7 @@
 import json
 from os import environ
 from pydoc import doc
+from random import seed
 from urllib import request
 from django.shortcuts import render
 from django.db.models import Q
@@ -26,6 +27,7 @@ class HospitalViewSet(ModelViewSet):
     queryset = Hospital.objects.all().order_by('-id')
     serializer_class = HospitalSerializer
     permission_classes = [IsAdminUser]
+    # authentication_classes = [BasicAuthentication]
     search_fields = ['id', 'name', 'email', 'contact', 'contact_person']
     filter_backends = (filters.SearchFilter,)
     parser_classes = [FormParser, JSONParser, MultiPartParser ]
@@ -41,6 +43,20 @@ class HospitalViewSet(ModelViewSet):
             return self.queryset
             
         return super().get_queryset()
+    
+@api_view(['GET'])
+@permission_classes([IsAdminUser|IsHospital])
+def get_doctor_name(request):
+    print(request.user)
+    if(request.user.is_superuser):
+        return Response({'name': 'SuperAdmin'}, status=status.HTTP_200_OK)
+    elif(request.user.is_hospital):
+        try:
+            hospital = Hospital.objects.get(user=request.user)
+        except Hospital.DoesNotExist:
+            return Response({"message": "Hospital does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({'type': 'hospital', 'name': hospital.name }, status=status.HTTP_200_OK)
 
 class DoctorViewSet(ModelViewSet):
     queryset = Doctor.objects.all().order_by('-id')
@@ -304,35 +320,39 @@ def doctorData(request, id=None):
 
 @api_view(['POST'])
 def start_payment(request):
-    appointment_id = request.data.get('appointment_id', None)
-    if(appointment_id is None):
-        return Response({"message": "Please provide an appointment id"}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        appointment = Appointment.objects.get(id=appointment_id)
-    except Appointment.DoesNotExist:
-        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
-    
-    
-    if(appointment.isPaid):
-        return Response({"message": "Already paid", 'type': 'paid'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    amount = appointment.doctor.hospital.price
-    
-    client = razorpay.Client(auth=(environ['RAZOR_KEY_ID'], environ['RAZOR_KEY_SECRET']))
-    payment = client.order.create({"amount": int(amount) * 100, 
-                                   "currency": "INR", 
-                                   "payment_capture": "1"})
-    appointment.payment_id = payment['id']
-    appointment.save()
-    appointment_data = AppointmentSerializer(appointment).data
-    
-    data = {
-        'appointment': appointment_data,
-        'payment': payment
+        appointment_id = request.data.get('appointment_id', None)
+        if(appointment_id is None):
+            return Response({"message": "Please provide an appointment id"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+        except Appointment.DoesNotExist:
+            return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
-    }
-    
-    return Response(data, status=status.HTTP_200_OK)
+        
+        if(appointment.isPaid):
+            return Response({"message": "Already paid", 'type': 'paid'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        amount = appointment.doctor.hospital.price
+        
+        client = razorpay.Client(auth=(environ['RAZOR_KEY_ID'], environ['RAZOR_KEY_SECRET']))
+        payment = client.order.create({"amount": int(amount) * 100, 
+                                    "currency": "INR", 
+                                    "payment_capture": "1"})
+        appointment.payment_id = payment['id']
+        appointment.amount = amount
+        appointment.save()
+        appointment_data = AppointmentSerializer(appointment).data
+        
+        data = {
+            'appointment': appointment_data,
+            'payment': payment
+            
+        }
+        
+        return Response(data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
 
 @api_view(['POST'])
 def handle_payment_success(request):
@@ -374,13 +394,61 @@ def handle_payment_success(request):
     
 
     # if payment is successful that means check is None then we will turn isPaid=True
-    print('payment successful')
+    print('payment successful') 
+    
+    
     
     appointment.isPaid = True
     appointment.save()
+    
     res_data = {
         'message': 'payment successfully received!',
         'appointment': AppointmentSerializer(appointment).data
     }
+    Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=appointment.payment_id, isPaid=True)
+    Notification.objects.create(appointment=appointment)
 
     return Response(res_data)
+
+
+
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+# @authentication_classes([BasicAuthentication])
+def get_homepage_details(request):
+    
+    data = {}
+    data['payments'] = sum([payment.amount for payment in Payment.objects.all() if(payment.isPaid) ])
+    data['total_appointments'] = len(Appointment.objects.filter(isPaid=True))
+    data['completed_appointments'] = len(Appointment.objects.filter(isPaid=True, status='completed'))
+    data['total_hospitals'] = len(Hospital.objects.all())
+    data['total_doctors'] = len(Doctor.objects.all())
+    
+    
+    
+    return Response(data, status=status.HTTP_200_OK)
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsHospital])
+
+def get_notifications(request):
+    notifications = Notification.objects.filter(appointment__doctor__hospital__user=request.user)
+    seen  = request.GET.get('seen', None)
+    if(seen=='true'):
+        notifications = notifications.filter(isRead=False)
+        for notification in notifications:
+            notification.isRead = True
+            notification.save()
+        return Response(status=status.HTTP_200_OK)
+    
+    isRead = request.GET.get('isRead', None)
+    if(isRead):
+        notifications = notifications.filter(isRead=False)    
+    return Response({"notifications" : NotificationSerializer(notifications, many=True).data, 'unseen': notifications.filter(isRead=False).count() }, status=status.HTTP_200_OK)

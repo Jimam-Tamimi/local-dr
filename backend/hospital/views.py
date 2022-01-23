@@ -55,11 +55,10 @@ class DoctorViewSet(ModelViewSet):
 
     def get_queryset(self):
         print(self.request.user)
-        if(not self.request.user.is_superuser):
-            queryset = self.queryset.filter(hospital__user=self.request.user)
-            return queryset
+        if(self.request.user.is_superuser):
+            return super().get_queryset()
         elif(self.request.user.is_hospital):
-            self.queryset = self.queryset.filter(doctor__hospital__user=self.request.user) 
+            self.queryset = self.queryset.filter(hospital__user=self.request.user) 
             print(self.queryset, 'is hospital')
             return self.queryset
         return super().get_queryset()
@@ -75,8 +74,9 @@ class DoctorViewSet(ModelViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.queryset.filter(hospital__deactivated=False)
+        queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
+        queryset = queryset.filter(hospital__deactivated=False)
         serializer = self.get_serializer(queryset, many=True)
         allData = serializer.data
         for data in allData:

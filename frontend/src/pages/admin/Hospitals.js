@@ -165,7 +165,6 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
   }
 
   const [formData, setFormData] = useState({
-    // fields = ['id', 'name', 'email', 'password', 'contact', 'contact_person', 'location']
     id: "",
     name: "",
     email: "",
@@ -201,10 +200,20 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
       }  
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formDataV, config);
       if (res.status === 201) {
+        setFormData({
+          ...formData,
+          id: "",
+          name: "",
+          email: "",
+          password: "",
+          contact: "",
+          contact_person: "",
+          location: "",
+          price: '',
+        })
         dispatch(alert('Hospital added successfully', 'success'))
         setShowHospitalForm(false)
         getHospitals()
-
       }
     } catch (error) {
       console.log(error?.response);
@@ -241,27 +250,27 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
       <Form onSubmit={onSubmit}>
         <InputDiv>
           <Label>Name *</Label>
-          <Input required onChange={onChange} name="name" placeholder="Name" />
+          <Input required onChange={onChange} name="name" placeholder="Name"  value={name}/>
         </InputDiv>
         <InputDiv>
           <Label>Email *</Label>
-          <Input required name="email" type="email" placeholder="Email" onChange={onChange} />
+          <Input required name="email" type="email" placeholder="Email" onChange={onChange} value={email} />
         </InputDiv>
         <InputDiv>
           <Label>Password *</Label>
-          <Input required name="password" type="password" placeholder="Password" onChange={onChange} />
+          <Input required name="password" type="password" placeholder="Password" onChange={onChange} value={password} />
         </InputDiv>
         <InputDiv>
           <Label>Contact *</Label>
-          <Input required name="contact" type="tel" placeholder="Contact" onChange={onChange} />
+          <Input required name="contact" type="tel" placeholder="Contact" onChange={onChange} value={contact} />
         </InputDiv>
         <InputDiv>
           <Label>Contact Person *</Label>
-          <Input required name="contact_person" type="text" placeholder="Contact Person" onChange={onChange} />
+          <Input required name="contact_person" type="text" placeholder="Contact Person" onChange={onChange} value={contact_person} />
         </InputDiv>
         <InputDiv>
           <Label>Price *</Label>
-          <Input required name="price" type="number" placeholder="Contact Person" onChange={onChange} />
+          <Input required name="price" type="number" placeholder="Contact Person" onChange={onChange} value={price} />
         </InputDiv>
         <InputDivW   >
         <InputDiv   >
@@ -279,7 +288,7 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
 
           <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
             <>
-              <Label htmlFor="add-number">Where do you need blood? *</Label>
+              <Label htmlFor="add-number">Location *</Label>
               <Input
                 id="places"
                 placeholder="Search Places..."
@@ -409,6 +418,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
         dispatch(alert('Hospital updated successfully', 'success'))
         setShowEditForm(false)
         getHospitals()
+ 
       }
     } catch (error) {
       console.log(error.response);
@@ -451,6 +461,10 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
         <InputDiv>
           <Label>Email *</Label>
           <Input required name="email" type="email" value={email} placeholder="Email" onChange={onChange} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Password *</Label>
+          <Input required name="password" type="text" value={password} placeholder="Password" onChange={onChange} />
         </InputDiv>
         <InputDiv>
           <Label>Contact *</Label>

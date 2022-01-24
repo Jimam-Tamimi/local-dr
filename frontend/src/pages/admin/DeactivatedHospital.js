@@ -22,6 +22,7 @@ import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import { useCallback } from 'react'
+import { setProgress } from "../../redux/progress/actions";
 
 export default function DeactivatedHospital() {
     const [hospitals, setHospitals] = useState([])
@@ -37,8 +38,10 @@ export default function DeactivatedHospital() {
             console.log(err)
         })
     }
-    useEffect(() => {
-        getHospitals()
+    useEffect( async () => {
+        dispatch(setProgress(25))
+        await getHospitals()
+        dispatch(setProgress(100))
     }, [])
     const filterHospitals = async e => {
         const search = e.target.value
@@ -55,32 +58,39 @@ export default function DeactivatedHospital() {
 
 
     const deleteHospital = async id => {
+        dispatch(setProgress(10))
         try {
             const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`)
+        dispatch(setProgress(30))
             if (res.status === 204) {
                 dispatch(alert("Hospital deleted successfully", "success"))
-                getHospitals()
+                await getHospitals()
+                dispatch(setProgress(70))
             }
         } catch (err) {
-
+            
             dispatch(alert("Failed to delete this hospital", "danger"))
-
+            
         }
+        dispatch(setProgress(100))
     }
     const activateHospital = async id => {
         if (window.confirm('Are you sure you want to activate this hospital?')) {
-
+            dispatch(setProgress(20))
             try {
                 const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`, { deactivated: false })
+                dispatch(setProgress(60))
                 if (res.status === 200) {
                     dispatch(alert("Hospital Activated successfully", "success"))
-                    getHospitals()
+                    await getHospitals()
+                    dispatch(setProgress(80))
                 }
             } catch (err) {
-
+                
                 dispatch(alert("Failed to activate this hospital", "danger"))
-
+                
             }
+            dispatch(setProgress(100))
         }
     }
 
@@ -133,10 +143,7 @@ export default function DeactivatedHospital() {
 
                 </Table>
             </Grid>
-
-            <Modal style={{ alignItems: "flex-start" }} zoom show={showHospitalForm} setShow={setShowHospitalForm}>
-                <HospitalsForm getHospitals={getHospitals} setShowHospitalForm={setShowHospitalForm} />
-            </Modal>
+ 
             <Modal style={{ alignItems: "flex-start" }} zoom show={showEditForm} setShow={setShowEditForm}  >
                 <SetShowEditForm hospitalId={hospitalId} getHospitals={getHospitals} setShowEditForm={setShowEditForm} />
 
@@ -146,190 +153,7 @@ export default function DeactivatedHospital() {
 }
 
 
-
-function HospitalsForm({ setShowHospitalForm, getHospitals }) {
-    const [coords, setCoords] = useState({ lat: 0, lng: 0 })
-    const [mark, setMark] = useState({ lat: 0, lng: 0 })
-    const [autoComplete, setAutoComplete] = useState(null)
-    const [profImage, setProfImage] = useState(null)
-
-    function setCurrentLocation() {
-
-        navigator.geolocation.getCurrentPosition((location) => {
-            setCoords({ lat: location.coords.latitude, lng: location.coords.longitude })
-            setMark({ lat: location.coords.latitude, lng: location.coords.longitude })
-        }, () => console.log('error :)'), { timeout: 10000 })
-    }
-    useEffect(() => {
-        setCurrentLocation()
-    }, [])
-    const dispatch = useDispatch()
-    const onPlaceChanged = () => {
-        try {
-            const lat = autoComplete.getPlace().geometry.location.lat();
-            const lng = autoComplete.getPlace().geometry.location.lng();
-            setMark({ lat, lng })
-            setCoords({ lat, lng })
-        } catch {
-
-        }
-    }
-
-    const [formData, setFormData] = useState({
-        // fields = ['id', 'name', 'email', 'password', 'contact', 'contact_person', 'location']
-        id: "",
-        name: "",
-        email: "",
-        password: "",
-        contact: "",
-        contact_person: "",
-        location: "",
-    })
-    const { name, email, password, contact, contact_person, location, price } = formData;
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-    useEffect(() => {
-        setFormData({ ...formData, location: JSON.stringify(mark) })
-    }, [mark])
-    const onSubmit = async e => {
-        e.preventDefault();
-        try {
-            let formDataV = new FormData();
-            formDataV.append('name', name);
-            formDataV.append('email', email);
-            formDataV.append('password', password);
-            formDataV.append('contact', contact);
-            formDataV.append('contact_person', contact_person);
-            formDataV.append('location', JSON.stringify(mark));
-            formDataV.append('price', price);
-            formDataV.append('image', profImage);
-
-
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-
-                }
-            }
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formDataV, config);
-            if (res.status === 201) {
-                dispatch(alert('Hospital added successfully', 'success'))
-                setShowHospitalForm(false)
-                getHospitals()
-
-            }
-        } catch (error) {
-            console.log(error?.response);
-
-            for (const err in error.response.data) {
-                dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
-            }
-        }
-    }
-
-
-    const onDrop = useCallback((acceptedFiles) => {
-        acceptedFiles.forEach((file) => {
-            const reader = new FileReader()
-
-            reader.onabort = () => console.log('file reading was aborted')
-            reader.onerror = () => console.log('file reading has failed')
-            reader.onload = () => {
-                // Do whatever you want with the file contents
-                const binaryStr = reader.result
-                console.log(binaryStr)
-                setProfImage(file)
-            }
-            reader.readAsArrayBuffer(file)
-        })
-
-
-    }, [])
-
-    return (
-        <>
-
-
-            <Form onSubmit={onSubmit}>
-                <InputDiv>
-                    <Label>Name *</Label>
-                    <Input required onChange={onChange} name="name" placeholder="Name" />
-                </InputDiv>
-                <InputDiv>
-                    <Label>Email *</Label>
-                    <Input required name="email" type="email" placeholder="Email" onChange={onChange} />
-                </InputDiv>
-                <InputDiv>
-                    <Label>Password *</Label>
-                    <Input required name="password" type="password" placeholder="Password" onChange={onChange} />
-                </InputDiv>
-                <InputDiv>
-                    <Label>Contact *</Label>
-                    <Input required name="contact" type="tel" placeholder="Contact" onChange={onChange} />
-                </InputDiv>
-                <InputDiv>
-                    <Label>Contact Person *</Label>
-                    <Input required name="contact_person" type="text" placeholder="Contact Person" onChange={onChange} />
-                </InputDiv>
-                <InputDiv>
-                    <Label>Price *</Label>
-                    <Input required name="price" type="number" placeholder="Contact Person" onChange={onChange} />
-                </InputDiv>
-                <InputDivW   >
-                    <InputDiv   >
-                        <Label>Profile Image *</Label>
-                        <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
-                            {({ getRootProps, getInputProps }) => (
-                                <section>
-                                    <div {...getRootProps()}>
-                                        <input {...getInputProps()} />
-                                        <p>Drag 'n' drop some files here, or click to select files</p>
-                                    </div>
-                                </section>
-                            )}
-                        </Dropzone>        </InputDiv>
-
-                    <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
-                        <>
-                            <Label htmlFor="add-number">Where do you need blood? *</Label>
-                            <Input
-                                id="places"
-                                placeholder="Search Places..."
-                                type="text"
-                                onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
-                            />
-                        </>
-                    </Autocomplete>
-                </InputDivW>
-                <InputDiv style={{ boxShadow: "0px 0px 15px 2px var(--main-box-shadow-color)" }} height="400px">
-
-                    <Map
-                        coords={coords}
-                        // isMarkerShown
-                        googleMapURL=" "
-                        loadingElement={<div style={{ height: `400px`, width: '100%' }} />}
-                        containerElement={<div style={{ height: `400px`, width: '100%' }} />}
-                        mapElement={<div style={{ height: `400px`, width: '100%' }} />}
-                        setCoords={setCoords}
-                        setMark={setMark}
-                        click={e => setMark({ lat: e.latLng.lat(), lng: e.latLng.lng() })}
-                        defaultZoom={17}
-                    >
-                        {
-                            mark ? <Marker key={0}
-                                position={mark}
-                            /> : ''
-                        }
-                    </Map>
-
-
-                </InputDiv>
-                <InputDiv>
-                    <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Create</Button>
-                </InputDiv>
-            </Form>
-        </>
-    )
-}
+ 
 
 function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 

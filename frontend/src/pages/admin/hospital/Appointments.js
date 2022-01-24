@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import alert from '../../../redux/alert/actions';
+import { setProgress } from '../../../redux/progress/actions';
 import { Button, ButtonLink, Container, Grid } from '../../../styles/Essentials.styles';
 import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../../styles/Table.styles';
 import { HeadingColumn } from '../../styles/admin/Hospitals.styles';
@@ -15,8 +16,10 @@ export default function Appointments() {
       setAppointments(res.data);
     }
   }
-  useEffect(() => {
-    getAppointments()
+  useEffect( async ()  => {
+    dispatch(setProgress(25))
+    await getAppointments()
+    dispatch(setProgress(100))
   }, [])
 
   const getDateFromStr = (date) => {
@@ -44,30 +47,37 @@ export default function Appointments() {
   }
   const completeAppointment = async (id) => {
     if(window.confirm('Are you sure you want to complete this appointment')){
+      dispatch(setProgress(15))
         try {
           const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`, {
             status: 'completed'
           })
+        dispatch(setProgress(45))
           if (res.status === 200) {
             dispatch(alert('Appointment completed successfully', 'success'))
-            getAppointments()
-            
+            await getAppointments()
+          dispatch(setProgress(75))
           }
         } catch (err) {
             dispatch(alert('Failed to complete appointment ', 'danger'))
     
           console.log(err)
         }
+        dispatch(setProgress  (100))
     }
 
   }
   const deleteAppointment = async (id) => {
     if(window.confirm('Are you sure you want to delete this appointment')){
+    dispatch(setProgress(15))
       try {
         const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/appointments/${id}/`)
+      dispatch(setProgress(45))
+
         if (res.status === 204  ) {
           dispatch(alert('Appointment deleted successfully', 'success'))
-          getAppointments()
+          await getAppointments()
+      dispatch(setProgress(85))
           
         }
       } catch (err) {
@@ -75,6 +85,7 @@ export default function Appointments() {
   
         console.log(err)
       }
+      dispatch(setProgress(100))
   }
   }
 

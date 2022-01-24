@@ -19,6 +19,7 @@ import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import alert from "../../redux/alert/actions";
+import { setProgress } from "../../redux/progress/actions";
 setOptions({
     theme: "ios",
     themeVariant: "light",
@@ -38,7 +39,7 @@ export default function BookAppointment({ match }) {
         doctor: "",
     });
     const dispatch = useDispatch();
-    useEffect(() => {
+    useEffect( async () => {
         let hour = 7;
         let minute = 0;
         let tempTimes = [];
@@ -64,6 +65,7 @@ export default function BookAppointment({ match }) {
             minute = minute + 10;
         }
         setTimes(tempTimes);
+        dispatch(setProgress(20))
 
         axios
             .get(`${process.env.REACT_APP_API_URL}api/appointments/${match?.params?.id}/`)
@@ -80,6 +82,7 @@ export default function BookAppointment({ match }) {
                         doctor: res.data.doctor,
                     });
                 }
+        dispatch(setProgress(100))
             })
             .catch((err) => {
                 console.log(err.response);

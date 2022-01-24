@@ -27,9 +27,15 @@ import YourAppointments from "./pages/home/YourAppointments";
 import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments";
 import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
 import Staff from "./pages/admin/Staff";
+import LoadingBar from 'react-top-loading-bar'
+
+
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
+
+  const progress = useSelector(state => state.progress)
+  
   useEffect(() => {
     AOS.init({ once: true, duration: 1000 });
     dispatch(authenticate())
@@ -41,29 +47,37 @@ function App() {
     dispatch(checkAdmin());
   }, []);
 
-      
-      if ( JSON.parse(localStorage.getItem('auth'))?.isAuthenticated) {
-        axios.interceptors.request.use(
-          async config => {
-            const token = await auth.access;
+  useEffect( async  () => {
+        
+    if ( JSON.parse(localStorage.getItem('auth'))?.isAuthenticated) {
+      await axios.interceptors.request.use(
+        async config => {
+          const token = JSON.parse(localStorage.getItem("auth"))?.access;
+          if(token) {
             config.headers.authorization = `JWT ${JSON.parse(localStorage.getItem("auth"))?.access}`;
-           
-            return config;
-          },
-          error => {
-            Promise.reject(error);
           }
-        );
-        axios.interceptors.response.use(
-          response => response,
-          async error => {
-            if (error?.response?.status === 401) {
-              await dispatch(refreshToken())
-            }
-            return Promise.reject(error);
+         
+          return config;
+        },
+        error => {
+          Promise.reject(error);
+        }
+      );
+      await  axios.interceptors.response.use(
+        response => response,
+        async error => {
+          if (error?.response?.status === 401) {
+            await dispatch(refreshToken())
           }
-        ) 
-      }
+          return Promise.reject(error);
+        }
+      ) 
+    }
+     
+  }, []); 
+  
+  
+
   
 
   const adminAuth = useSelector(state => state.adminAuth)
@@ -92,6 +106,9 @@ function App() {
   return (
 
     <>
+    <LoadingBar color={'#1D7ACB'} progress={progress} height={3}
+    onLoaderFinished={() => (0)} />
+    
       <AdminLayout >
         <AdminRoute>
           {

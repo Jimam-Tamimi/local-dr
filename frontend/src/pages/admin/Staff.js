@@ -22,6 +22,7 @@ import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import { useCallback } from 'react'
+import { setProgress } from "../../redux/progress/actions";
 
 
 
@@ -32,17 +33,21 @@ export default function Staff() {
   const [staffId, setStaffId] = useState(null);
   // get hospital data t  rough api
   const dispatch = useDispatch()
-  const getStaff = () => {
+  const getStaff = async () => {
     // axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?deactivated=false`).then((res) => {
-    axios.get(`${process.env.REACT_APP_API_URL}api/staff/`).then((res) => {
+    await axios.get(`${process.env.REACT_APP_API_URL}api/staff/`).then((res) => {
       setStaff(res.data)
+
     }).catch((err) => {
       dispatch(alert(err.response.data.error, "danger"))
       console.log(err)
     })
+
   }
-  useEffect(() => {
-    getStaff()
+  useEffect( async () => {
+    dispatch(setProgress(20))
+    await getStaff()
+    dispatch(setProgress(100))
   }, [])
   const filterStaff = async e => {
     const search = e.target.value
@@ -59,17 +64,24 @@ export default function Staff() {
 
 
   const deleteStaff = async id => {
+    dispatch(setProgress(10))
+
     try {
       const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/staff/${id}/`)
+      dispatch(setProgress(70))
 
       if (res.status === 204) {
         dispatch(alert("Staff deleted successfully", "success"))
         getStaff()
+        dispatch(setProgress(80))
+
       }
     } catch (err) {
       dispatch(alert("Failed to deleted this staff", "danger"))
 
     }
+    dispatch(setProgress(100))
+
   }
 
 
@@ -153,11 +165,15 @@ function HospitalsForm({ setShowStaffForm, getStaff }) {
 
   const onSubmit = async e => {
     e.preventDefault();
+    dispatch(setProgress(10))
     try {
 
 
+      dispatch(setProgress(20))
 
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/staff/`, formData);
+      dispatch(setProgress(80))
+
       if (res.status === 201) {
         setFormData({
           ...formData,
@@ -169,6 +185,8 @@ function HospitalsForm({ setShowStaffForm, getStaff }) {
 
         })
         dispatch(alert('Hospital added successfully', 'success'))
+      dispatch(setProgress(90))
+
         setShowStaffForm(false)
         getStaff()
       }
@@ -179,6 +197,8 @@ function HospitalsForm({ setShowStaffForm, getStaff }) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
     }
+    dispatch(setProgress(100))
+
   }
 
 
@@ -248,8 +268,12 @@ function SetShowEditForm({ staffId, getStaff, setShowEditForm }) {
   }, [staffId]) 
 
   const onSubmit = async e => {
+    dispatch(setProgress(10))
+
     e.preventDefault()
     try { 
+    dispatch(setProgress(20))
+
 
       const res = await axios.put(`${process.env.REACT_APP_API_URL}api/staff/${staffId}/`, formData)
       console.log(res);
@@ -257,6 +281,8 @@ function SetShowEditForm({ staffId, getStaff, setShowEditForm }) {
         dispatch(alert('Staff updated successfully', 'success'))
         setShowEditForm(false)
         getStaff()
+    dispatch(setProgress(75))
+
 
       }
     } catch (error) {
@@ -264,6 +290,8 @@ function SetShowEditForm({ staffId, getStaff, setShowEditForm }) {
       dispatch(alert('Failed to update staff', 'danger'))
 
     }
+    dispatch(setProgress(100))
+
   }
 
  

@@ -467,6 +467,7 @@ def handle_payment_success(request):
 # @authentication_classes([BasicAuthentication])
 def get_homepage_details(request):
     data = {}
+    
     if(request.user.is_superuser):
         data['payments'] = sum([payment.amount for payment in Payment.objects.all() if(payment.isPaid) ])
         data['total_appointments'] = len(Appointment.objects.filter(isPaid=True))

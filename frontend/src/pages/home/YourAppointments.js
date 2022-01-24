@@ -2,20 +2,32 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { showRazorpay } from '../../helpers';
+import { setProgress } from '../../redux/progress/actions';
 import { Button, ButtonLink, Container, Grid } from '../../styles/Essentials.styles';
 import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../styles/Table.styles';
 
 export default function YourAppointments() {
   const [appointments, setAppointments] = useState([]);
-  const getAppointments = async () => {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}api/appointments/`);
-    console.log(res)
-    if (res.status === 200) {
-      setAppointments(res.data);
+  const getAppointments = async () => { 
+    dispatch(setProgress(20))
+
+    try { 
+
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/appointments/`,);
+      console.log(res)
+      dispatch(setProgress(80))
+      if (res.status === 200) {
+        setAppointments(res.data);
+      }
+      dispatch(setProgress(100))
+    } catch (err) {
+      console.log(err.response);
     }
   }
   useEffect(() => {
-    getAppointments()
+    setTimeout(() => {
+      getAppointments()
+    }, );
   }, [])
 
   const getDateFromStr = (date) => {

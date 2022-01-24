@@ -90,7 +90,7 @@ function Login({ setForm }) {
       <LoginForm onSubmit={loginSubmit}>
         <FormTitle>Enter Email And Password to Login</FormTitle>
         <InputDiv>
-          <Label>Enter Your Email</Label>
+          <Label>Email</Label>
           <Input
             type="email"
             name="email"
@@ -100,7 +100,7 @@ function Login({ setForm }) {
           />
         </InputDiv>
         <InputDiv>
-          <Label>Enter Password</Label>
+          <Label>Password</Label>
           <Input
             type="password"
             name="password"
@@ -159,34 +159,35 @@ function Signup({ setForm }) {
         <FormTitle>Enter Email And Password and Create Account</FormTitle>
 
         <InputDiv>
-          <Label>Enter Your Email</Label>
-          <Input
-            type="email"
-            required
-            name="email"
-            placeholder="Enter Your Email"
-            onChange={onChange}
-            value={email}
-          />
-        </InputDiv>
-        <InputDiv>
-          <Label>Enter Your Name</Label>
+          <Label>Name</Label>
           <Input
             type="text"
             required
             name="name"
-            placeholder="Enter Your Name"
+            placeholder="Name"
             onChange={onChange}
             value={name}
           />
         </InputDiv>
         <InputDiv>
-          <Label>Enter Your Number</Label>
+          <Label>Email</Label>
+          <Input
+            type="email"
+            required
+            name="email"
+            placeholder="Email"
+            onChange={onChange}
+            value={email}
+          />
+        </InputDiv>
+       
+        <InputDiv>
+          <Label>Mobile  Number</Label>
           <Input
             type="tel"
             required
             name="number"
-            placeholder="Enter Your Number"
+            placeholder="Mobile Number"
             onChange={onChange}
             value={number}
           />
@@ -311,7 +312,7 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
           {
             codeSent ?
               <Button onClick={e => { e.preventDefault(); verifyCode(e) }} block>Request Reset</Button> :
-              <Button type="submit" block>Send Reset Code Reset</Button>
+              <Button type="submit" block>Send Reset Code</Button>
           }
         </InputDiv>
         <InputDiv style={{ alignItems: 'center' }}>

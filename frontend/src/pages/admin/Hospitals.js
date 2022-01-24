@@ -22,6 +22,7 @@ import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import {useCallback} from 'react'
+import { setProgress } from "../../redux/progress/actions";
  
 
 
@@ -40,35 +41,47 @@ export default function Hospitals() {
       console.log(err)
     })
   }
-  useEffect(() => {
-    getHospitals()
+  useEffect( async () => {
+     dispatch(setProgress(30))
+    await getHospitals()
+    dispatch(setProgress(100))
   }, [])
   const filterHospitals = async e => {
+
     const search = e.target.value
     try {
-
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/hospitals/?search=${search}&?deactivated=false`)
+
       if (res.status === 200) {
         setHospitals(res.data)
+
       }
     } catch (err) {
 
     }
+
   }
 
 
   const deactivateHospital = async id => {
+    dispatch(setProgress(10))
     try {
+
       const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/hospitals/${id}/`, {deactivated:true})
+    dispatch(setProgress(75))
       
       if (res.status === 200) {
         dispatch(alert("Hospital deactivated successfully", "success"))
         getHospitals()
+    dispatch(setProgress(85))
+
       }
     } catch (err) {      
       dispatch(alert("Failed to deactivate this hospital", "danger"))
 
     }
+    dispatch(setProgress(100))
+
   }
 
 
@@ -185,6 +198,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
     setFormData({ ...formData, location: JSON.stringify(mark) })
   }, [mark])
   const onSubmit = async e => {
+    dispatch(setProgress(10))
+
     e.preventDefault();
     try { 
       let formDataV = new FormData();
@@ -205,6 +220,7 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
                     
         }
       }  
+    dispatch(setProgress(30))
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/hospitals/`, formDataV, config);
       if (res.status === 201) {
         setFormData({
@@ -223,6 +239,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
         dispatch(alert('Hospital added successfully', 'success'))
         setShowHospitalForm(false)
         getHospitals()
+      dispatch(setProgress(75))
+
       }
     } catch (error) {
       console.log(error?.response);
@@ -231,6 +249,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
     }
+    dispatch(setProgress(100))
+
   }
 
   
@@ -391,9 +411,9 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
   const { name, email, password, contact, contact_person, location, price, locationName } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  useEffect(() => {
+  useEffect( async () => {
     if (hospitalId !== null) {
-      getHospitalData(hospitalId)
+      await getHospitalData(hospitalId)
     }
   }, [hospitalId])
   useEffect(() => {
@@ -402,6 +422,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
   const onSubmit = async e => {
     e.preventDefault()
+    dispatch(setProgress(15))
     try {
       let formData = new FormData();
       formData.append('name', name);  
@@ -424,8 +445,11 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
                     
         }
       }  
+    dispatch(setProgress(25))
+
       const res = await axios.put(`${process.env.REACT_APP_API_URL}api/hospitals/${hospitalId}/`, formData)
       console.log(res);
+      dispatch(setProgress(65))
       if (res.status === 200) {
         dispatch(alert('Hospital updated successfully', 'success'))
         setShowEditForm(false)
@@ -437,6 +461,10 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       dispatch(alert('Failed to update hospital', 'danger'))
 
     }
+
+    dispatch(setProgress(100))  
+
+    
   }
 
 

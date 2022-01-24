@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { Box, BoxesWrap } from '../styles/admin/Index.styles'
 import axios from 'axios'
+import { useDispatch } from 'react-redux';
+import {setProgress} from '../../redux/progress/actions'
 export default function Index() {
     const [adminDetails, setAdminDetails] = useState({});
+    const dispatch = useDispatch()
     useEffect( async () => {
         document.title = 'Admin'
+        dispatch(setProgress(10))
         try {
 
             const res = await axios.get(`${process.env.REACT_APP_API_URL}api/get_homepage_details/`)
             console.log(res);
+            dispatch(setProgress(60))
+
             if(res.status == 200){
                 setAdminDetails(res.data)
+                
             }
         } catch (error) {
             console.log(error);
         }
+        
+        dispatch(setProgress(100))
 
     }, []);
     

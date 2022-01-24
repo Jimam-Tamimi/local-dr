@@ -22,19 +22,21 @@ import alert from '../../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import { TimeColumn } from "../../styles/home/BookAppointment.styles";
 import { Date, Time, Times, TimeSchedule, TimeScheduleWrap } from "../../styles/admin/Schedule.styles";
+import { setProgress } from "../../../redux/progress/actions";
 
 
 export default function Schedule() {
     const [doctors, setDoctors] = useState([])
+    const dispatch = useDispatch()
     const getDoctors = async () => {
         try {
-            
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-                    
-        }
-      }  
+
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+
+                }
+            }
 
             const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/`, config)
             console.log(res)
@@ -52,10 +54,10 @@ export default function Schedule() {
 
             const config = {
                 headers: {
-                  'Content-Type': 'multipart/form-data'
-                            
+                    'Content-Type': 'multipart/form-data'
+
                 }
-              }  
+            }
             const res = await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/?search=${search}`)
             if (res.status === 200) {
                 setDoctors(res.data)
@@ -64,8 +66,10 @@ export default function Schedule() {
 
         }
     }
-    useEffect(() => {
-        getDoctors()
+    useEffect(async () => {
+        dispatch(setProgress(20))
+        await getDoctors()
+        dispatch(setProgress(100))
     }, [])
 
     const getProperTime = (time) => {
@@ -90,18 +94,24 @@ export default function Schedule() {
     const [doctorId, setDoctorId] = useState(null)
 
     const clearTime = async id => {
-         
+        dispatch(setProgress(20))
+
         try {
+            dispatch(setProgress(40))
+
             const res = await axios.patch(`${process.env.REACT_APP_API_URL}api/doctors/${id}/`, {
                 startTime: null,
                 endTime: null
             })
+            dispatch(setProgress(70))
             if (res.status === 200) {
-                getDoctors()
+                await getDoctors()
+                dispatch(setProgress(90))
             }
         } catch (error) {
 
         }
+        dispatch(setProgress(100))
     }
     const [showScheduledTime, setShowScheduledTime] = useState(false);
     const [selectedTime, setSelectedTime] = useState(null);
@@ -138,15 +148,15 @@ export default function Schedule() {
                                         doctor?.doctor_schedule?.map(time => (
                                             <p>{time.date}</p>
                                         ))
-                                    } 
+                                    }
 
                                 </Td>
                                 <Td>
                                     <Actions>
                                         <Button onClick={e => { setShowTimeEditForm(true); setDoctorId(doctor.id) }} sm green>Edit Time</Button>
-                                        <Button onClick={e => { setShowScheduledTime(true); setSelectedTime(doctor.id)}} sm green>Scheduled Time</Button>
+                                        <Button onClick={e => { setShowScheduledTime(true); setSelectedTime(doctor.id) }} sm green>Scheduled Time</Button>
                                     </Actions>
-                                </Td>       
+                                </Td>
                             </Tr>
                         ))
                     }
@@ -159,7 +169,7 @@ export default function Schedule() {
                 <ScheduleTime getDoctors={getDoctors} doctorId={doctorId} setShowTimeEditForm={setShowTimeEditForm} />
             </Modal>
             <Modal zoom show={showScheduledTime} setShow={setShowScheduledTime}>
-                <ShowSchedule doctors={doctors} setSelectedTime={setSelectedTime}  getDoctors={getDoctors} selectedTime={selectedTime} />
+                <ShowSchedule doctors={doctors} setSelectedTime={setSelectedTime} getDoctors={getDoctors} selectedTime={selectedTime} />
             </Modal>
         </>
     );
@@ -173,21 +183,23 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
         times: [],
     })
 
-    
     const { date, times } = formData
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
     const dispatch = useDispatch()
     const onSubmit = async e => {
         console.log(formData)
         e.preventDefault()
+        dispatch(setProgress(20))
         try {
-            
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${doctorId}/`, formData, )
+
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${doctorId}/`, formData,)
             console.log(res)
+        dispatch(setProgress(60))
             if (res.status === 200) {
                 dispatch(alert('Doctor Time Updated', 'success'))
                 setShowTimeEditForm(false)
-                getDoctors()
+                await getDoctors()
+        dispatch(setProgress(85))
                 setFormData({
                     date: "",
                     times: [],
@@ -199,11 +211,12 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
 
             console.log(error.response)
         }
+        dispatch(setProgress(100))
     }
 
 
-    
-    function getAllTime(){
+
+    function getAllTime() {
         let hour = 7
         let minutes = 0
         let times = []
@@ -212,33 +225,33 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
         let endHour = 11
         let endMinutes = 30 + 10
         while (true) {
-                    
-            if(hour === endHour && minutes === endMinutes && timeOffset === 'PM'){
+
+            if (hour === endHour && minutes === endMinutes && timeOffset === 'PM') {
                 break
             }
-            if(hour ==13){
+            if (hour == 13) {
                 hour = 1
             }
-            
-            if(minutes == 60) {
+
+            if (minutes == 60) {
                 minutes = 0
                 hour++
             }
-            if(hour == 12){
+            if (hour == 12) {
                 timeOffset = 'PM'
             }
-            times.push(`${(hour + '').length == 1 ? "0" + hour : hour}:${(minutes + '').length ==1? '0' + minutes : minutes} ${timeOffset}`)
+            times.push(`${(hour + '').length == 1 ? "0" + hour : hour}:${(minutes + '').length == 1 ? '0' + minutes : minutes} ${timeOffset}`)
 
             minutes += 10
 
 
-                
+
         }
         return times
 
     }
-    
-    
+
+
     return (
         <>
             <Form onSubmit={onSubmit}>
@@ -248,26 +261,26 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
 
                 </InputDiv>
                 <InputDiv>
-                            <Label>Select Time</Label>
-                            <Grid
-                                style={{ maxHeight: "290px", overflowY: "scroll" }}
-                                justify="space-between"
-                                lg={4}
-                                spacing={10}
+                    <Label>Select Time</Label>
+                    <Grid
+                        style={{ maxHeight: "290px", overflowY: "scroll" }}
+                        justify="space-between"
+                        lg={4}
+                        spacing={10}
+                    >
+                        {getAllTime().map((t, i) => (
+                            <TimeColumn key={i}
+                                selected={times.includes(t)}
+                                onClick={(e) => {
+                                    // times.includes(t) ? console.log('') : setFormData({ ...formData, times: [...times, times] })
+                                    times.includes(t) ? setFormData({ ...formData, times: times.filter(item => item != t) }) : setFormData({ ...formData, times: [...times, t] }); console.log(formData);
+                                }}
                             >
-                                {getAllTime().map((t, i) => (
-                                    <TimeColumn key={i}
-                                        selected={times.includes(t)}
-                                        onClick={(e) => {
-                                                // times.includes(t) ? console.log('') : setFormData({ ...formData, times: [...times, times] })
-                                                times.includes(t)? setFormData({ ...formData, times: times.filter(item => item != t) }) :  setFormData({ ...formData, times: [...times, t] }); console.log(formData);
-                                        }}
-                                    >
-                                        {t}
-                                    </TimeColumn>
-                                ))}
-                            </Grid>
-                        </InputDiv>
+                                {t}
+                            </TimeColumn>
+                        ))}
+                    </Grid>
+                </InputDiv>
                 <InputDiv>
                     <Button style={{ margin: '10px 0px', marginLeft: 'auto' }} green >Save</Button>
                 </InputDiv>
@@ -278,24 +291,24 @@ function ScheduleTime({ getDoctors, setShowTimeEditForm, doctorId }) {
 
 
 
- 
 
-function ShowSchedule({selectedTime, getDoctors, doctors, setSelectedTime}) {  
+
+function ShowSchedule({ selectedTime, getDoctors, doctors, setSelectedTime }) {
     const [doctor, setDoctor] = useState(null);
     useEffect(async () => {
-        setDoctor( await  doctors.find(d => d.id === selectedTime))
+        setDoctor(await doctors.find(d => d.id === selectedTime))
         console.log(doctors);
         console.log(selectedTime);
-        console.log(doctor?.doctor_schedule);  
+        console.log(doctor?.doctor_schedule);
     }, [selectedTime, doctors]);
-    
+
     function convertStrToTimeList(str) {
         return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
     }
 
     const dispatch = useDispatch()
     const clearTime = async (tid) => {
-        if(window.confirm('Are you sure you want to clear time?')){
+        if (window.confirm('Are you sure you want to clear time?')) {
             try {
                 const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${tid}/`)
                 console.log(res)
@@ -311,25 +324,25 @@ function ShowSchedule({selectedTime, getDoctors, doctors, setSelectedTime}) {
             }
         }
     }
-    
-  return ( 
-    <TimeScheduleWrap  >
-{
-    doctor?.doctor_schedule?.map(time => (
-        <TimeSchedule>
-            <Button onClick={e => clearTime(time.id)} danger sm block style={{margin: '5px 0px'}}>Clear </Button>
-            <Date>{time.date}</Date>
-            <Times>
-                {
-                    convertStrToTimeList(time.time).map((t, i) => (
-                        <Time>{t}</Time>
-                    ))
-                }
-            </Times>
-        </TimeSchedule>   
-    ))
-} 
 
-    </TimeScheduleWrap>
-  );
+    return (
+        <TimeScheduleWrap  >
+            {
+                doctor?.doctor_schedule?.map(time => (
+                    <TimeSchedule>
+                        <Button onClick={e => clearTime(time.id)} danger sm block style={{ margin: '5px 0px' }}>Clear </Button>
+                        <Date>{time.date}</Date>
+                        <Times>
+                            {
+                                convertStrToTimeList(time.time).map((t, i) => (
+                                    <Time>{t}</Time>
+                                ))
+                            }
+                        </Times>
+                    </TimeSchedule>
+                ))
+            }
+
+        </TimeScheduleWrap>
+    );
 }

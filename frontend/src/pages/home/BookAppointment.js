@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import alert from "../../redux/alert/actions";
 import { logout } from "../../redux/auth/actions";
 import { showRazorpay } from '../../helpers'
+import { setProgress } from "../../redux/progress/actions";
 
 
 export default function BookAppointment({ match }) {
@@ -54,6 +55,7 @@ export default function BookAppointment({ match }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     const history = useHistory();
     const onSubmit = async (e) => {
+    dispatch(setProgress(10))
         e.preventDefault();
         console.log(formData);
         try {
@@ -61,6 +63,7 @@ export default function BookAppointment({ match }) {
                 `${process.env.REACT_APP_API_URL}api/appointments/`,
                 formData
             );
+    dispatch(setProgress(100))
             console.log(res);
             if (res.status === 201) {
                 await showRazorpay(res.data.id, () => {
@@ -95,10 +98,13 @@ export default function BookAppointment({ match }) {
     const [activeTime, setActiveTime] = useState(null);
     useEffect(() => {
         console.log(adminAuth.type);
+        dispatch(setProgress(30))
 
         match.params?.id &&
             axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
                 console.log(res.data);
+            dispatch(setProgress(100))
+
                 if (res.status === 200) {
                     setDoctorData(res.data);
                 }
@@ -136,16 +142,20 @@ export default function BookAppointment({ match }) {
 
     useEffect(async () => {
         try {
+        dispatch(setProgress(25))
 
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${match.params?.id}/?date=${date}`);
-            console.log({ res });
-            if (res.status == 200) {
-                setActiveTime(res.data)
-            }
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${match.params?.id}/?date=${date}`);
+        console.log({ res });
+        dispatch(setProgress(80))
+
+        if (res.status == 200) {
+            setActiveTime(res.data)
         }
-        catch (error) {
-            console.log(error?.response);
-        }
+    }
+    catch (error) {
+        console.log(error?.response);
+    }
+    dispatch(setProgress(100))
     }, [date]);
 
 
@@ -244,7 +254,7 @@ export default function BookAppointment({ match }) {
                                 ))
                             }
                             {
-                                activeTime.length === 0 &&
+                                activeTime?.length === 0 &&
                                 <p style={{ width: "100%", textAlign: "center", marginTop: "25px" }}>No Appointments Available on Selected Date</p>
                             }
                         </Grid>

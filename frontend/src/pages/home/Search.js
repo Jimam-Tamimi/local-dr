@@ -44,6 +44,7 @@ import { Marker } from "react-google-maps";
 import Map from "../../components/Map/Map";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { setProgress } from "../../redux/progress/actions";
  
 export default function Search({ match,  }) {
   const [providers, setProviders] = useState([
@@ -169,15 +170,15 @@ export default function Search({ match,  }) {
       console.log(err)
     }
   }
-  useEffect(() => {
-    getDoctorList()
-    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`)
-    console.log(paginationNext)
-  }, [search])
-  useEffect(() => {
-    console.log('state changes')
-  }, [search])
+  useEffect(async () => {
+    dispatch(setProgress(10))
+    await getDoctorList()
+    dispatch(setProgress(60))
 
+    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`) 
+    dispatch(setProgress(100))
+
+  }, [search]) 
   return (
     <>
       <ProvidersWrap >

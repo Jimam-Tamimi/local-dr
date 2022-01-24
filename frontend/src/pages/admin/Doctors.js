@@ -22,6 +22,7 @@ import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import {useCallback} from 'react'
+import { setProgress } from "../../redux/progress/actions";
 
 export default function Doctors() {
 
@@ -45,8 +46,10 @@ export default function Doctors() {
       dispatch(alert(err.response.data.error, "danger"))
     })
   }
-  useEffect(() => {
-    getDoctors()
+  useEffect( async () => {
+    dispatch(setProgress(15))
+    await getDoctors()
+    dispatch(setProgress(100))
   }, [])
   const filterDoctors = async e => {
     const search = e.target.value
@@ -63,17 +66,22 @@ export default function Doctors() {
 
 
   const deleteDoctor = async id => {
+    dispatch(setProgress(15))
+
     try {
       const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/doctors/${id}/`)
+      dispatch(setProgress(45))
       if (res.status === 204) {
         dispatch(alert("Doctor deleted successfully", "success"))
-        getDoctors()
+        await getDoctors()
+      dispatch(setProgress(85))
       }
     } catch (err) {
 
       dispatch(alert("Failed to delete this Doctor", "danger"))
 
     }
+    dispatch(setProgress(100))
   }
 
 
@@ -160,6 +168,8 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
   const [profImage, setProfImage] = useState(null)
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
+    dispatch(setProgress(15))
+
     e.preventDefault();
     try {
       let formData = new FormData();
@@ -175,7 +185,10 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
                     
         }
       }  
+    dispatch(setProgress(35))
+
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/doctors/`, formData,  config);
+    dispatch(setProgress(75))
       
       if (res.status === 201) {
         dispatch(alert('Doctor added successfully', 'success'))
@@ -186,6 +199,8 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
         //   speciality: "",
         //   qualification: "",
         // })
+    dispatch(setProgress(85))
+
 
       }
     } catch (error) { 
@@ -194,6 +209,7 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
     }
+    dispatch(setProgress(100  ))
   }
   const [hospitals, setHospitals] = useState([])
   const getHospitals = async (e) => {
@@ -207,10 +223,7 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
       
     }
   }
-
-  useEffect(() => {
-    console.log(doctorHospitalId)
-  }, [doctorHospitalId])
+ 
 
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -305,6 +318,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
     e.preventDefault();
+    dispatch(setProgress(15))
     try {
       let formData = new FormData();
       formData.append('name', name);
@@ -321,11 +335,13 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
                     
         }
       }  
+    dispatch(setProgress(25))
       const res = await axios.put(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`, formData,  config);
       if (res.status === 200) {
         dispatch(alert('Doctor Updated successfully', 'success'))
         setShowEditForm(false)
-        getDoctors()
+        await getDoctors()
+    dispatch(setProgress(65))
 
 
       }
@@ -334,6 +350,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
         dispatch(alert(`${err}: ${error.response.data[err]}`, 'danger'))
       }
     }
+    dispatch(setProgress(100))
   }
   const [hospitals, setHospitals] = useState([])
   const getHospitals = async (e) => {
@@ -350,17 +367,22 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
     }
   }
 
-  useEffect(() => {
+  useEffect( async () => {
+    dispatch(setProgress(15))
     if (doctorId !== null) {
-      axios.get(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`).then(res => {
+      await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`).then(res => {
+    dispatch(setProgress(75))
+
         setFormData({ ...formData, name: res.data.name, speciality: res.data.speciality, qualification: res.data.qualification })
         setDoctorHospitalId(res.data.hospital.id)
         setHospitalName(res.data.hospital.name)
         console.log(res)
+    dispatch(setProgress(85))
       }).catch(err => {
         console.log(err)
       })
     }
+    dispatch(setProgress(100))
   }, [doctorId])
   useEffect(() => {
     console.log(formData)

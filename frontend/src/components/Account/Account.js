@@ -11,12 +11,15 @@ import {
   SignupForm,
 } from "./Account.styles";
 import { useDispatch } from 'react-redux'
+import axios from "axios";
+import alert from "../../redux/alert/actions";
 
 
 export default function Account() {
   const [form, setForm] = useState("login");
   const location = useLocation();
   const history = useHistory();
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   let search = location.search;
   let params = new URLSearchParams(search);
   const [showModal, setShowModal] = useState(
@@ -42,14 +45,16 @@ export default function Account() {
       <Modal zoom setShow={setShowModal} show={showModal}>
         <AccountWrap>
           <Grid direction="column">
-            {form === "login" ? (
-              <Login setForm={setForm} />
+            {
+              form === "login" ? <Login setForm={setForm} /> :
+                form === "signUp" ? <Signup setForm={setForm} /> :
+                  form === "forgotPassword" || form === "forgotPasswordCode" ? <ForgotPassword setForgotPasswordEmail={setForgotPasswordEmail} setForm={setForm} /> :
+                    form === "resetPassword" ? <ResetPassword forgotPasswordEmail={forgotPasswordEmail} setForm={setForm} /> : ""
 
-            ) : (
-              form === "signUp" && (
-                <Signup setForm={setForm} />
-              )
-            )}
+
+
+
+            }
           </Grid>
         </AccountWrap>
       </Modal>
@@ -110,6 +115,8 @@ function Login({ setForm }) {
         </InputDiv>
         <InputDiv style={{ alignItems: 'center' }}>
           <p>New To Local Doctor? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('signUp') }, 1) }}  >Create An Account</b></p>
+          <p>Forgot Password? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('forgotPassword') }, 1) }} >Reset Password</b></p>
+
         </InputDiv>
       </LoginForm>
 
@@ -127,17 +134,24 @@ function Signup({ setForm }) {
     email: "",
     password: "",
     cpassword: "",
+    name: '',
+    number: "",
   })
-  const { email, password, cpassword } = signupForm;
+  const { email, password, cpassword, name, number } = signupForm;
   const dispatch = useDispatch()
+  const history = useHistory()
+  const location = useLocation()
   const onSubmit = e => {
     e.preventDefault();
     console.log(signupForm)
-    dispatch(signup(email, password, cpassword))
-    setSignupForm({ email: '', password: '', cpassword: '' })
+    const action = dispatch(signup(email, password, cpassword, name, number))
+    action.then(res => { res && history.push(location.pathname); setSignupForm({ email: '', password: '', cpassword: '', name: '', number: '' }) })
+
+
+
   }
   const onChange = e => setSignupForm({ ...signupForm, [e.target.name]: e.target.value })
-  
+
   return (
     < >
 
@@ -153,6 +167,28 @@ function Signup({ setForm }) {
             placeholder="Enter Your Email"
             onChange={onChange}
             value={email}
+          />
+        </InputDiv>
+        <InputDiv>
+          <Label>Enter Your Name</Label>
+          <Input
+            type="text"
+            required
+            name="name"
+            placeholder="Enter Your Name"
+            onChange={onChange}
+            value={name}
+          />
+        </InputDiv>
+        <InputDiv>
+          <Label>Enter Your Number</Label>
+          <Input
+            type="tel"
+            required
+            name="number"
+            placeholder="Enter Your Number"
+            onChange={onChange}
+            value={number}
           />
         </InputDiv>
         <InputDiv>
@@ -180,7 +216,178 @@ function Signup({ setForm }) {
           />
         </InputDiv>
         <InputDiv>
-          <Button block>Login</Button>
+          <Button block>Create Account</Button>
+        </InputDiv>
+        <InputDiv style={{ alignItems: 'center' }}>
+          <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>
+        </InputDiv>
+      </SignupForm>
+    </>
+  )
+}
+
+function ForgotPassword({ setForm, setForgotPasswordEmail }) {
+
+  const [codeSent, setCodeSent] = useState(false);
+  const [codeResendAble, setCodeResendAble] = useState(false);
+
+
+  const [code, setCode] = useState(null);
+
+  const [formData, setFormData] = useState({
+    email: "",
+  });
+
+  const { email } = formData;
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const location = useLocation()
+  const onSubmit = async e => {
+    e.preventDefault();
+    console.log(formData)
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/forgot_password/`, { email })
+    console.log(res)
+    if (res?.status == 200) {
+      setCodeSent(true)
+      setCodeResendAble(false)
+      setForm('forgotPasswordCode')
+      setTimeout(() => {
+        setCodeResendAble(true)
+      }, 20000);
+    }
+  }
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+  const verifyCode = async e => {
+    e.preventDefault()
+    try {
+
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/verify_reset_password_code/`, { code, code })
+      console.log(res);
+      if (res.status === 200) {
+        setForgotPasswordEmail(email)
+        setForm('resetPassword')
+      }
+    } catch (err) {
+      dispatch(alert(err?.response?.data?.error, 'danger'))
+    }
+
+  }
+
+
+
+  return (
+    < >
+
+      <SignupForm onSubmit={onSubmit}>
+        <FormTitle>Forgot Password</FormTitle>
+
+        <InputDiv>
+          <Label>Enter Your Email</Label>
+          <Input
+            type="email"
+            required
+            name="email"
+            placeholder="Enter Your Email"
+            onChange={onChange}
+            value={email}
+          />
+        </InputDiv>
+        {
+          codeSent &&
+          <InputDiv>
+            <Label>Enter the Code Send to Your Email</Label>
+            <Input
+              type="text"
+              required
+              name="code"
+              placeholder="Enter the Code Send to Your Email"
+              onChange={e => setCode(e.target.value)}
+              value={code}
+            />
+          </InputDiv>
+        }
+        <InputDiv>
+          {
+            codeSent ?
+              <Button onClick={e => { e.preventDefault(); verifyCode(e) }} block>Request Reset</Button> :
+              <Button type="submit" block>Send Reset Code Reset</Button>
+          }
+        </InputDiv>
+        <InputDiv style={{ alignItems: 'center' }}>
+          <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>
+          {
+            codeSent &&
+
+            <p>Verification code sent to your email.
+              {
+                codeResendAble ?
+                  <b style={{ cursor: 'pointer' }} onClick={onSubmit} > Resend Code</b> :
+                  <b style={{ cursor: 'not-allowed', opacity: '.7' }} > Can Resend After 20s</b>
+              }
+            </p>
+          }
+        </InputDiv>
+      </SignupForm>
+    </>
+  )
+}
+
+function ResetPassword({ setForm, forgotPasswordEmail }) {
+
+  // signup 
+  const [formData, setFormData] = useState({
+    email: forgotPasswordEmail,
+    password: '',
+    cpassword: '',
+  });
+  const { email, password, cpassword } = formData;
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const location = useLocation()
+  const onSubmit = async e => {
+    e.preventDefault();
+    console.log(formData)
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/reset_password/`, formData)
+    console.log(res)
+    if (res?.status == 200) {
+      setFormData({ email: '' })
+      setForm('login')
+    }
+  }
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+  return (
+    < >
+
+      <SignupForm onSubmit={onSubmit}>
+        <FormTitle>Reset Password</FormTitle>
+
+
+        <InputDiv>
+          <Label>New Password</Label>
+          <Input
+            type="password"
+            required
+            name="password"
+            placeholder="New Password"
+            onChange={onChange}
+            value={password}
+          />
+        </InputDiv>
+        <InputDiv>
+          <Label>Confirm Password</Label>
+          <Input
+            type="password"
+            required
+            name="cpassword"
+            placeholder="Confirm Password"
+            onChange={onChange}
+            value={cpassword}
+          />
+        </InputDiv>
+        <InputDiv>
+          <Button block>Reset Password</Button>
         </InputDiv>
         <InputDiv style={{ alignItems: 'center' }}>
           <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>

@@ -4,7 +4,7 @@ import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import {
     Form,
     ProfileColumn,
-    
+
     TimeColumn,
     Wrap,
 } from "../styles/home/BookAppointment.styles";
@@ -20,11 +20,10 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import alert from "../../redux/alert/actions";
 import { logout } from "../../redux/auth/actions";
-import { Date as DateComponent, Times, TimeSchedule, TimeScheduleWrap, Time, } from "../styles/admin/Schedule.styles";
-import {showRazorpay} from '../../helpers'
+import { showRazorpay } from '../../helpers'
 
 
-export default function BookAppointment({ match }) { 
+export default function BookAppointment({ match }) {
     const dispatch = useDispatch();
     const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -45,7 +44,7 @@ export default function BookAppointment({ match }) {
         name: "",
         email: "",
         number: "",
-        date: `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`,
+        date: new Date().getFullYear() + "-" + new Date().getMonth() + 1 + '-' + new Date().getDate(),
         time: "",
         doctor: match?.params?.id,
         user: auth.id,
@@ -69,7 +68,7 @@ export default function BookAppointment({ match }) {
                     history.push(`/your-appointments/`);
                 })
                 console.log(paymentSuccess);
-                
+
             }
         } catch (error) {
             console.log(error);
@@ -84,41 +83,31 @@ export default function BookAppointment({ match }) {
 
     };
     const [doctorData, setDoctorData] = useState(null)
-     
+
     const adminAuth = useSelector(state => state.adminAuth)
- 
+
     useEffect(() => {
         if (adminAuth.type !== 'user') {
             history.push('?show-account=true')
         }
     }, [adminAuth])
 
-    const [activeTime, setActiveTime] = useState([]);
-    useEffect( async () => {
+    const [activeTime, setActiveTime] = useState(null);
+    useEffect(() => {
         console.log(adminAuth.type);
-        
-        match.params?.id&&
-        axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
-            console.log(res.data);
-            if (res.status === 200) {
-                setDoctorData(res.data); 
-            }
-        }).then((err) => {
-            console.log(err?.response);
-            console.log(err);
-        })
 
-        try {
+        match.params?.id &&
+            axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
+                console.log(res.data);
+                if (res.status === 200) {
+                    setDoctorData(res.data);
+                }
+            }).catch((err) => {
+                console.log(err?.response);
+                console.log(err);
+            })
 
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${match.params?.id}/`)
-            console.log(res);
-            if (res.status == 200) {
-                setActiveTime(res.data)
-            }
-        }
-        catch (error) {
 
-        }
 
 
 
@@ -133,21 +122,33 @@ export default function BookAppointment({ match }) {
         }
     }, [])
 
-    
+
     function convertStrToTimeList(str) {
-        return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
+        return str?.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
     }
 
-    function getTime(time){
+    function getTime(time) {
         time = getTimeFromString(time)
         console.log(time);
-        return (time.timeOffset === 'PM' ? time.hour + 12 : time.hour) + ':' + time.minute + ':00' 
+        return (time.timeOffset === 'PM' ? time.hour + 12 : time.hour) + ':' + time.minute + ':00'
     }
 
 
+    useEffect(async () => {
+        try {
 
-    // payment 
-    
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${match.params?.id}/?date=${date}`);
+            console.log({ res });
+            if (res.status == 200) {
+                setActiveTime(res.data)
+            }
+        }
+        catch (error) {
+            console.log(error?.response);
+        }
+    }, [date]);
+
+
 
     return (
         <>
@@ -195,39 +196,62 @@ export default function BookAppointment({ match }) {
                         />
                     </InputDiv>
                     <InputDiv>
-                        <Label>Number</Label>
+                        <Label>Mobile Number</Label>
                         <Input
                             value={number}
                             onChange={onChange}
-                            placeholder="Number"
+                            placeholder="Mobile Number"
                             name="number"
                             required
 
                         />
                     </InputDiv>
                     <InputDiv>
+                        <Label>Date</Label>
+                        <Input
+                            onChange={onChange}
+                            placeholder="Date"
+                            name="date"
+                            required
+                            type={'date'}
+                            value={date}
 
-                        <TimeScheduleWrap  >
+                        />
+                    </InputDiv>
+                    <InputDiv>
+
+                        <Label>Select Time</Label>
+                        <Grid
+                            style={{ maxHeight: "290px", overflowY: "scroll" }}
+                            justify="space-between"
+                            lg={4}
+                            spacing={10}
+                        >
                             {
                                 activeTime?.map(time => (
-                                    <TimeSchedule> 
-                                        <DateComponent>{time.date}</DateComponent>
-                                        <Times>
-                                            {
-                                                convertStrToTimeList(time.time).map((t, i) => (
-                                                    <Time className={formData.date===time.date && formData.time === getTime(t)? 'active': ''} key={i} style={{cursor: 'pointer'}} onClick={e => {setFormData({...formData, date: time.date, time: getTime(t)}); console.log(formData);}} >{t}</Time>
-                                                ))
-                                            }
-                                        </Times>
-                                    </TimeSchedule>
+
+                                    convertStrToTimeList(time.time)?.map((t, i) => (
+                                        <TimeColumn key={i}
+                                            selected={formData.time === getTime(t)}
+                                            onClick={(e) => {
+                                                setFormData({ ...formData, time: getTime(t) }); console.log(formData);
+                                            }}
+                                        >
+                                            {t}
+                                        </TimeColumn>
+                                    ))
+
                                 ))
                             }
-
-                        </TimeScheduleWrap>
+                            {
+                                activeTime.length === 0 &&
+                                <p style={{ width: "100%", textAlign: "center", marginTop: "25px" }}>No Appointments Available on Selected Date</p>
+                            }
+                        </Grid>
 
                     </InputDiv>
 
-                    <Button block>Pay {doctorData?.hospital?.price}</Button>
+                    <Button block>Continue Booking</Button>
                 </Form>
             </Wrap>
         </>

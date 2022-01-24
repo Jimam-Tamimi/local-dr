@@ -154,7 +154,7 @@ export default function Home() {
                 />
                 s <br /> in your place
               </h1>
-              <SearchColumn onSubmit={onSubmit}>
+              <SearchColumn autoComplete="off" onSubmit={onSubmit}>
                 <div
                   style={{
                     width: "50%",

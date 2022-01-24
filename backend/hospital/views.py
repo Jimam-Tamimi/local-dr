@@ -147,8 +147,13 @@ def schedule_doctor(request, id=None):
             doctor = Doctor.objects.get(id=id)
         except Doctor.DoesNotExist:
             return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
-
-        doctorSchedule = doctor.doctor_schedule.all()
+        date = request.GET.get('date', None)
+        if(date):
+            doctorSchedule = doctor.doctor_schedule.filter(date=date)
+        else:
+            doctorSchedule = doctor.doctor_schedule.filter()
+            
+            
         serializer = DoctorScheduleSerializer(doctorSchedule, many=True)
         tmpData = serializer.data
         data = []
@@ -458,27 +463,28 @@ def handle_payment_success(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser|IsHospital])
 # @authentication_classes([BasicAuthentication])
 def get_homepage_details(request):
-    
     data = {}
-    data['payments'] = sum([payment.amount for payment in Payment.objects.all() if(payment.isPaid) ])
-    data['total_appointments'] = len(Appointment.objects.filter(isPaid=True))
-    data['completed_appointments'] = len(Appointment.objects.filter(isPaid=True, status='completed'))
-    data['total_hospitals'] = len(Hospital.objects.all())
-    data['total_doctors'] = len(Doctor.objects.all())
-    
-    
+    if(request.user.is_superuser):
+        data['payments'] = sum([payment.amount for payment in Payment.objects.all() if(payment.isPaid) ])
+        data['total_appointments'] = len(Appointment.objects.filter(isPaid=True))
+        data['completed_appointments'] = len(Appointment.objects.filter(isPaid=True, status='completed'))
+        data['total_hospitals'] = len(Hospital.objects.all())
+        data['total_doctors'] = len(Doctor.objects.all())
+        
+    elif(request.user.is_hospital):
+        data['total_appointments'] = len(Appointment.objects.filter(isPaid=True,  doctor__hospital__user=request.user))
+        data['completed_appointments'] = len(Appointment.objects.filter(isPaid=True, status='completed',  doctor__hospital__user=request.user))
+        data['total_doctors'] = len(Doctor.objects.filter(hospital__user=request.user))
+        
     
     return Response(data, status=status.HTTP_200_OK)
 
 
-import time
-
 @api_view(['GET'])
 @permission_classes([IsHospital])
-
 def get_notifications(request):
     notifications = Notification.objects.filter(appointment__doctor__hospital__user=request.user)
     seen  = request.GET.get('seen', None)

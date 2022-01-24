@@ -56,49 +56,74 @@ class UserViewSets(ModelViewSet):
         sendVerificationEmail([user.email], code)
         return Response(data, status=status.HTTP_201_CREATED, headers=headers, )
     
-    
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def verify(request, code):
-    if(request.method == "GET"):
-        print(request.user)
-        print(request.user.is_authenticated)
- 
-        try:
-            verification = Verification.objects.get(code=code)
-        except Verification.DoesNotExist:
-            return Response({'success': False, 'error': 'Verification code does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-        user = verification.user
-        user.email_verified = True
-        user.save()    
-        verification.delete()
-        return Response({"success": True, 'message': 'Email verified', }, status=status.HTTP_200_OK)
-    
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def resend_verification_code(request):
-    try:
-        email = request.data['email']
-    except Exception:
-        return Response({'success': False, 'error': 'Email was not provided'}, status=status.HTTP_400_BAD_REQUEST)
-        
-    try:
-        user = User.objects.get(email=email)
-    except User.DoesNotExist:
-        return Response({'success': False, 'error': 'Email does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-    try:
-        verification = Verification.objects.get(user=user)
-        verification.delete()
-    except Verification.DoesNotExist:
-        pass
-    verification = Verification.objects.create(user=user)
-    return Response({"success": True, 'message': 'Verification code sent', }, status=status.HTTP_200_OK)
-
-
+     
+     
 def vallidateToken(request):
     return Response({"vallied": True, 'message': 'Token is vallied', }, status=status.HTTP_200_OK)
+
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def forgot_password(request):
+    data = request.data
+    print(data)
+    email = data.get('email', None)
+    try:
+        user = MyUser.objects.get(email=email)
+    except MyUser.DoesNotExist:
+        return Response({'error': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    forgotPasswordCode = ForgotPasswordCode.objects.create(user=user)
+    subject = "Password reset code for your account from Local Doctor"
+    message = f'Your password reset code is {forgotPasswordCode.code}'
+    SendEmail(subject, message, [user.email]).start()
+
+    return Response({'success': True, 'message': 'Password reset code sent to your email'}, status=status.HTTP_200_OK)
+
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def verify_reset_password_code(request):
+    data = request.data
+    print(data)
+    code  = data.get('code', None)
+    try:
+        forgotPasswordCode = ForgotPasswordCode.objects.get(code=code)
+        forgotPasswordCode.user.can_change_password = True
+        forgotPasswordCode.user.save()
+        return Response({'success': True, 'message': 'Password reset code is vallied'}, status=status.HTTP_200_OK)
+    except MyUser.DoesNotExist:
+        return Response({'error': 'Code does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    data = request.data
+    print(data)
+    email     = data.get('email', None) 
+    password    = data.get('password', None) 
+    cpassword    = data.get('cpassword', None) 
+    if(password != cpassword):
+        return Response({'error': 'Password and confirm password does not match'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        user = MyUser.objects.get(email=email)
+        if(user.can_change_password):
+            user.set_password(password)
+            user.save()
+            return Response({'success': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': "You are not alloud to change this user's password!!"}, status=status.HTTP_400_BAD_REQUEST)
+    except MyUser.DoesNotExist:
+        return Response({'error': 'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 @api_view(['POST'])
 @permission_classes([IsAdminUser|IsHospital])

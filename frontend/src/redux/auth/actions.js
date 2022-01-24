@@ -4,14 +4,15 @@ import alert from '../alert/actions'
 import jwt_decode from "jwt-decode";
 
 
-export const signup = (email, password, cpassword) => async dispatch => {
-    const data = { email, password, cpassword }
+export const signup = (email, password, cpassword, name, number) => async dispatch => {
+    const data = { email, password, cpassword, name, number }
     try {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
             }
         }
+        console.log(data);
         const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/users/`, data, config)
         const payload = res.data
         if (payload.success) {
@@ -20,6 +21,8 @@ export const signup = (email, password, cpassword) => async dispatch => {
                 type: 'LOGIN_SUCCESS',
                 payload: payload
             })
+            return true
+
         }
     } catch (error) {
         if (error.response) {

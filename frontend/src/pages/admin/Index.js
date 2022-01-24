@@ -23,10 +23,12 @@ export default function Index() {
     return (
         <>
             <BoxesWrap>
-                <Box background="#009EFA">
+
+                {adminDetails?.payments && <Box background="#009EFA">
                     <h3>{adminDetails?.payments}</h3>
                     <p>Total Payments</p>
-                </Box>
+                </Box>}
+
                 <Box background="#009EFA">
                     <h3>{adminDetails?.completed_appointments}</h3>
                     <p>Completed Appointments</p>
@@ -39,10 +41,12 @@ export default function Index() {
                     <h3>{adminDetails?.total_doctors}</h3>
                     <p>Total Doctors</p>
                 </Box>
-                <Box  background="#ffbd34">
+
+                {adminDetails?.total_hospitals && <Box  background="#ffbd34">
                     <h3>{adminDetails?.total_hospitals}</h3>
                     <p>Total Hospitals</p>
-                </Box>
+                </Box>}
+                
             </BoxesWrap>
         </>
     )

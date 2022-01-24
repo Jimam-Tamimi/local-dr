@@ -40,29 +40,31 @@ function App() {
   useEffect(() => {
     dispatch(checkAdmin());
   }, []);
+
+      
+      if ( JSON.parse(localStorage.getItem('auth'))?.isAuthenticated) {
+        axios.interceptors.request.use(
+          async config => {
+            const token = await auth.access;
+            config.headers.authorization = `JWT ${JSON.parse(localStorage.getItem("auth"))?.access}`;
+           
+            return config;
+          },
+          error => {
+            Promise.reject(error);
+          }
+        );
+        axios.interceptors.response.use(
+          response => response,
+          async error => {
+            if (error?.response?.status === 401) {
+              await dispatch(refreshToken())
+            }
+            return Promise.reject(error);
+          }
+        ) 
+      }
   
-  if (auth.isAuthenticated) {
-    axios.interceptors.request.use(
-      async config => {
-        const token = await auth.access;
-        config.headers.authorization = `JWT ${JSON.parse(localStorage.getItem('auth')).access}`;
-       
-        return config;
-      },
-      error => {
-        Promise.reject(error);
-      }
-    );
-    axios.interceptors.response.use(
-      response => response,
-      async error => {
-        if (error?.response?.status === 401) {
-          await dispatch(refreshToken())
-        }
-        return Promise.reject(error);
-      }
-    ) 
-  }
 
   const adminAuth = useSelector(state => state.adminAuth)
 
@@ -70,9 +72,8 @@ function App() {
       console.log(adminAuth);
 
       const removeAdminAuth = ( ) => {
-        localStorage.setItem('test', JSON.stringify({...adminAuth}))
-          if(adminAuth.type != 'user'){
-            console.log('jimam');
+        console.log(adminAuth.type);
+          if(adminAuth.type === 'superuser'){
             localStorage.removeItem('auth')
           }
       }
@@ -109,6 +110,8 @@ function App() {
               </> :
               adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
                 <>
+                  <Route exact path="/admin/" component={Index} />
+
                 <Route exact path="/admin/appointment/" component={Appointments} />
                 <Route exact path="/admin/appointment/completed/" component={CompletedAppointments} />
                 <Route exact path="/admin/schedule/" component={Schedule} />

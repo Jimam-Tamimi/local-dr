@@ -13,6 +13,7 @@ import {
 import { useDispatch } from 'react-redux'
 import axios from "axios";
 import alert from "../../redux/alert/actions";
+import { setProgress } from "../../redux/progress/actions";
 
 
 export default function Account() {
@@ -76,12 +77,17 @@ function Login({ setForm }) {
   const history = useHistory()
   const location = useLocation()
   const onLoginFormChange = (e) => setLoginFormData({ ...loginFormData, [e.target.name]: e.target.value })
-  const loginSubmit = e => {
+  const loginSubmit = async e => {
     e.preventDefault();
+    dispatch(setProgress(20))
     console.log(loginFormData)
-    let action = dispatch(login(email, password))
+    let action = await dispatch(login(email, password))
+    dispatch(setProgress(100))
+    if(action){
+      setLoginFormData({ email: '', password: '' }) 
+      history.push(location.pathname); 
+    }
     console.log(action, 'action')
-    action.then(res => { res && history.push(location.pathname); setLoginFormData({ email: '', password: '' }) })
   }
 
   return (
@@ -141,11 +147,16 @@ function Signup({ setForm }) {
   const dispatch = useDispatch()
   const history = useHistory()
   const location = useLocation()
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
+    dispatch(setProgress(20))
     console.log(signupForm)
-    const action = dispatch(signup(email, password, cpassword, name, number))
-    action.then(res => { res && history.push(location.pathname); setSignupForm({ email: '', password: '', cpassword: '', name: '', number: '' }) })
+    const action = await dispatch(signup(email, password, cpassword, name, number))
+    dispatch(setProgress(100))
+    if(action){
+      setSignupForm({ email: '', password: '', cpassword: '', name: '', number: '' }) 
+      history.push(location.pathname); 
+    } 
 
 
 
@@ -180,7 +191,7 @@ function Signup({ setForm }) {
             value={email}
           />
         </InputDiv>
-       
+
         <InputDiv>
           <Label>Mobile  Number</Label>
           <Input
@@ -245,26 +256,35 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
   const location = useLocation()
   const onSubmit = async e => {
     e.preventDefault();
+    dispatch(setProgress(20))
     console.log(formData)
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/forgot_password/`, { email })
-    console.log(res)
-    if (res?.status == 200) {
-      setCodeSent(true)
-      setCodeResendAble(false)
-      setForm('forgotPasswordCode')
-      setTimeout(() => {
-        setCodeResendAble(true)
-      }, 20000);
+    try {
+
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/forgot_password/`, { email })
+      console.log(res)
+      dispatch(setProgress(90))
+      if (res?.status == 200) {
+        setCodeSent(true)
+        setCodeResendAble(false)
+        setForm('forgotPasswordCode')
+        setTimeout(() => {
+          setCodeResendAble(true)
+        }, 20000);
+      }
+    } catch (err) {
     }
+    dispatch(setProgress(100))
   }
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
   const verifyCode = async e => {
+    dispatch(setProgress(20))
     e.preventDefault()
     try {
 
       const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/verify_reset_password_code/`, { code, code })
       console.log(res);
+      dispatch(setProgress(60))
       if (res.status === 200) {
         setForgotPasswordEmail(email)
         setForm('resetPassword')
@@ -272,6 +292,8 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
     } catch (err) {
       dispatch(alert(err?.response?.data?.error, 'danger'))
     }
+    dispatch(setProgress(100))
+
 
   }
 
@@ -347,14 +369,20 @@ function ResetPassword({ setForm, forgotPasswordEmail }) {
   const history = useHistory()
   const location = useLocation()
   const onSubmit = async e => {
+    dispatch(setProgress(20))
     e.preventDefault();
     console.log(formData)
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/reset_password/`, formData)
-    console.log(res)
-    if (res?.status == 200) {
-      setFormData({ email: '' })
-      setForm('login')
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/reset_password/`, formData)
+      console.log(res)
+      dispatch(setProgress(70))
+      if (res?.status == 200) {
+        setFormData({ email: '' })
+        setForm('login')
+      }
+    } catch (err) {
     }
+    dispatch(setProgress(100))
   }
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 

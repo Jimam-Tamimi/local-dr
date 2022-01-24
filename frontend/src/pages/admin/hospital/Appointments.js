@@ -92,10 +92,10 @@ export default function Appointments() {
           <Table>
             <Tr>
               <Th>ID</Th>
-              <Th>Doctor</Th>
               <Th>Name</Th>
+              <Th>Mobile Number</Th>
+              <Th>Doctor</Th>
               <Th>Email</Th>
-              <Th>Number</Th>
               <Th>Date</Th>
               <Th>Time</Th>
               <Th>Status</Th>
@@ -107,11 +107,11 @@ export default function Appointments() {
                 <Tr key={i}>
 
                   <Td>{appointment?.id}</Td>
-                  <Td img={true}> <div> { appointment?.doctor.image && <img src={`${process.env.REACT_APP_MEDIA_URL}${appointment?.doctor.image}`} />} {appointment?.doctor.name}</div></Td>
-
                   <Td>{appointment?.name}</Td>
-                  <Td>{appointment?.email}</Td>
                   <Td>{appointment?.number}</Td>
+
+                  <Td img={true}> <div> { appointment?.doctor.image && <img src={`${process.env.REACT_APP_MEDIA_URL}${appointment?.doctor.image}`} />} {appointment?.doctor.name}</div></Td>
+                  <Td>{appointment?.email}</Td>
                   <Td>{getDateFromStr(appointment?.date)}</Td>
                   <Td>{getTimeFromStr(appointment?.time)}</Td>
                   <Td>{appointment?.status}</Td>

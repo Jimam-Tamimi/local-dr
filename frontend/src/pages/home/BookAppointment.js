@@ -21,13 +21,12 @@ import { useDispatch, useSelector } from "react-redux";
 import alert from "../../redux/alert/actions";
 import { logout } from "../../redux/auth/actions";
 import { Date as DateComponent, Times, TimeSchedule, TimeScheduleWrap, Time, } from "../styles/admin/Schedule.styles";
-setOptions({
-    theme: "ios",
-    themeVariant: "light",
-});
+import {showRazorpay} from '../../helpers'
+
+
 export default function BookAppointment({ match }) { 
     const dispatch = useDispatch();
-
+    const [paymentSuccess, setPaymentSuccess] = useState(false);
 
 
     const getTimeFromString = (time) => {
@@ -65,10 +64,15 @@ export default function BookAppointment({ match }) {
             );
             console.log(res);
             if (res.status === 201) {
-                dispatch(alert("Appointment booked successfully", "success"));
-                history.push(`/payment/${res?.data?.id}/`)
+                await showRazorpay(res.data.id, () => {
+                    dispatch(alert("Appointment booked successfully", "success"));
+                    history.push(`/your-appointments/`);
+                })
+                console.log(paymentSuccess);
+                
             }
         } catch (error) {
+            console.log(error);
             console.log(error.response);
             if (error.response) {
                 for (const err in error.response.data) {
@@ -93,7 +97,7 @@ export default function BookAppointment({ match }) {
     useEffect( async () => {
         console.log(adminAuth.type);
         
-
+        match.params?.id&&
         axios.get(`${process.env.REACT_APP_API_URL}api/get-doctor-data/${match.params?.id}/`).then((res) => {
             console.log(res.data);
             if (res.status === 200) {
@@ -140,12 +144,18 @@ export default function BookAppointment({ match }) {
         return (time.timeOffset === 'PM' ? time.hour + 12 : time.hour) + ':' + time.minute + ':00' 
     }
 
+
+
+    // payment 
+    
+
     return (
         <>
             <Wrap>
                 <Form
                     onSubmit={onSubmit}
                     style={{ marginBottom: "20px", height: "auto" }}
+                    id="appointment-form"
                 >
                     <Grid direction="row" justify="start">
                         <ProfileColumn justify="start" lg={3} sx={4}>
@@ -217,7 +227,7 @@ export default function BookAppointment({ match }) {
 
                     </InputDiv>
 
-                    <Button block>Submit</Button>
+                    <Button block>Pay {doctorData?.hospital?.price}</Button>
                 </Form>
             </Wrap>
         </>

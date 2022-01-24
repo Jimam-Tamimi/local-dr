@@ -1,67 +1,72 @@
-import React, { useEffect, useRef } from 'react'
-import {FaHospitalAlt, FaPlusCircle, FaSitemap} from 'react-icons/fa' 
-import { useSelector } from 'react-redux';
-import { DashboardWrap, DashLink } from './Dashboard.styles'
+import React, { useEffect, useRef } from "react";
+import { FaHospitalAlt, FaPlusCircle, FaSitemap } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { DashboardWrap, DashLink } from "./Dashboard.styles";
 
+export default function Dashboard({ showDash, setShowDash }) {
+  const dashRef = useRef(null);
+  useEffect(() => {
+    const toggleOpen = (e) => {
+      if (
+        !dashRef.current.contains(e.target) &&
+        showDash &&
+        window.innerWidth < 850
+      ) {
+        setShowDash(false);
+      }
+    };
+    window.addEventListener("click", toggleOpen);
+    return () => {
+      window.removeEventListener("click", toggleOpen);
+    };
+  }, [showDash]);
 
-export default function Dashboard({showDash, setShowDash}) {
-    const dashRef = useRef(null);
-    useEffect(() => {
-      const toggleOpen = (e) => { 
-        if (!dashRef.current.contains(e.target) && showDash && window.innerWidth < 850) {
-            setShowDash(false);
-        }
-      };
-      window.addEventListener("click", toggleOpen);
-      return () => {
-        window.removeEventListener("click", toggleOpen);
-      };
-    }, [showDash]);
+  const adminAuth = useSelector((state) => state.adminAuth);
 
-    const adminAuth = useSelector(state => state.adminAuth)
-    
-    return (
-        <>
-            <DashboardWrap ref={dashRef} showDash={showDash}>
-              {
-                adminAuth.isAdmin === true && adminAuth.type === 'superuser' ?
-                <>
-                  <DashLink to="/admin/hospitals/">
-                          <FaSitemap />
-                          <p>Hospitals</p>
-                  </DashLink>
-                  <DashLink to="/admin/hospital/deactivated/">
-                          <FaSitemap />
-                          <p>Deactivated Hospitals</p>
-                  </DashLink>
-                  
-                  <DashLink exact to="/admin/doctors/">
-                          <FaSitemap />
-                          <p>Doctor</p>
-                  </DashLink>
- 
-                </> : 
-                adminAuth.isAdmin === true && adminAuth.type === 'hospital' ?
-                <>
-                  <DashLink to="/admin/schedule/">
-                          <FaSitemap />
-                          <p>Schedule</p>
-                  </DashLink>
-                  <DashLink exact to="/admin/appointment/">
-                          <FaSitemap />
-                          <p>Appointments</p>
-                  </DashLink>
-                  <DashLink exact to="/admin/appointment/completed/">
-                          <FaSitemap />
-                          <p>Completed Appointments</p>
-                  </DashLink>
-                  <DashLink exact to="/">
-                          <FaSitemap />
-                          <p>Completed </p>
-                  </DashLink>
-                </> : ''
-              }
-                {/* <DashLink to="#">
+  return (
+    <>
+      <DashboardWrap ref={dashRef} showDash={showDash}>
+        {adminAuth.isAdmin === true &&
+        (adminAuth.type === "superuser" || adminAuth.type === "staff") ? (
+          <>
+            <DashLink to="/admin/hospitals/">
+              <FaSitemap />
+              <p>Hospitals</p>
+            </DashLink>
+            <DashLink to="/admin/hospital/deactivated/">
+              <FaSitemap />
+              <p>Deactivated Hospitals</p>
+            </DashLink>
+            <DashLink exact to="/admin/doctors/">
+              <FaSitemap />
+              <p>Doctor</p>
+            </DashLink>
+            {adminAuth.type !== "staff" && (
+              <DashLink exact to="/admin/staff/">
+                <FaSitemap />
+                <p>Staff</p>
+              </DashLink>
+            )}
+          </>
+        ) : adminAuth.isAdmin === true && adminAuth.type === "hospital" ? (
+          <>
+            <DashLink to="/admin/schedule/">
+              <FaSitemap />
+              <p>Schedule</p>
+            </DashLink>
+            <DashLink exact to="/admin/appointment/">
+              <FaSitemap />
+              <p>Appointments</p>
+            </DashLink>
+            <DashLink exact to="/admin/appointment/completed/">
+              <FaSitemap />
+              <p>Completed Appointments</p>
+            </DashLink>
+          </>
+        ) : (
+          ""
+        )}
+        {/* <DashLink to="#">
                         <FaPlusCircle />
                         <p>Add Hospital</p>
                 </DashLink>
@@ -73,7 +78,7 @@ export default function Dashboard({showDash, setShowDash}) {
                         <FaSitemap />
                         <p>Temp</p>
                 </DashLink>*/}
-            </DashboardWrap> 
-        </>
-    )
+      </DashboardWrap>
+    </>
+  );
 }

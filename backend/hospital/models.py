@@ -70,6 +70,19 @@ class Notification(models.Model):
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, blank=False, null=False) 
     isRead = models.BooleanField(default=False)
     
+    
+ 
+class Staff(models.Model):
+    name = models.CharField(max_length=20, null=False, blank=False)
+    email = models.EmailField(max_length=100, null=False, blank=False)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, blank=False, null=False)
+    country = models.CharField(max_length=20, null=False, blank=False)
+    password = models.CharField(max_length=500, null=False, blank=False)
+    
+    def __str__(self):
+        return self.name
+    
+    
 @receiver(pre_save, sender=Hospital)
 def create_profile(sender, instance, **kwargs):
     if(instance.id is None):
@@ -78,11 +91,49 @@ def create_profile(sender, instance, **kwargs):
         user.set_password(instance.password)
         user.is_hospital = True
         user.save()
-        instance.user = user
-    
+        instance.user = user 
+    else:
+        hospital = sender.objects.get(id=instance.id)
+        user = MyUser.objects.get(id=instance.user.id) 
+        print(user)
+        if(hospital.password != instance.password):
+            user.   set_password(instance.password)
+            user.save()
+        if(hospital.email != instance.email):
+            user.email = instance.email
+            user.save()
+        
+         
     
 @receiver(post_delete, sender=Hospital)
-def create_profile(sender, instance, **kwargs):
+def delete_profile(sender, instance, **kwargs):
+    user = MyUser.objects.get(email=instance.email)
+    user.delete()
+    
+    
+@receiver(pre_save, sender=Staff)
+def create_staff(sender, instance, **kwargs):
+    if(instance.id is None):
+        user = MyUser.objects.create(email=instance.email)
+        user.set_password(instance.password)
+        user.is_staff = True
+        user.save()
+        instance.user = user
+    else:
+        staff = sender.objects.get(id=instance.id)
+        user = MyUser.objects.get(id=instance.user.id) 
+        print(user)
+        if(staff.password != instance.password):
+            user.set_password(instance.password)
+            user.save()
+        if(staff.email != instance.email):
+            user.email = instance.email
+            user.save()
+        
+    
+
+@receiver(post_delete, sender=Staff)
+def delete_profile(sender, instance, **kwargs):
     user = MyUser.objects.get(email=instance.email)
     user.delete()
     

@@ -26,7 +26,7 @@ import HomeAppointments from "./pages/home/Appointment";
 import YourAppointments from "./pages/home/YourAppointments";
 import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments";
 import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
-import Payment from "./pages/home/Payment";
+import Staff from "./pages/admin/Staff";
 function App() {
   const dispatch = useDispatch()
   const location = useLocation()
@@ -61,7 +61,7 @@ function App() {
         }
         return Promise.reject(error);
       }
-    )
+    ) 
   }
 
   const adminAuth = useSelector(state => state.adminAuth)
@@ -94,9 +94,15 @@ function App() {
       <AdminLayout >
         <AdminRoute>
           {
-            adminAuth.isAdmin === true && adminAuth.type === 'superuser' ?
+            adminAuth.isAdmin === true && (adminAuth.type === 'superuser' || adminAuth.type === 'staff') ?
               <>
-                <Route exact path="/admin/" component={Index} />
+              {
+                 adminAuth.type !== 'staff' &&
+                 <>
+                  <Route exact path="/admin/" component={Index} />
+                  <Route exact path="/admin/staff/" component={Staff} />
+                 </>
+              }
                 <Route exact path="/admin/hospitals/" component={Hospitals} />
                 <Route exact path="/admin/doctors/" component={Doctors} />
                 <Route exact path="/admin/hospital/deactivated/" component={DeactivatedHospital} />
@@ -116,7 +122,6 @@ function App() {
           <Route exact path='/doctor/:id/' component={BookAppointment} />
           <Route exact path='/appointments/:id/' component={HomeAppointments} />
           <Route exact path='/your-appointments/' component={YourAppointments} />
-          <Route exact path='/payment/:id/' component={Payment} />
         </PrivateRoute>
         <GuestRoute>
         </GuestRoute>

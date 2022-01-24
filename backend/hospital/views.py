@@ -20,6 +20,9 @@ from rest_framework.decorators import action, api_view, permission_classes, auth
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, FileUploadParser, MultiPartParser, FormParser
+from django.core.mail import send_mail
+from django.conf import settings
+
 # Create your views here.
 
 
@@ -46,7 +49,7 @@ class HospitalViewSet(ModelViewSet):
     
 @api_view(['GET'])
 @permission_classes([IsAdminUser|IsHospital])
-def get_doctor_name(request):
+def get_user_name(request):
     print(request.user)
     if(request.user.is_superuser):
         return Response({'name': 'SuperAdmin'}, status=status.HTTP_200_OK)
@@ -57,6 +60,13 @@ def get_doctor_name(request):
             return Response({"message": "Hospital does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
         return Response({'type': 'hospital', 'name': hospital.name }, status=status.HTTP_200_OK)
+    elif(request.user.is_staff and not request.user.is_superuser):
+        try:
+            staff = Staff.objects.get(user=request.user)
+        except Hospital.DoesNotExist:
+            return Response({"message": "Staff does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({'type': 'staff', 'name': staff.name }, status=status.HTTP_200_OK)
 
 class DoctorViewSet(ModelViewSet):
     queryset = Doctor.objects.all().order_by('-id')
@@ -213,9 +223,30 @@ class AppointmentViewSet(ModelViewSet):
             data.append(d)
         return Response(data, status=status.HTTP_200_OK)
 
+class StaffViewSet(ModelViewSet):
+    queryset = Staff.objects.all().order_by('-id')
+    serializer_class = StaffSerializer
+    # authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]
+    search_fields = ['id', 'name', 'email', 'country', ]
+    filter_backends = (filters.SearchFilter,)
 
+    def get_queryset(self):
+        print(self.queryset)
+        if(self.request.user.is_superuser):
+    
+            return super().get_queryset()
+        else:
+            return Staff.objects.none()
+   
+    def create(self, request, *args, **kwargs):
+        if(not request.user.is_superuser):
+            return Response({"message": "You are not allowed to create staff"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return super().create(request, *args, **kwargs)
 
-
+            
+        
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def doctorRecommendations(request):
@@ -408,6 +439,16 @@ def handle_payment_success(request):
     Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=appointment.payment_id, isPaid=True)
     Notification.objects.create(appointment=appointment)
 
+    try:
+        send_mail(
+            'Appointment Confirmation From Local Dr.',
+            'Your appointment has been confirmed with Dr. ' + appointment.doctor.name + ' at ' + appointment.doctor.hospital.name + ' on ' + str(appointment.date) + ' at ' + str(appointment.time) + '. Your appointment id is ' + str(appointment.id) + '. ',
+            settings.EMAIL_HOST_USER,
+            [appointment.email], 
+        )
+    except Exception as e:
+        print(e)
+    
     return Response(res_data)
 
 
@@ -433,7 +474,7 @@ def get_homepage_details(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
-
+import time
 
 @api_view(['GET'])
 @permission_classes([IsHospital])

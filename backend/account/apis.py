@@ -104,11 +104,13 @@ def vallidateToken(request):
 @permission_classes([IsAdminUser|IsHospital])
 def isAdmin(request):
     if(request.user.is_superuser):
-        return Response({"isAdmin": True, 'type': 'superuser', 'message': 'User is admin', }, status=status.HTTP_200_OK)
+        return Response({"isAdmin": True, 'type': 'superuser', 'message': 'User is superuser', }, status=status.HTTP_200_OK)
     elif(request.user.is_hospital):
-        return Response({"isAdmin": True, 'type': 'hospital', 'message': 'User is admin', }, status=status.HTTP_200_OK)
+        return Response({"isAdmin": True, 'type': 'hospital', 'message': 'User is hospital', }, status=status.HTTP_200_OK)
+    elif(request.user.is_staff and not request.user.is_superuser):
+        return Response({"isAdmin": True, 'type': 'staff', 'message': 'User is staff', }, status=status.HTTP_200_OK)
     else:
-        return Response({"isAdmin": False, 'type': 'user', 'message': 'User is admin', }, status=status.HTTP_403_FORBIDDEN)
+        return Response({"isAdmin": False, 'type': 'user', 'message': 'User is unknown', }, status=status.HTTP_403_FORBIDDEN)
     
     
     

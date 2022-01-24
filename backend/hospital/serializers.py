@@ -49,3 +49,10 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ['id', 'appointment', 'isRead',  ]
+
+
+class StaffSerializer(serializers.ModelSerializer):  
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Staff
+        fields = ['id', 'name', 'email', 'user', 'country', 'password' ]

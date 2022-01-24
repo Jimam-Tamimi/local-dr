@@ -6,6 +6,7 @@ router = DefaultRouter()
 router.register(r'hospitals', HospitalViewSet)
 router.register(r'doctors', DoctorViewSet)
 router.register(r'appointments', AppointmentViewSet)
+router.register(r'staff', StaffViewSet)
 
 urlpatterns = [
     path('doctors/recommendations/', doctorRecommendations),
@@ -15,7 +16,8 @@ urlpatterns = [
     path('razorpay/pay/', start_payment, name="payment"),
     path('razorpay/payment/success/', handle_payment_success, name="payment_success"),
     path(r'schedule-doctor/<int:id>/', schedule_doctor),
-    path(r'get_doctor_name/', get_doctor_name), 
+    path(r'get_user_name/', get_user_name), 
+    path(r'get_homepage_details/', get_homepage_details), 
     path(r'get_notifications/', get_notifications),
     
 ] + router.urls

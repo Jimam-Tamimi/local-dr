@@ -22,6 +22,8 @@ import alert from '../../redux/alert/actions'
 import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone'
 import {useCallback} from 'react'
+ 
+
 
 export default function Hospitals() {
   const [hospitals, setHospitals] = useState([])
@@ -98,7 +100,7 @@ export default function Hospitals() {
           </Tr>
           {
             hospitals.map((hospital, i) => (
-              <Tr key={hospital.id}>
+              <Tr key={i}>
 
                 <Td>{hospital.id}</Td> 
                 <Td img={true}> <div> { hospital.image && <img src={hospital.image} />} {hospital.name}</div></Td>
@@ -159,6 +161,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
       const lng = autoComplete.getPlace().geometry.location.lng();
       setMark({ lat, lng })
       setCoords({ lat, lng })
+      setFormData({...formData , locationName: autoComplete?.getPlace()?.formatted_address});
+
     } catch {
 
     }
@@ -172,8 +176,10 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
     contact: "",
     contact_person: "",
     location: "",
+    locationName: "",
+
   })
-  const { name, email, password, contact, contact_person, location, price } = formData;
+  const { name, email, password, contact, contact_person, location, price, locationName } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   useEffect(() => {
     setFormData({ ...formData, location: JSON.stringify(mark) })
@@ -190,6 +196,7 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
       formDataV.append('location', JSON.stringify(mark));
       formDataV.append('price', price);
       formDataV.append('image', profImage);
+      formDataV.append('locationName', locationName);
 
 
       const config = {
@@ -209,6 +216,8 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
           contact: "",
           contact_person: "",
           location: "",
+          locationName: "",
+
           price: '',
         })
         dispatch(alert('Hospital added successfully', 'success'))
@@ -288,7 +297,7 @@ function HospitalsForm({ setShowHospitalForm, getHospitals }) {
 
           <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
             <>
-              <Label htmlFor="add-number">Location *</Label>
+              <Label htmlFor="places">Hospital Location</Label>
               <Input
                 id="places"
                 placeholder="Search Places..."
@@ -333,7 +342,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
 
   const [coords, setCoords] = useState({ lat: 0, lng: 0 })
   const [mark, setMark] = useState({ lat: 0, lng: 0 })
-  const [autoComplete, setAutoComplete] = useState(null)
+  const [autoComplete, setAutoComplete] = useState(null) 
   const dispatch = useDispatch()
 
   function setCurrentLocation() {
@@ -343,13 +352,14 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       setMark({ lat: location.coords.latitude, lng: location.coords.longitude })
     }, () => console.log('error :)'), { timeout: 10000 })
   }
-
+  
   const onPlaceChanged = () => {
     try {
       const lat = autoComplete.getPlace().geometry.location.lat();
       const lng = autoComplete.getPlace().geometry.location.lng();
       setMark({ lat, lng })
-      setCoords({ lat, lng })
+      setCoords({ lat, lng }) 
+      setFormData({...formData , locationName: autoComplete?.getPlace()?.formatted_address});
     } catch {
 
     }
@@ -362,6 +372,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
     contact: "",
     contact_person: "",
     location: "",
+    locationName: "",
     price: '',
   })
   const getHospitalData = async (id) => {
@@ -377,7 +388,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       dispatch(alert('Error getting hospital data', 'danger'))
     }
   }
-  const { name, email, password, contact, contact_person, location, price } = formData;
+  const { name, email, password, contact, contact_person, location, price, locationName } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   useEffect(() => {
@@ -400,6 +411,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
       formData.append('contact_person', contact_person);
       formData.append('location', JSON.stringify(mark));
       formData.append('price', price);
+      formData.append('location_name', locationName);
       if(profImage){
         formData.append('image', profImage);
       }
@@ -447,6 +459,7 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
     })
     
   }, [])
+   
   
 
   return (
@@ -493,14 +506,17 @@ function SetShowEditForm({ hospitalId, getHospitals, setShowEditForm }) {
             )}
           </Dropzone>        </InputDiv>
 
-          <Autocomplete onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+          <Autocomplete onLoad={autoC => {setAutoComplete(autoC)}} onPlaceChanged={onPlaceChanged}>
             <>
-              <Label htmlFor="add-number">Where do you need blood? *</Label>
+              <Label htmlFor="add-number">Hospital Location *</Label>
               <Input
                 id="places"
                 placeholder="Search Places..."
                 type="text"
                 onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+                value={locationName}
+                onChange={onChange}
+                name="locationName"
               />
             </>
           </Autocomplete>

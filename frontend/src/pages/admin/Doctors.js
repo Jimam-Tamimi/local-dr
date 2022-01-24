@@ -181,6 +181,11 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
         dispatch(alert('Doctor added successfully', 'success'))
         setShowDoctorForm(false)
         getDoctors()
+        // setFormData({
+        //   name: "",
+        //   speciality: "",
+        //   qualification: "",
+        // })
 
       }
     } catch (error) { 
@@ -321,6 +326,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
         dispatch(alert('Doctor Updated successfully', 'success'))
         setShowEditForm(false)
         getDoctors()
+
 
       }
     } catch (error) {

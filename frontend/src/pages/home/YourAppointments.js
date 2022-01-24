@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { showRazorpay } from '../../helpers';
 import { Button, ButtonLink, Container, Grid } from '../../styles/Essentials.styles';
 import { Actions, OptionsColumn, Search, Table, Td, Th, Tr } from '../../styles/Table.styles';
 
@@ -39,7 +41,7 @@ export default function YourAppointments() {
       console.log(err)
     }
   }
-
+  const dispatch = useDispatch()
   return (
     <>
       <Container>
@@ -75,7 +77,7 @@ export default function YourAppointments() {
                   {
                     appointment?.isPaid ? 
                     <Td><ButtonLink to={`/appointments/${appointment.id}`} sm>View</ButtonLink></Td>
-                     : <Td><ButtonLink to={`/payment/${appointment.id}`} sm>Pay</ButtonLink></Td>
+                     : <Td><Button onClick={e => showRazorpay(appointment.id, () => getAppointments()) }  sm>Pay</Button> </Td>
                   }
 
                 </Tr>

@@ -1,5 +1,3 @@
-from django.db import connections
-from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
@@ -7,8 +5,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from hospital.permission import IsHospital
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.core.mail import send_mail
-from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes 
 
 
@@ -16,12 +12,7 @@ from account.models import *
 from .serializers import *
 from account.threads import SendEmail
 from account.helpers import sendVerificationEmail
-
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-    TokenVerifyView,
-)
+ 
 
 
 

@@ -33,8 +33,8 @@ export default function BookAppointment({ match }) {
         const timeArray = time.split(":");
         let t = {
             hour: parseInt(timeArray[0]),
-            minute: parseInt(timeArray[1].split(" ")[0]),
-            timeOffset: timeArray[1].split(" ")[1].replaceAll(",", ""),
+            minute: parseInt(timeArray[1]?.split(" ")[0]),
+            timeOffset: timeArray[1]?.split(" ")[1]?.replaceAll(",", ""),
         };
         console.log(t);
         return t;
@@ -149,7 +149,7 @@ export default function BookAppointment({ match }) {
         dispatch(setProgress(80))
 
         if (res.status == 200) {
-            setActiveTime(res.data)
+                setActiveTime(res.data)
         }
     }
     catch (error) {

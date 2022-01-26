@@ -34,6 +34,9 @@ function App() {
   const dispatch = useDispatch()
   const location = useLocation()
 
+  
+  
+
   const progress = useSelector(state => state.progress)
   
   useEffect(() => {
@@ -43,10 +46,9 @@ function App() {
   }, [])
   
   const auth = useSelector(state => state.auth)
-  useEffect(() => {
-    dispatch(checkAdmin());
-  }, []);
 
+
+  
   useEffect( async  () => {
         
     if ( JSON.parse(localStorage.getItem('auth'))?.isAuthenticated) {
@@ -76,6 +78,15 @@ function App() {
      
   }, [auth]); 
   
+  
+  
+  
+  
+  useEffect(() => {
+    dispatch(checkAdmin());
+  }, []);
+
+ 
   
 
   

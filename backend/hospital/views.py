@@ -1,11 +1,7 @@
 import json
 from os import environ
-from pydoc import doc
-from random import seed
 from urllib import request
-from django.shortcuts import render
 from django.db.models import Q
-from hospital.helpers import available
 from hospital.helpers import distance
 import razorpay
 from hospital.permission import IsHospital
@@ -166,7 +162,8 @@ def schedule_doctor(request, id=None):
         for d in tmpData:
             date = d['date']
             time  = getStrFromTimeList(d['time'])
-            breaker = False
+            if d['time']=="[]":
+                break
             for appointment in appointments:
                 if(str(appointment.date) == date and  getAppointmentTime(appointment) in time):
                     print(time)
@@ -177,8 +174,7 @@ def schedule_doctor(request, id=None):
             d['time'] = str(time)
              
             data.append(d)
-            
-        print(data) 
+        print(data)
         return Response(data, status=status.HTTP_200_OK)
         
         

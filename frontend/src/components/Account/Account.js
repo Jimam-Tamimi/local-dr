@@ -124,7 +124,7 @@ function Login({ setForm }) {
           />
         </div>
         <div className="form-group">
-          <button block>Login</button>
+          <button block="true" >Login</button>
         </div>
 
         <div className="form-group">
@@ -238,7 +238,7 @@ function Signup({ setForm }) {
           />
         </div>
         <div className="form-group">
-          <button block>Create Account</button>
+          <button block="true" >Create Account</button>
         </div>
         <div className="form-group">
           <p onClick={e => setTimeout(() => { setForm('forgotPassword') }, 1) }  style={{textAlign: "end"}} >Forgot Password</p>
@@ -347,8 +347,8 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
         <div className="form-group">
           {
             codeSent ?
-              <button onClick={e => { e.preventDefault(); verifyCode(e) }} block>Request Reset</button> :
-              <button type="submit" block>Send Reset Code</button>
+              <button onClick={e => { e.preventDefault(); verifyCode(e) }} block="true" >Request Reset</button> :
+              <button type="submit" block="true" >Send Reset Code</button>
           }
         </div>
 
@@ -430,7 +430,7 @@ function ResetPassword({ setForm, forgotPasswordEmail }) {
           />
         </div>
         <div className="form-group">
-          <button block>Reset Password</button>
+          <button block="true" >Reset Password</button>
         </div>
 
         <div  className="form-group m-0" >

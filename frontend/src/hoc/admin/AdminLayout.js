@@ -10,7 +10,7 @@ import {
   AccountWrap,
   LoginForm,
 } from "../../components/Account/Account.styles";
-import { Button, Column, Grid } from "../../styles/Essentials.styles";
+import { Button, Column, Flex, Grid } from "../../styles/Essentials.styles";
 import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAdmin } from "../../redux/adminAuth/actions";
@@ -20,22 +20,21 @@ import DotLoader from "react-spinners/DotLoader";
 import BeatLoader from "react-spinners/BeatLoader";
 import AlertComponent from "../../components/Alert/AlertComponent";
 import axios from "axios";
+import { appendLink, removeLink } from "../../helpers";
+import drImage from "../../assets/images/doctor-image-admin.jpg";
 
 export default function AdminLayout({ children }) {
   const adminAuth = useSelector((state) => state.adminAuth);
   const dispatch = useDispatch();
   const location = useLocation();
   const auth = useSelector((state) => state.auth);
-  useEffect(() => {
- 
-  }, []);
+  useEffect(() => {}, []);
   const [showDash, setShowDash] = useState(
     window.innerWidth > 850 ? true : false
   );
   window.onresize = () => {
     setShowDash(window.innerWidth > 850 ? true : false);
   };
- 
 
   return (
     <>
@@ -86,6 +85,15 @@ const Content = styled.main`
 `;
 
 const AdminLogin = () => {
+  useEffect(() => {
+    let links = appendLink([
+      "https://fonts.googleapis.com/css?family=Karla:400,700&display=swap",
+    ]);
+    return () => {
+      removeLink(links);
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -94,6 +102,7 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("login login");
     await dispatch(login(email, password));
     await dispatch(checkAdmin());
   };
@@ -101,48 +110,176 @@ const AdminLogin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   return (
     <>
-      <AccountWrap
-        style={{
-          margin: "auto",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Grid direction="column">
-          <LoginForm onSubmit={onSubmit}>
-            <FormTitle>Enter Email And Password to Login</FormTitle>
-            <InputDiv>
-              <Label>Enter Your Email</Label>
-              <Input
-                type="email"
-                name="email"
-                placeholder="Enter Your Email"
-                onChange={onChange}
-                value={email}
-              />
-            </InputDiv>
-            <InputDiv>
-              <Label>Enter Password</Label>
-              <Input
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-                value={password}
-                onChange={onChange}
-              />
-            </InputDiv>
-            <InputDiv>
-              <Button green block>
-                Login
-              </Button>
-            </InputDiv>
-            <InputDiv style={{ alignItems: "center" }}>
-              {/* <p>New To Local Doctor? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('signUp') }, 1) }}  >Create An Account</b></p> */}
-            </InputDiv>
-          </LoginForm>
-        </Grid>
-      </AccountWrap>
+      <AdminFormWrap >
+        <div className="login-cart">
+          <div className="first-column">
+            <img src={drImage} />
+          </div>
+          <div className="second-column">
+            <div className="brand-wrapper">
+              <h1>MyCity DOC</h1>
+            </div>
+            <p className="login-card-desc">Sign in to your account</p>
+            <form onSubmit={onSubmit} className="login-form">
+              <div className="form-group">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={onChange}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="********"
+                  value={password}
+                  onChange={onChange}
+                />
+              </div>
+              <button className="login">Login</button>
+            </form>
+          </div>
+        </div>
+      </AdminFormWrap>
     </>
   );
 };
+
+const AdminFormWrap = styled.div`
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #d0d0ce;
+  ${Flex}
+  & * {
+    font-family: "Karla", sans-serif;
+  }
+
+  div.login-cart {
+    background-color: white;
+    border: 0;
+    border-radius: 27.5px;
+    box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+    overflow: hidden;
+    width: 1110px;
+    height: 600px;
+    ${Flex}
+    justify-content: space-between;
+
+    @media (max-width: 1200px) {
+      max-width: 930px;
+    }  
+    @media (max-width: 992px) {
+      max-width: 690px;
+    }  
+    @media (max-width: 768px) {
+      max-width: 510px;
+    } 
+    div.first-column {
+      border: 0;
+      border-radius: 27.5px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+      overflow: hidden;
+      width: 42%;
+      @media (max-width: 768px) {
+      display: none;
+    } 
+
+      img {
+        width: 100%;
+        height: 100%;
+        height: 600px;
+        object-fit: cover;
+      }
+    }
+
+    div.second-column {
+      width: 58%;
+      padding: 85px 60px 60px;
+      @media (max-width: 768px) {
+      width: 100%;
+
+    } 
+
+      div.brand-wrapper {
+        margin-bottom: 19px;
+      }
+
+      p.login-card-desc {
+        font-size: 25px;
+        color: #000;
+        font-weight: normal;
+        margin-bottom: 23px;
+      }
+      form.login-form {
+        max-width: 326px;
+
+        div.form-group {
+          margin-bottom: 1rem;
+
+          input {
+            display: block;
+            width: 100%;
+            height: calc(1.5em + 0.75rem + 2px);
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+
+            border: 1px solid #d5dae2;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            min-height: 45px;
+            font-size: 13px;
+            line-height: 15;
+            font-weight: normal;
+
+            &:focus {
+              color: #495057;
+              background-color: #fff;
+              border-color: #80bdff;
+              outline: 0;
+              box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
+            }
+          }
+        }
+        button.login {
+          transition: color 0.15s ease-in-out,
+            background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+            box-shadow 0.15s ease-in-out;
+          user-select: none;
+          text-align: center;
+          /* vertical-align: middle; */
+          display: block;
+          margin-bottom: 1.5rem !important;
+          cursor: pointer;
+          padding: 13px 20px 12px;
+          background-color: #000;
+          border-radius: 4px;
+          font-size: 17px;
+          font-weight: bold;
+          line-height: 20px;
+          color: #fff;
+          width: 100%;
+          border: 1px solid transparent;
+          &:hover {
+            border: 1px solid #000;
+            background-color: transparent;
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+`;

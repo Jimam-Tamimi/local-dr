@@ -45,12 +45,12 @@ export const login = (email, password) => async dispatch => {
         }
         const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/token/`, data, config)
         const payload = res.data 
-        dispatch(alert(`Login successful`, 'success'))
-
+        
         dispatch({
             type: 'LOGIN_SUCCESS',
             payload: payload
         }) 
+        dispatch(alert(`Login successful`, 'success'))
         return true
     } catch (error) {
         if (error.response) {

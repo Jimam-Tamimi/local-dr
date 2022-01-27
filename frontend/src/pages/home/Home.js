@@ -160,8 +160,8 @@ export default function Home() {
                     width: "50%",
                     borderTopRightRadius: 0,
                     borderBottomRightRadius: 0,
-                    borderRight: "2px solid #0000001f",
                   }}
+                  className="search-hospital"
                 >
                   <AiOutlineSearch />
                   <input
@@ -194,8 +194,10 @@ export default function Home() {
                     width: "30%",
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
-                    borderRight: "2px solid #0000001f",
+                    
                   }}
+                  className="search-hospital"
+
                 >
                   <>
                     <IoLocationSharp />
@@ -206,6 +208,7 @@ export default function Home() {
                           name="location"
                           type="text"
                           placeholder="My Location"
+                          style={{borderBottom: "1px solid #0000003b"}}
                           onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
                         />
                       </>

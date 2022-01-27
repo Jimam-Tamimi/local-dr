@@ -60,15 +60,15 @@ export const RightCol = styled.div`
     bottom: 0px;
 
     @media screen and (max-width: 715px) {
-      font-size: 0.8rem;
+      font-size: 0.9rem;
     }
   }
   & > h2 {
-    font-size: 1.6em;
+    font-size: 1.8em;
     font-weight: 600;
     margin-bottom: 5px;
     @media screen and (max-width: 715px) {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
     }
   }
   & > p > b {
@@ -98,6 +98,10 @@ export const RightCol = styled.div`
       right: 0px;
       bottom: 0px;
     }
+  }
+  & > p {
+    font-size: 1.1rem;
+
   }
 `;
 

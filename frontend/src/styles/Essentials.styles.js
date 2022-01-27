@@ -119,9 +119,11 @@ export const Button = styled.button`
     transform: var(--for-active-click);
   }
   ${({block}) => block && `
-    width: 100%;
+        width: 100%;
     display: block;
-    padding: 0.7rem 1rem;
+    padding: 0.9rem 1rem;
+    text-align: center;
+    border-radius: 5px;
   `}
   ${({sm}) => sm && `
     padding: 0.35rem 0.6rem;
@@ -166,7 +168,10 @@ export const ButtonLink = styled(Link)`
   ${({block}) => block && `
     width: 100%;
     display: block;
-    padding: 0.7rem 1rem;
+    padding: 0.9rem 1rem;
+    text-align: center;
+    border-radius: 5px;
+
   `}
   ${({sm}) => sm && `
     padding: 0.35rem 0.6rem;

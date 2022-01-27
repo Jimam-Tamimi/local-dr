@@ -29,20 +29,20 @@ export default function Dashboard({ showDash, setShowDash }) {
         {adminAuth.isAdmin === true &&
         (adminAuth.type === "superuser" || adminAuth.type === "staff") ? (
           <>
-            <DashLink to="/admin/hospitals/">
+            <DashLink onClick={e => setShowDash(false)}    to="/admin/hospitals/">
               <FaSitemap />
               <p>Hospitals</p>
             </DashLink>
-            <DashLink to="/admin/hospital/deactivated/">
+            <DashLink onClick={e => setShowDash(false)}   to="/admin/hospital/deactivated/">
               <FaSitemap />
               <p>Deactivated Hospitals</p>
             </DashLink>
-            <DashLink exact to="/admin/doctors/">
+            <DashLink onClick={e => setShowDash(false)}   exact to="/admin/doctors/">
               <FaSitemap />
               <p>Doctor</p>
             </DashLink>
             {adminAuth.type !== "staff" && (
-              <DashLink exact to="/admin/staff/">
+              <DashLink onClick={e => setShowDash(false)}   exact to="/admin/staff/">
                 <FaSitemap />
                 <p>Staff</p>
               </DashLink>
@@ -50,15 +50,15 @@ export default function Dashboard({ showDash, setShowDash }) {
           </>
         ) : adminAuth.isAdmin === true && adminAuth.type === "hospital" ? (
           <>
-            <DashLink to="/admin/schedule/">
+            <DashLink onClick={e => setShowDash(false)}   to="/admin/schedule/">
               <FaSitemap />
               <p>Schedule</p>
             </DashLink>
-            <DashLink exact to="/admin/appointment/">
+            <DashLink onClick={e => setShowDash(false)}   exact to="/admin/appointment/">
               <FaSitemap />
               <p>Appointments</p>
             </DashLink>
-            <DashLink exact to="/admin/appointment/completed/">
+            <DashLink onClick={e => setShowDash(false)}   exact to="/admin/appointment/completed/">
               <FaSitemap />
               <p>Completed Appointments</p>
             </DashLink>
@@ -66,15 +66,15 @@ export default function Dashboard({ showDash, setShowDash }) {
         ) : (
           ""
         )}
-        {/* <DashLink to="#">
+        {/* <DashLink onClick={e => setShowDash(false)}   to="#">
                         <FaPlusCircle />
                         <p>Add Hospital</p>
                 </DashLink>
-                <DashLink className='active' to="#">
+                <DashLink onClick={e => setShowDash(false)}   className='active' to="#">
                         <FaHospitalAlt />
                         <p>Temp</p>
                 </DashLink>
-                <DashLink to="#">
+                <DashLink onClick={e => setShowDash(false)}   to="#">
                         <FaSitemap />
                         <p>Temp</p>
                 </DashLink>*/}

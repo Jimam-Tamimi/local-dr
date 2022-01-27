@@ -1,5 +1,5 @@
 import { Column } from "../../../styles/Essentials.styles";
-import styled, { keyframes } from 'styled-components'; 
+import styled, { keyframes } from 'styled-components';
 
 export const HeroWrap = styled.div`
   width: 100vw;
@@ -16,6 +16,9 @@ export const ColumnOne = styled(Column)`
   & > h1 {
     font-size: 4.4rem;
     color: var(--primary-text-color);
+    @media only screen and (max-width: 992px) {
+      font-size: 2.2rem;
+    }
   }
   & > * {
     margin-top: 20px;
@@ -54,6 +57,8 @@ export const SearchColumn = styled.form`
   display: flex;
   position: relative;
   background: white;
+  border-radius: 5px;
+
   & > div > input {
     border: none;
       width: 100% !important;
@@ -157,30 +162,42 @@ export const SearchColumn = styled.form`
     flex-direction: column;
     background: white;
     padding: 15px;
-    & > div > input {
-      width: 100% !important;
-      
+      & > div > input {
+        width: 100% !important;
+        
+      }
+      & > div  {
+        width: 100% !important;
+        padding: 0px 0px;
+
     }
-    & > div  {
-      width: 100% !important;
-      padding: 0px 0px;
-
-  }
-    & > button {
-      width: 100% !important;
-      padding: 10px 10px;
-    font-size: 21px;
-    font-weight: 600;
-    margin-top: 10px;
-  }
-  & > div > input {
-    padding: 1rem 2.1rem;
-    border-bottom: 1px solid #0000003b;
-    margin: 5px 0px;
-  }
+      & > button {
+        width: 100% !important;
+        padding: 10px 10px;
+      font-size: 21px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    & > div > input {
+      padding: 1rem 2.1rem;
+      border-bottom: 1px solid rgb(0 0 0 / 25%);
+      margin: 5px 0px;
+    }
   }
 
-`;
+  & > div.search-hospital{
+    border-right: 2px solid #0000001f;
+    @media screen and (max-width: 992px) {
+      border-right: none;
+    }
+  }
+  & > div{
+    @media screen and (max-width: 992px) {
+      margin: 3px 0px;
+    }
+  }
+
+`
 
 
 export const FeatureWrap = styled.div`

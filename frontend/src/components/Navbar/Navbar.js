@@ -145,7 +145,8 @@ export default function Navbar({ }) {
               showSearch &&
               <Column justify="start" lg={2} sm={0} >
                 <Link to='/'>
-                  <img src={logo} />
+                  {/* <img src={logo} /> */}
+                  <h1 style={{color: "var(--primary-text-color)", }}>MyCity Doc</h1>
                 </Link>
               </Column>
             }

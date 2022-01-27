@@ -104,6 +104,7 @@ def reset_password(request):
         user = MyUser.objects.get(email=email)
         if(user.can_change_password):
             user.set_password(password)
+            user.can_change_password = False
             user.save()
             return Response({'success': True, 'message': 'Password reset successfully'}, status=status.HTTP_200_OK)
         else:

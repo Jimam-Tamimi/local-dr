@@ -6,17 +6,25 @@ import { FormTitle, Input, InputDiv, Label } from "../../styles/Form.styles";
 import Modal from "../Modal/Modal";
 import {
   AccountWrap,
-  ColumnTab,
-  LoginForm,
-  SignupForm,
+  Form,
 } from "./Account.styles";
 import { useDispatch } from 'react-redux'
 import axios from "axios";
 import alert from "../../redux/alert/actions";
 import { setProgress } from "../../redux/progress/actions";
-
+import {appendLink, removeLink } from '../../helpers'
 
 export default function Account() {
+
+  useEffect(() => {
+    let links = appendLink([
+      "https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap",
+    ]);
+    return () => {
+      removeLink(links);
+    };
+  }, []);
+  
   const [form, setForm] = useState("login");
   const location = useLocation();
   const history = useHistory();
@@ -93,38 +101,40 @@ function Login({ setForm }) {
   return (
     < >
 
-      <LoginForm onSubmit={loginSubmit}>
-        <FormTitle>Enter Email And Password to Login</FormTitle>
-        <InputDiv>
-          <Label>Email</Label>
-          <Input
+      <Form onSubmit={loginSubmit}>
+        <h2 className="form-heading">Sign In</h2>
+        <div className="form-group">
+          <label>Email</label>
+          <input
             type="email"
             name="email"
             placeholder="Enter Your Email"
             value={email}
             onChange={onLoginFormChange}
           />
-        </InputDiv>
-        <InputDiv>
-          <Label>Password</Label>
-          <Input
+        </div>
+        <div className="form-group">
+          <label>Password</label>
+          <input
             type="password"
             name="password"
             placeholder="Enter Password"
             onChange={onLoginFormChange}
             value={password}
-
           />
-        </InputDiv>
-        <InputDiv>
-          <Button block>Login</Button>
-        </InputDiv>
-        <InputDiv style={{ alignItems: 'center' }}>
-          <p>New To Local Doctor? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('signUp') }, 1) }}  >Create An Account</b></p>
-          <p>Forgot Password? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('forgotPassword') }, 1) }} >Reset Password</b></p>
+        </div>
+        <div className="form-group">
+          <button block>Login</button>
+        </div>
 
-        </InputDiv>
-      </LoginForm>
+        <div className="form-group">
+          <p onClick={e => setTimeout(() => { setForm('forgotPassword') }, 1) }  style={{textAlign: "end"}} >Forgot Password</p>
+        </div>
+
+        <div  className="form-group m-0" >
+          <p className="center">Not a member? <p className="link" onClick={e => setTimeout(() => { setForm('signUp') }, 1) }   >Sign Up</p></p>
+        </div>
+      </Form>
 
 
 
@@ -166,12 +176,12 @@ function Signup({ setForm }) {
   return (
     < >
 
-      <SignupForm onSubmit={onSubmit}>
-        <FormTitle>Enter Email And Password and Create Account</FormTitle>
+      <Form  onSubmit={onSubmit}>
+        <h2 className="form-heading">Sign Up</h2>
 
-        <InputDiv>
-          <Label>Name</Label>
-          <Input
+        <div className="form-group">
+          <label>Name</label>
+          <input
             type="text"
             required
             name="name"
@@ -179,10 +189,10 @@ function Signup({ setForm }) {
             onChange={onChange}
             value={name}
           />
-        </InputDiv>
-        <InputDiv>
-          <Label>Email</Label>
-          <Input
+        </div>
+        <div className="form-group">
+          <label>Email</label>
+          <input
             type="email"
             required
             name="email"
@@ -190,11 +200,11 @@ function Signup({ setForm }) {
             onChange={onChange}
             value={email}
           />
-        </InputDiv>
+        </div>
 
-        <InputDiv>
-          <Label>Mobile  Number</Label>
-          <Input
+        <div className="form-group">
+          <label>Mobile  Number</label>
+          <input
             type="tel"
             required
             name="number"
@@ -202,10 +212,10 @@ function Signup({ setForm }) {
             onChange={onChange}
             value={number}
           />
-        </InputDiv>
-        <InputDiv>
-          <Label>Enter Password</Label>
-          <Input
+        </div>
+        <div className="form-group">
+          <label>Enter Password</label>
+          <input
             type="password"
             required
             name="password"
@@ -214,10 +224,10 @@ function Signup({ setForm }) {
             onChange={onChange}
 
           />
-        </InputDiv>
-        <InputDiv>
-          <Label>Confirm Password</Label>
-          <Input
+        </div>
+        <div className="form-group">
+          <label>Confirm Password</label>
+          <input
             type="password"
             required
             name="cpassword"
@@ -226,14 +236,18 @@ function Signup({ setForm }) {
             onChange={onChange}
 
           />
-        </InputDiv>
-        <InputDiv>
-          <Button block>Create Account</Button>
-        </InputDiv>
-        <InputDiv style={{ alignItems: 'center' }}>
-          <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>
-        </InputDiv>
-      </SignupForm>
+        </div>
+        <div className="form-group">
+          <button block>Create Account</button>
+        </div>
+        <div className="form-group">
+          <p onClick={e => setTimeout(() => { setForm('forgotPassword') }, 1) }  style={{textAlign: "end"}} >Forgot Password</p>
+        </div>
+
+        <div  className="form-group m-0" >
+          <p className="center">Already have an account? <p className="link" onClick={e => setTimeout(() => { setForm('login') }, 1) }   >Login</p></p>
+        </div> 
+      </Form>
     </>
   )
 }
@@ -302,12 +316,12 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
   return (
     < >
 
-      <SignupForm onSubmit={onSubmit}>
-        <FormTitle>Forgot Password</FormTitle>
+      <Form  onSubmit={onSubmit}>
+        <h2 className="form-heading">Forgot Password</h2>
 
-        <InputDiv>
-          <Label>Enter Your Email</Label>
-          <Input
+        <div className="form-group">
+          <label>Enter Your Email</label>
+          <input
             type="email"
             required
             name="email"
@@ -315,12 +329,12 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
             onChange={onChange}
             value={email}
           />
-        </InputDiv>
+        </div>
         {
           codeSent &&
-          <InputDiv>
-            <Label>Enter the Code Send to Your Email</Label>
-            <Input
+          <div className="form-group">
+          <label>Enter the Code Send to Your Email</label>
+            <input
               type="text"
               required
               name="code"
@@ -328,30 +342,30 @@ function ForgotPassword({ setForm, setForgotPasswordEmail }) {
               onChange={e => setCode(e.target.value)}
               value={code}
             />
-          </InputDiv>
+          </div>
         }
-        <InputDiv>
+        <div className="form-group">
           {
             codeSent ?
-              <Button onClick={e => { e.preventDefault(); verifyCode(e) }} block>Request Reset</Button> :
-              <Button type="submit" block>Send Reset Code</Button>
+              <button onClick={e => { e.preventDefault(); verifyCode(e) }} block>Request Reset</button> :
+              <button type="submit" block>Send Reset Code</button>
           }
-        </InputDiv>
-        <InputDiv style={{ alignItems: 'center' }}>
-          <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>
+        </div>
+
+
+        <div className="form-group">
           {
             codeSent &&
+              <p onClick={e => setTimeout(() => { codeResendAble && onSubmit(e) }, 1) }  style={{textAlign: "end"}} >{codeResendAble ? "Resend Code": "Can Resend After 20s"}</p>
 
-            <p>Verification code sent to your email.
-              {
-                codeResendAble ?
-                  <b style={{ cursor: 'pointer' }} onClick={onSubmit} > Resend Code</b> :
-                  <b style={{ cursor: 'not-allowed', opacity: '.7' }} > Can Resend After 20s</b>
-              }
-            </p>
           }
-        </InputDiv>
-      </SignupForm>
+        </div>
+
+        <div  className="form-group m-0" >
+          <p className="center">Already have an account? <p className="link" onClick={e => setTimeout(() => { setForm('login') }, 1) }   >Login</p></p>
+        </div> 
+
+      </Form>
     </>
   )
 }
@@ -389,13 +403,13 @@ function ResetPassword({ setForm, forgotPasswordEmail }) {
   return (
     < >
 
-      <SignupForm onSubmit={onSubmit}>
-        <FormTitle>Reset Password</FormTitle>
+      <Form  onSubmit={onSubmit}>
+        <h2 className="form-heading">Reset Password</h2>
 
+        <div className="form-group">
 
-        <InputDiv>
-          <Label>New Password</Label>
-          <Input
+          <label>New Password</label>
+          <input
             type="password"
             required
             name="password"
@@ -403,10 +417,10 @@ function ResetPassword({ setForm, forgotPasswordEmail }) {
             onChange={onChange}
             value={password}
           />
-        </InputDiv>
-        <InputDiv>
-          <Label>Confirm Password</Label>
-          <Input
+        </div>
+        <div className="form-group">
+          <label>Confirm Password</label>
+          <input
             type="password"
             required
             name="cpassword"
@@ -414,14 +428,16 @@ function ResetPassword({ setForm, forgotPasswordEmail }) {
             onChange={onChange}
             value={cpassword}
           />
-        </InputDiv>
-        <InputDiv>
-          <Button block>Reset Password</Button>
-        </InputDiv>
-        <InputDiv style={{ alignItems: 'center' }}>
-          <p>Already have an account? <b style={{ cursor: 'pointer' }} onClick={(e) => { setTimeout(() => { setForm('login') }, 1) }} >Login</b></p>
-        </InputDiv>
-      </SignupForm>
+        </div>
+        <div className="form-group">
+          <button block>Reset Password</button>
+        </div>
+
+        <div  className="form-group m-0" >
+          <p className="center">Not a member? <p className="link" onClick={e => setTimeout(() => { setForm('signUp') }, 1) }   >Sign Up</p></p>
+        </div>
+         
+      </Form>
     </>
   )
 }

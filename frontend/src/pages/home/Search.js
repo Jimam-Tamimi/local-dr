@@ -40,13 +40,13 @@ import { IoLocationSharp } from 'react-icons/io5'
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
 import { Datepicker, Page, setOptions } from '@mobiscroll/react';
 import { Marker } from "react-google-maps";
- 
+
 import Map from "../../components/Map/Map";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setProgress } from "../../redux/progress/actions";
- 
-export default function Search({ match,  }) {
+
+export default function Search({ match, }) {
   const [providers, setProviders] = useState([
     { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
     // { img: demoDr2, cords: { lat: 40.7350610, lng: -73.945242 } },
@@ -106,9 +106,9 @@ export default function Search({ match,  }) {
   const [myLocationData, setMyLocationData] = useState({ lat: params.get('lat'), lng: params.get('lng') })
   useEffect(() => {
 
-      navigator.geolocation.getCurrentPosition((location) => {
-        setMyLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
-      }, () => console.log('error :)'), { timeout: 10000 })
+    navigator.geolocation.getCurrentPosition((location) => {
+      setMyLocationData({ lat: location.coords.latitude, lng: location.coords.longitude })
+    }, () => console.log('error :)'), { timeout: 10000 })
   }, [])
 
 
@@ -128,36 +128,36 @@ export default function Search({ match,  }) {
   const [paginationNext, setPaginationNext] = useState('')
   const [count, setCount] = useState(0)
   const fetchMoreData = async () => {
- 
-      try { 
-        console.log('fetching more data')
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&${paginationNext? 'page=' + paginationNext : ''}`)
-        console.log(res.data, 'data frm pagination')
-        if (res.status === 200) {
 
-          setDoctorList([...doctorList, ...res?.data?.results])
-          console.log([...doctorList, ...res?.data?.results])
-          setPaginationNext(res.data.next)
-          console.log(res.data.next, 'next')
+    try {
+      console.log('fetching more data')
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&${paginationNext ? 'page=' + paginationNext : ''}`)
+      console.log(res.data, 'data frm pagination')
+      if (res.status === 200) {
 
-        }
-      } catch (err) {
-        console.log(err)
-      } 
+        setDoctorList([...doctorList, ...res?.data?.results])
+        console.log([...doctorList, ...res?.data?.results])
+        setPaginationNext(res.data.next)
+        console.log(res.data.next, 'next')
+
+      }
+    } catch (err) {
+      console.log(err)
+    }
   };
-  
-  
+
+
   const search = useSelector(state => state.search)
-  const {doctor, speciality, available, distance, lat, lng, location_name} = search
+  const { doctor, speciality, available, distance, lat, lng, location_name } = search
 
   const [doctorList, setDoctorList] = useState([])
   const getDoctorList = async () => {
-    try { 
+    try {
       const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}`)
       if (res.status === 200) {
         console.log(res, 'data frm search')
         setDoctorList(res?.data?.results)
-        if(res.data.next) {
+        if (res.data.next) {
           let next = new URL(res.data.next)
           let nextQ = next.searchParams.get('page')
           console.log(nextQ, 'nextQ')
@@ -175,10 +175,10 @@ export default function Search({ match,  }) {
     await getDoctorList()
     dispatch(setProgress(60))
 
-    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`) 
+    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`)
     dispatch(setProgress(100))
 
-  }, [search]) 
+  }, [search])
   return (
     <>
       <ProvidersWrap >
@@ -197,12 +197,12 @@ export default function Search({ match,  }) {
                   <DropdownDiv>
                     {
                       [true, false].map((item, index) => (
-                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: item })}} key={index}>
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: item }) }} key={index}>
                           <input value={item} checked={item == available} id={`d-${item}`} name="available" type={'radio'} />
                           <label >{`${item}`}</label>
                         </DropdownOption>
                       ))
-                    } 
+                    }
                   </DropdownDiv>
                 </Dropdown>
               </div>
@@ -217,7 +217,7 @@ export default function Search({ match,  }) {
                     <DropdownOption>
                       <input id="d-30" name="distance" type={'radio'} />
                       <label for="d-30" >30 KM</label>
-                    </DropdownOption> 
+                    </DropdownOption>
                   </DropdownDiv>
                 </Dropdown>
               </div>
@@ -227,7 +227,7 @@ export default function Search({ match,  }) {
                   <DropdownDiv>
                     {
                       [10, 30, 50, 100].map((item, i) => (
-                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_DISTANCE', payload: item })}} key={i} >
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_DISTANCE', payload: item }) }} key={i} >
                           <input value={item} checked={item == distance} id={`d-${item}`} name="distance" type={'radio'} />
                           <label  >{item} KM</label>
                         </DropdownOption>
@@ -243,7 +243,7 @@ export default function Search({ match,  }) {
             </Column>
           </Grid>
 
-          <Grid justify="center" align="center" lg={12} direction="column">
+          <Grid style={{ width: "95%" }} justify="center" align="center" lg={12} direction="column">
             <InfiniteScroll
               style={{
                 display: "flex",
@@ -263,7 +263,7 @@ export default function Search({ match,  }) {
                 <ProviderColumn key={i} direction="column" lg={12}>
                   <Column align="start" lg={12}>
                     <LeftCol>
-                      <img src={doctor.image&&`${process.env.REACT_APP_MEDIA_URL}${doctor.image}`} alt="doctor image" />
+                      <img src={doctor.image && `${process.env.REACT_APP_MEDIA_URL}${doctor.image}`} alt="doctor image" />
                     </LeftCol>
                     <RightCol>
                       {/* <Badge style={{}}>Available</Badge> */}
@@ -271,49 +271,54 @@ export default function Search({ match,  }) {
                       <p>
                         <b>{doctor.hospital.name}</b>
                       </p>
+                      <p>{doctor?.hospital?.locationName}</p>
                       <p>{doctor.qualification}</p>
                       <p>{doctor.speciality}</p>
                       <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
-                        
-                          doctor.available ?
-                        <ButtonLink to={`/doctor/${doctor.id}/`}  style={{ boxShadow: "none" }} sm >
-                          Book Appointment
-                        </ButtonLink> :
-                        <Button to={`/doctor/${doctor.id}/`}  style={{ boxShadow: "none" }} sm  disabled={true}>
-                          Not Available
-                        </Button> 
-                        
+
+                        doctor.available ?
+                          <ButtonLink to={`/doctor/${doctor.id}/`} style={{ boxShadow: "none" }} sm >
+                            Book Appointment
+                          </ButtonLink> :
+                          <Button to={`/doctor/${doctor.id}/`} style={{ boxShadow: "none" }} sm disabled={true}>
+                            Not Available
+                          </Button>
+
                       )}
                     </RightCol>
                   </Column>
                   {!showButton && (
-                          doctor.available ?
-                    <ButtonLink to={`/doctor/${doctor.id}/`} 
-                      block
-                      style={{
-                        boxShadow: "none",
-                        boxShadow: "none",
-                        margin: "20px 0px 0px 0px",
-                      }}
-                      sm
-                      disabled={!doctor.available}
-                    >
-                      Book Appointment
-                    </ButtonLink>:
-                    <Button to={`/doctor/${doctor.id}/`} disabled={true} 
-                      block
-                      style={{
-                        boxShadow: "none",
-                        boxShadow: "none",
-                        margin: "20px 0px 0px 0px",
-                      }}
-                      sm
-                      disabled={!doctor.available}
-                    >
-                      Book Appointment
-                    </Button>
+                    doctor.available ?
+                      <ButtonLink to={`/doctor/${doctor.id}/`}
+                        block
+                        style={{
+                          boxShadow: "none",
+                          boxShadow: "none",
+                          margin: "20px 0px 0px 0px",
+                          padding: "6px 0px",
+                          fontSize: "16px"
+                        }}
+                        sm
+                        disabled={!doctor.available}
+                      >
+                        Book Appointment
+                      </ButtonLink> :
+                      <Button to={`/doctor/${doctor.id}/`} disabled={true}
+                        block
+                        style={{
+                          boxShadow: "none",
+                          boxShadow: "none",
+                          margin: "20px 0px 0px 0px",
+                          padding: "6px 0px",
+                          fontSize: "16px"
+                        }}
+                        sm
+                        disabled={!doctor.available}
+                      >
+                        Not Available
+                      </Button>
                   )}
                 </ProviderColumn>
               ))}

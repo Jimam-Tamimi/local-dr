@@ -10,8 +10,7 @@ width: 215px;
     background: #112233;
     padding: 20px 0px;
     transform: translateX(-100%);
-    transition: var(--main-transition);
-
+    transition: var(--main-transition); 
     ${({showDash}) => showDash ? `transform: translateX(0);`: `transform: translateX(-100%);`}
     `
 export const DashLink = styled(NavLink)`

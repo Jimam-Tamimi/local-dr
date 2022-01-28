@@ -177,52 +177,6 @@ export default function BookAppointment({ match }) {
     dispatch(setProgress(100));
   }, [date]);
 
-  const initPayPalButton = async (id, onApprove) => {
-    await window.paypal
-      .Buttons({
-        style: {
-          shape: "rect",
-          color: "blue",
-          layout: "vertical",
-          label: "paypal",
-        },
-
-        createOrder: async function (data, actions) {
-          const res = await axios.post(
-            `${process.env.REACT_APP_API_URL}api/paypal_payment_start/`,
-            { appointment_id: id }
-          );
-          let amount = 0;
-          console.log({ name: res });
-          if (res?.status === 200) {
-            amount = res?.data?.amount;
-          }
-          return actions.order.create({
-            purchase_units: [
-              { amount: { currency_code: "USD", value: amount } },
-            ],
-          });
-        },
-
-        onApprove: async function (data, actions) {
-          return actions.order.capture().then(async function (orderData) {
-            console.log("Capture result", orderData);
-            const res = await axios.post(
-              `${process.env.REACT_APP_API_URL}api/paypal_payment_success/`,
-              { appointment_id: id, payment_id: orderData.id }
-            );
-            if (res?.status === 200) {
-              onApprove();
-            }
-          });
-        },
-
-        onError: function (err) {
-          console.log(err);
-        },
-      })
-      .render("#paypal-button-container");
-  };
 
   const [submitButtonState, setSubmitButtonState] = useState("continue");
 
@@ -231,7 +185,7 @@ export default function BookAppointment({ match }) {
     await showRazorpay(onSubmitSuccessApoId, () => {
       dispatch(alert("Appointment booked successfully", "success"));
       history.push(`/your-appointments/`);
-    });
+    }, () => dispatch(alert("Payment Failed", "danger")) );
   };
 
   const payWithInternationalCard = async (e) => {
@@ -245,7 +199,7 @@ export default function BookAppointment({ match }) {
       initPayPalButton(onSubmitSuccessApoId, () => {
         dispatch(alert("Appointment booked successfully", "success"));
         history.push(`/your-appointments/`);
-      });
+      }, () => dispatch(alert("Payment Failed", "danger")));
     };
   };
 

@@ -2,12 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { showRazorpay } from "../../helpers";
+import { initPayPalButton, showRazorpay } from "../../helpers";
 import { setProgress } from "../../redux/progress/actions";
 import {
   Button,
   ButtonLink,
   Container,
+  Flex,
   Grid,
 } from "../../styles/Essentials.styles";
 import {
@@ -19,6 +20,9 @@ import {
   Th,
   Tr,
 } from "../../styles/Table.styles";
+import Modal from "../../components/Modal/Modal";
+import { useHistory } from "react-router-dom";
+import alert from "../../redux/alert/actions";
 
 export default function YourAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -86,9 +90,49 @@ export default function YourAppointments() {
     }
   };
   const dispatch = useDispatch();
-  return (
-    <>      
+  const history = useHistory();
 
+  const [submitButtonState, setSubmitButtonState] = useState("");
+  const [shoePayMod, setShoePayMod] = useState(false);
+  const [selectedAppId, setSelectedAppId] = useState(null);
+
+  const payWithIndianCard = async (e) => {
+    e.preventDefault();
+    await showRazorpay(
+      selectedAppId,
+      () => {
+        dispatch(alert("Payment Successful", "success"));
+        getAppointments();
+        setShoePayMod(false);
+        setSubmitButtonState(null);
+    },
+    () => dispatch(alert("Payment Failed", "danger"))
+    );
+  };
+  const payWithInternationalCard = async (e) => {
+    e.preventDefault();
+    const script = await document.createElement("script");
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
+    await document.body.appendChild(script);
+    script.onload = () => {
+      setSubmitButtonState("paypal");
+      initPayPalButton(
+        selectedAppId,
+        () => {
+            dispatch(alert("Payment Successful", "success"));
+            getAppointments();
+            setShoePayMod(false);
+            setSubmitButtonState(null);
+
+        },
+        () => dispatch(alert("Payment Failed", "danger"))
+      );
+    };
+  };
+
+  return (
+    <>
       <YourAppointmentsWrap>
         <div className="row">
           <div className="col">
@@ -133,16 +177,17 @@ export default function YourAppointments() {
                           </td>
                         ) : (
                           <td>
-                            <Button
-                              onClick={(e) =>
-                                showRazorpay(appointment.id, () =>
-                                  getAppointments()
-                                )
-                              }
+                            <ButtonLink
+                              style={{ fontWeight: 800 }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setShoePayMod(true);
+                                setSelectedAppId(appointment.id);
+                              }}
                               sm
                             >
                               Pay
-                            </Button>{" "}
+                            </ButtonLink>{" "}
                           </td>
                         )}
                       </tr>
@@ -154,9 +199,53 @@ export default function YourAppointments() {
           </div>
         </div>
       </YourAppointmentsWrap>
+
+      <Modal style={{alignItems: `${submitButtonState === "paypal" ? 'baseline':'center'}`}} show={shoePayMod} setShow={setShoePayMod}>
+        <ChoosePayWrap>
+          {submitButtonState === "paypal" ? (
+            <div
+              style={{ marginTop: "15px" }}
+              id="paypal-button-container"
+            ></div>
+          ) : (
+            <>
+              <Button onClick={payWithIndianCard} block>
+                Pay With Indian Card
+              </Button>
+              <Button
+                onClick={payWithInternationalCard}
+                style={{
+                  background: "var(--primary-text-color)",
+                  color: "white",
+                }}
+                block
+              >
+                Pay With International Card
+              </Button>
+            </>
+          )}
+        </ChoosePayWrap>
+      </Modal>
     </>
   );
 }
+
+const ChoosePayWrap = styled.div`
+  min-width: 400px;
+  min-height: 200px;
+  background: white;
+  border-radius: 5px;
+  ${Flex}
+  flex-direction: column;
+  position: relative;
+  button {
+    width: 90%;
+    margin: 10px 0px;
+  }
+  #paypal-button-container{
+    width: 90%;
+  }
+`;
 
 const YourAppointmentsWrap = styled(Container)`
 

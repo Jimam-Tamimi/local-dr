@@ -26,7 +26,7 @@ export const loadScript = () => {
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     document.body.appendChild(script);
 };
-export const showRazorpay = async (id, onSuccess) => {
+export const showRazorpay = async (id, onSuccess, onError) => {
     const res = await loadScript();
 
     let bodyData = new FormData();
@@ -40,8 +40,7 @@ export const showRazorpay = async (id, onSuccess) => {
 
     } catch (error) {
         console.log(error.response);
-        if (error?.response?.status === 400) {
-        }
+        onError()
     }
 
 
@@ -114,3 +113,50 @@ export const removeLink = (link) => {
 
 
 // paypal 
+export const initPayPalButton = async (id, onApprove, onError) => {
+    await window.paypal
+      .Buttons({
+        style: {
+          shape: "rect",
+          color: "blue",
+          layout: "vertical",
+          label: "paypal",
+        },
+
+        createOrder: async function (data, actions) {
+          const res = await axios.post(
+            `${process.env.REACT_APP_API_URL}api/paypal_payment_start/`,
+            { appointment_id: id }
+          );
+          let amount = 0;
+          console.log({ name: res });
+          if (res?.status === 200) {
+            amount = res?.data?.amount;
+          }
+          return actions.order.create({
+            purchase_units: [
+              { amount: { currency_code: "USD", value: amount } },
+            ],
+          });
+        },
+
+        onApprove: async function (data, actions) {
+          return actions.order.capture().then(async function (orderData) {
+            console.log("Capture result", orderData);
+            const res = await axios.post(
+              `${process.env.REACT_APP_API_URL}api/paypal_payment_success/`,
+              { appointment_id: id, payment_id: orderData.id }
+            );
+            if (res?.status === 200) {
+              onApprove();
+            }
+          });
+        },
+
+        onError: function (err) {
+          console.log(err);
+          onError()
+        },
+      })
+      .render("#paypal-button-container");
+  };

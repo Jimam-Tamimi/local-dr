@@ -163,6 +163,7 @@ def schedule_doctor(request, id=None):
             date = d['date']
             time  = getStrFromTimeList(d['time'])
             if d['time']=="[]":
+                # data = []
                 break
             for appointment in appointments:
                 if(str(appointment.date) == date and  getAppointmentTime(appointment) in time):

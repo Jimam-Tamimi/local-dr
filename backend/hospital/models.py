@@ -50,6 +50,7 @@ class Appointment(models.Model):
     date = models.DateField(null=False, blank=False)
     time = models.TimeField(null=False, blank=False)
     status = models.CharField(max_length=20, default="in progress", null=False, blank=False,choices=[('in progress','in progress'),('completed','completed')])
+
     payment_id = models.CharField(max_length=250, null=True, blank=True)
     isPaid = models.BooleanField(default=False)
     amount = models.PositiveIntegerField(default=0, blank=True, null=True)
@@ -59,10 +60,10 @@ class Appointment(models.Model):
     
 
 class Payment(models.Model):
-    payment_id = models.CharField(max_length=250, null=False, blank=False)
+    payed_with = models.CharField(max_length=20, null=False, blank=False, choices=[('razorpay','razorpay'),('paypal','paypal')])
+    payment_id = models.CharField(max_length=250, null=True, blank=True)
     amount = models.PositiveIntegerField(default=0, blank=False, null=False)
     appointment = models.ForeignKey(Appointment, on_delete=models.SET_NULL, blank=True, null=True)
-    isPaid = models.BooleanField(default=False)
     
     
     

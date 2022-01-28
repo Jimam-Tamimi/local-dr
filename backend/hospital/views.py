@@ -221,6 +221,7 @@ class AppointmentViewSet(ModelViewSet):
         data = []
         for d in tmpData:
             d['doctor'] = DoctorSerializer(Doctor.objects.get(id=d['doctor'])).data
+            
             data.append(d)
         return Response(data, status=status.HTTP_200_OK)
 
@@ -437,7 +438,43 @@ def handle_payment_success(request):
         'message': 'payment successfully received!',
         'appointment': AppointmentSerializer(appointment).data
     }
-    Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=appointment.payment_id, isPaid=True)
+    Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=raz_pay_id, payed_with='razorpay')
+    Notification.objects.create(appointment=appointment)
+
+    try:
+        send_mail(
+            'Appointment Confirmation From Local Dr.',
+            'Your appointment has been confirmed with Dr. ' + appointment.doctor.name + ' at ' + appointment.doctor.hospital.name + ' on ' + str(appointment.date) + ' at ' + str(appointment.time) + '. Your appointment id is ' + str(appointment.id) + '. ',
+            settings.EMAIL_HOST_USER,
+            [appointment.email], 
+        )
+    except Exception as e:
+        print(e)
+    
+    return Response(res_data)
+
+
+
+
+@api_view(['POST'])
+def paypal_payment_success(request):
+    appointment_id = request.data.get('appointment_id', None)
+        
+    try:
+        appointment = Appointment.objects.get(id=appointment_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
+ 
+     
+    
+    appointment.isPaid = True
+    appointment.save()
+    
+    res_data = {
+        'message': 'payment successfully received!',
+        'appointment': AppointmentSerializer(appointment).data
+    }
+    Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=raz_pay_id, payed_with='razorpay')
     Notification.objects.create(appointment=appointment)
 
     try:
@@ -465,7 +502,7 @@ def get_homepage_details(request):
     data = {}
     
     if(request.user.is_superuser):
-        data['payments'] = sum([payment.amount for payment in Payment.objects.all() if(payment.isPaid) ])
+        data['payments'] = sum([payment.amount for payment in Payment.objects.all() ])
         data['total_appointments'] = len(Appointment.objects.filter(isPaid=True))
         data['completed_appointments'] = len(Appointment.objects.filter(isPaid=True, status='completed'))
         data['total_hospitals'] = len(Hospital.objects.all())
@@ -483,6 +520,8 @@ def get_homepage_details(request):
 @api_view(['GET'])
 @permission_classes([IsHospital])
 def get_notifications(request):
+
+
     notifications = Notification.objects.filter(appointment__doctor__hospital__user=request.user)
     seen  = request.GET.get('seen', None)
     if(seen=='true'):
@@ -496,3 +535,93 @@ def get_notifications(request):
     if(isRead):
         notifications = notifications.filter(isRead=False)    
     return Response({"notifications" : NotificationSerializer(notifications, many=True).data, 'unseen': notifications.filter(isRead=False).count() }, status=status.HTTP_200_OK)
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_data(request):
+    print(request.user)
+    data = {}
+    data['name'] = request.user.name
+    data['email'] = request.user.email
+    data['number'] = request.user.number
+    return Response(data, status=status.HTTP_200_OK) 
+
+
+
+
+
+
+
+ 
+
+@api_view(['POST'])
+def paypal_payment_success(request):
+ 
+    appointment_id = request.data.get('appointment_id', None)
+    payment_id = request.data.get('payment_id', None)
+        
+    try:
+        appointment = Appointment.objects.get(id=appointment_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
+ 
+ 
+ 
+ 
+    
+    appointment.isPaid = True
+    appointment.save()
+    
+    res_data = {
+        'message': 'payment successfully received!',
+        'appointment': AppointmentSerializer(appointment).data
+    }
+    Payment.objects.create(appointment=appointment, amount=appointment.amount, payment_id=payment_id, payed_with='paypal')
+    Notification.objects.create(appointment=appointment)
+
+    try:
+        send_mail(
+            'Appointment Confirmation From Local Dr.',
+            'Your appointment has been confirmed with Dr. ' + appointment.doctor.name + ' at ' + appointment.doctor.hospital.name + ' on ' + str(appointment.date) + ' at ' + str(appointment.time) + '. Your appointment id is ' + str(appointment.id) + '. ',
+            settings.EMAIL_HOST_USER,
+            [appointment.email], 
+        )
+    except Exception as e:
+        print(e)
+    
+    return Response(res_data)
+
+
+
+
+@api_view(['POST'])
+def paypal_payment_start(request):
+    try:
+        appointment_id = request.data.get('appointment_id', None)
+        if(appointment_id is None):
+            return Response({"message": "Please provide an appointment id"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+        except Appointment.DoesNotExist:
+            return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        
+        if(appointment.isPaid):
+            return Response({"message": "Already paid", 'type': 'paid'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        amount = appointment.doctor.hospital.price
+       
+        appointment.amount = amount
+        appointment.save()
+        appointment_data = AppointmentSerializer(appointment).data
+        
+        data = { 
+            'amount': amount,
+        }
+        
+        return Response(data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)

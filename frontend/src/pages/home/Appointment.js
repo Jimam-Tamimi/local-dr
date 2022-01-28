@@ -68,29 +68,31 @@ export default function BookAppointment({ match }) {
     }
     setTimes(tempTimes);
     dispatch(setProgress(20));
-
-    axios
-      .get(
-        `${process.env.REACT_APP_API_URL}api/appointments/${match?.params?.id}/`
-      )
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          setFormData({
-            ...formData,
-            name: res.data.name,
-            email: res.data.email,
-            number: res.data.number,
-            date: res.data.date,
-            time: res.data.time,
-            doctor: res.data.doctor,
-          });
-        }
-        dispatch(setProgress(100));
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    // setTimeout(() => {
+      axios
+        .get(
+          `${process.env.REACT_APP_API_URL}api/appointments/${match?.params?.id}/`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            setFormData({
+              ...formData,
+              id: res.data.id,
+              name: res.data.name,
+              email: res.data.email,
+              number: res.data.number,
+              date: res.data.date,
+              time: res.data.time,
+              doctor: res.data.doctor,
+            });
+          }
+          dispatch(setProgress(100));
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    // });  
   }, []);
 
   const getTimeFromString = (time) => {
@@ -107,7 +109,7 @@ export default function BookAppointment({ match }) {
     return t;
   };
 
-  const { name, email, number, date, time, hospital, doctor } = formData;
+  const { id, name, email, number, date, time, hospital, doctor } = formData;
 
   const [doctorData, setDoctorData] = useState(null);
   useEffect(() => {
@@ -132,466 +134,378 @@ export default function BookAppointment({ match }) {
     <>
       <>
         <Wrap>
-          <Form style={{ marginBottom: "20px", height: "auto" }}>
-            <Grid direction="row" justify="start">
-              <ProfileColumn justify="start" lg={3} sx={4}>
-                <img
-                  src={
-                    doctorData?.image &&
-                    `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`
-                  }
-                />
-              </ProfileColumn>
-
-              <ProfileColumn direction="column" align="start" lg={9} sx={8}>
-                <h3>{doctorData?.name}</h3>
-                <p>{doctorData?.hospital?.name}</p>
-                <p>{doctorData?.qualification}</p>
-              </ProfileColumn>
-            </Grid>
-            <InputDiv>
-              <FormTitle>Book your appointment</FormTitle>
-            </InputDiv>
-            <InputDiv>
-              <Label>Name</Label>
-
-              <Input value={name} placeholder="Name" name="name" disabled />
-            </InputDiv>
-            <InputDiv>
-              <Label>Email</Label>
-
-              <Input value={email} placeholder="Email" name="email" disabled />
-            </InputDiv>
-            <InputDiv>
-              <Label>Number</Label>
-              <Input
-                value={number}
-                placeholder="Number"
-                name="number"
-                disabled
-              />
-            </InputDiv>
-            <InputDiv>
-              <Label>Date</Label>
-              <Input
-                value={date}
-                placeholder="Date"
-                name="date"
-                disabled
-                type="date"
-              />
-            </InputDiv>
-            <InputDiv>
-              <Label>Time</Label>
-              <Input
-                value={time}
-                placeholder="Time"
-                name="time"
-                disabled
-                type="time"
-              />
-            </InputDiv>
-          </Form>
+          <table
+            align="center"
+            border={0}
+            cellPadding={0}
+            cellSpacing={0}
+            width="100%"
+            style={{ maxWidth: "600px" }}
+          >
+            <tbody>
+              <tr>
+                <td
+                  align="center"
+                  style={{
+                    padding: "35px 35px 20px 35px",
+                    backgroundColor: "#ffffff",
+                  }}
+                  bgcolor="#ffffff"
+                >
+                  <table
+                    align="center"
+                    border={0}
+                    cellPadding={0}
+                    cellSpacing={0}
+                    width="100%"
+                    style={{ maxWidth: "600px" }}
+                  >
+                    <tbody>
+                      <tr>
+                        <td
+                          align="center"
+                          style={{
+                            fontFamily:
+                              "Open Sans, Helvetica, Arial, sans-serif",
+                            fontSize: "16px",
+                            fontWeight: 400,
+                            lineHeight: "24px",
+                            paddingTop: "25px",
+                          }}
+                        >
+                          {" "}
+                          <img
+                            src="https://img.icons8.com/carbon-copy/100/000000/checked-checkbox.png"
+                            width={125}
+                            height={120}
+                            style={{ display: "block", border: "0px" }}
+                          />
+                          <br />
+                          <h2
+                            style={{
+                              fontSize: "30px",
+                              fontWeight: 800,
+                              lineHeight: "36px",
+                              color: "#333333",
+                              margin: 0,
+                            }}
+                          >
+                            {" "}
+                            Appointment Confirmed{" "}
+                          </h2>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          align="left"
+                          style={{
+                            fontFamily:
+                              "Open Sans, Helvetica, Arial, sans-serif",
+                            fontSize: "16px",
+                            fontWeight: 400,
+                            lineHeight: "24px",
+                            paddingTop: "10px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              fontSize: "16px",
+                              fontWeight: 400,
+                              lineHeight: "24px",
+                              color: "#777777",
+                            }}
+                          >
+                            {" "}
+                            {/* Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Praesentium iste ipsa numquam odio dolores, nam.{" "} */}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="left" style={{ paddingTop: "20px" }}>
+                          <table
+                            cellSpacing={0}
+                            cellPadding={0}
+                            border={0}
+                            width="100%"
+                          >
+                            <tbody>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  bgcolor="#eeeeee"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 800,
+                                    lineHeight: "24px",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  {" "}
+                                  Appointment Details
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  bgcolor="#eeeeee"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 800,
+                                    lineHeight: "24px",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  {" "}
+                                  {id}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "15px 10px 5px 10px",
+                                  }}
+                                >
+                                  {" "}
+                                  Name{" "}
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "15px 10px 5px 10px",
+                                  }}
+                                >
+                                  {" "}
+                                  {name}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  Doctor name
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  {" "}
+                                  {doctorData?.name}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  Hospital Name
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  {doctorData?.hospital?.name}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  Date
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  {date}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td
+                                  width="75%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  Time
+                                </td>
+                                <td
+                                  width="25%"
+                                  align="left"
+                                  style={{
+                                    fontFamily:
+                                      "Open Sans, Helvetica, Arial, sans-serif",
+                                    fontSize: "16px",
+                                    fontWeight: 400,
+                                    lineHeight: "24px",
+                                    padding: "5px 10px",
+                                  }}
+                                >
+                                  {time}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="center"
+                  height="100%"
+                  valign="top"
+                  width="100%"
+                  style={{
+                    padding: "0 35px 35px 35px",
+                    backgroundColor: "#ffffff",
+                  }}
+                  bgcolor="#ffffff"
+                >
+                  <table
+                    align="center"
+                    border={0}
+                    cellPadding={0}
+                    cellSpacing={0}
+                    width="100%"
+                    style={{ maxWidth: "660px" }}
+                  >
+                    <tbody>
+                      <tr>
+                        <td align="center" valign="top" style={{ fontSize: 0 }}>
+                          <div
+                            style={{
+                              display: "inline-block",
+                              maxWidth: "50%",
+                              minWidth: "240px",
+                              verticalAlign: "top",
+                              width: "100%",
+                            }}
+                          >
+                            <table
+                              align="left"
+                              border={0}
+                              cellPadding={0}
+                              cellSpacing={0}
+                              width="100%"
+                              style={{ maxWidth: "300px" }}
+                            >
+                              <tbody>
+                                <tr>
+                                  <td
+                                    align="left"
+                                    valign="top"
+                                    style={{
+                                      fontFamily:
+                                        "Open Sans, Helvetica, Arial, sans-serif",
+                                      fontSize: "16px",
+                                      fontWeight: 400,
+                                      lineHeight: "24px",
+                                    }}
+                                  >
+                                    <p style={{ fontWeight: 800 }}>
+                                      Hospital Address
+                                    </p>
+                                    <p>{doctorData?.hospital?.locationName}</p>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div
+                            style={{
+                              display: "inline-block",
+                              maxWidth: "50%",
+                              minWidth: "240px",
+                              verticalAlign: "top",
+                              width: "100%",
+                            }}
+                          ></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </Wrap>
       </>
-
-      <table
-        align="center"
-        border={0}
-        cellPadding={0}
-        cellSpacing={0}
-        width="100%"
-        style={{ maxWidth: "600px" }}
-      >
-        <tbody> 
-          <tr>
-            <td
-              align="center"
-              style={{
-                padding: "35px 35px 20px 35px",
-                backgroundColor: "#ffffff",
-              }}
-              bgcolor="#ffffff"
-            >
-              <table
-                align="center"
-                border={0}
-                cellPadding={0}
-                cellSpacing={0}
-                width="100%"
-                style={{ maxWidth: "600px" }}
-              >
-                <tbody>
-                  <tr>
-                    <td
-                      align="center"
-                      style={{
-                        fontFamily: "Open Sans, Helvetica, Arial, sans-serif",
-                        fontSize: "16px",
-                        fontWeight: 400,
-                        lineHeight: "24px",
-                        paddingTop: "25px",
-                      }}
-                    >
-                      {" "}
-                      <img
-                        src="https://img.icons8.com/carbon-copy/100/000000/checked-checkbox.png"
-                        width={125}
-                        height={120}
-                        style={{ display: "block", border: "0px" }}
-                      />
-                      <br />
-                      <h2
-                        style={{
-                          fontSize: "30px",
-                          fontWeight: 800,
-                          lineHeight: "36px",
-                          color: "#333333",
-                          margin: 0,
-                        }}
-                      >
-                        {" "}
-                        Thank You For Your Order!{" "}
-                      </h2>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td
-                      align="left"
-                      style={{
-                        fontFamily: "Open Sans, Helvetica, Arial, sans-serif",
-                        fontSize: "16px",
-                        fontWeight: 400,
-                        lineHeight: "24px",
-                        paddingTop: "10px",
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: 400,
-                          lineHeight: "24px",
-                          color: "#777777",
-                        }}
-                      >
-                        {" "}
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Praesentium iste ipsa numquam odio dolores, nam.{" "}
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td align="left" style={{ paddingTop: "20px" }}>
-                      <table
-                        cellSpacing={0}
-                        cellPadding={0}
-                        border={0}
-                        width="100%"
-                      >
-                        <tbody>
-                          <tr>
-                            <td
-                              width="75%"
-                              align="left"
-                              bgcolor="#eeeeee"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 800,
-                                lineHeight: "24px",
-                                padding: "10px",
-                              }}
-                            >
-                              {" "}
-                              Order Confirmation #{" "}
-                            </td>
-                            <td
-                              width="25%"
-                              align="left"
-                              bgcolor="#eeeeee"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 800,
-                                lineHeight: "24px",
-                                padding: "10px",
-                              }}
-                            >
-                              {" "}
-                              2345678{" "}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td
-                              width="75%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "15px 10px 5px 10px",
-                              }}
-                            >
-                              {" "}
-                              Purchased Item (1){" "}
-                            </td>
-                            <td
-                              width="25%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "15px 10px 5px 10px",
-                              }}
-                            >
-                              {" "}
-                              $100.00{" "}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td
-                              width="75%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "5px 10px",
-                              }}
-                            >
-                              {" "}
-                              Shipping + Handling{" "}
-                            </td>
-                            <td
-                              width="25%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "5px 10px",
-                              }}
-                            >
-                              {" "}
-                              $10.00{" "}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td
-                              width="75%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "5px 10px",
-                              }}
-                            >
-                              {" "}
-                              Sales Tax{" "}
-                            </td>
-                            <td
-                              width="25%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 400,
-                                lineHeight: "24px",
-                                padding: "5px 10px",
-                              }}
-                            >
-                              {" "}
-                              $5.00{" "}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td align="left" style={{ paddingTop: "20px" }}>
-                      <table
-                        cellSpacing={0}
-                        cellPadding={0}
-                        border={0}
-                        width="100%"
-                      >
-                        <tbody>
-                          <tr>
-                            <td
-                              width="75%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 800,
-                                lineHeight: "24px",
-                                padding: "10px",
-                                borderTop: "3px solid #eeeeee",
-                                borderBottom: "3px solid #eeeeee",
-                              }}
-                            >
-                              {" "}
-                              TOTAL{" "}
-                            </td>
-                            <td
-                              width="25%"
-                              align="left"
-                              style={{
-                                fontFamily:
-                                  "Open Sans, Helvetica, Arial, sans-serif",
-                                fontSize: "16px",
-                                fontWeight: 800,
-                                lineHeight: "24px",
-                                padding: "10px",
-                                borderTop: "3px solid #eeeeee",
-                                borderBottom: "3px solid #eeeeee",
-                              }}
-                            >
-                              {" "}
-                              $115.00{" "}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td
-              align="center"
-              height="100%"
-              valign="top"
-              width="100%"
-              style={{
-                padding: "0 35px 35px 35px",
-                backgroundColor: "#ffffff",
-              }}
-              bgcolor="#ffffff"
-            >
-              <table
-                align="center"
-                border={0}
-                cellPadding={0}
-                cellSpacing={0}
-                width="100%"
-                style={{ maxWidth: "660px" }}
-              >
-                <tbody>
-                  <tr>
-                    <td align="center" valign="top" style={{ fontSize: 0 }}>
-                      <div
-                        style={{
-                          display: "inline-block",
-                          maxWidth: "50%",
-                          minWidth: "240px",
-                          verticalAlign: "top",
-                          width: "100%",
-                        }}
-                      >
-                        <table
-                          align="left"
-                          border={0}
-                          cellPadding={0}
-                          cellSpacing={0}
-                          width="100%"
-                          style={{ maxWidth: "300px" }}
-                        >
-                          <tbody>
-                            <tr>
-                              <td
-                                align="left"
-                                valign="top"
-                                style={{
-                                  fontFamily:
-                                    "Open Sans, Helvetica, Arial, sans-serif",
-                                  fontSize: "16px",
-                                  fontWeight: 400,
-                                  lineHeight: "24px",
-                                }}
-                              >
-                                <p style={{ fontWeight: 800 }}>
-                                  Delivery Address
-                                </p>
-                                <p>
-                                  675 Massachusetts Avenue
-                                  <br />
-                                  11th Floor
-                                  <br />
-                                  Cambridge, MA 02139
-                                </p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div
-                        style={{
-                          display: "inline-block",
-                          maxWidth: "50%",
-                          minWidth: "240px",
-                          verticalAlign: "top",
-                          width: "100%",
-                        }}
-                      >
-                        <table
-                          align="left"
-                          border={0}
-                          cellPadding={0}
-                          cellSpacing={0}
-                          width="100%"
-                          style={{ maxWidth: "300px" }}
-                        >
-                          <tbody>
-                            <tr>
-                              <td
-                                align="left"
-                                valign="top"
-                                style={{
-                                  fontFamily:
-                                    "Open Sans, Helvetica, Arial, sans-serif",
-                                  fontSize: "16px",
-                                  fontWeight: 400,
-                                  lineHeight: "24px",
-                                }}
-                              >
-                                <p style={{ fontWeight: 800 }}>
-                                  Estimated Delivery Date
-                                </p>
-                                <p>January 1st, 2016</p>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
- 
-        </tbody>
-      </table>
     </>
   );
 }

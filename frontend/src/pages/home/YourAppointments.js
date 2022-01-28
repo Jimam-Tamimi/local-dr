@@ -87,234 +87,68 @@ export default function YourAppointments() {
   };
   const dispatch = useDispatch();
   return (
-    <>
-      <Container>
-        <Grid style={{ overflowX: "scroll" }} direction="column">
-          <OptionsColumn justify="flex-end" style={{ margin: "10px 0px" }}>
-            <Search
-              onChange={filterAppointments}
-              type="text"
-              placeholder="Search..."
-            />
-          </OptionsColumn>
-          <Table>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Name</Th>
-              <Th>Email</Th>
-              <Th>Number</Th>
-              <Th>Date</Th>
-              <Th>Time</Th>
-              <Th>Status</Th>
-              <Th>Payment Status</Th>
-              <Th>Action</Th>
-            </Tr>
-            {appointments.map((appointment, i) => (
-              <Tr key={i}>
-                <Td>{appointment?.id}</Td>
-                <Td>{appointment?.name}</Td>
-                <Td>{appointment?.email}</Td>
-                <Td>{appointment?.number}</Td>
-                <Td>{getDateFromStr(appointment?.date)}</Td>
-                <Td>{getTimeFromStr(appointment?.time)}</Td>
-                <Td>{appointment?.status}</Td>
-                <Td>{appointment?.isPaid ? "Paid" : "Unpaid"}</Td>
-                {appointment?.isPaid ? (
-                  <Td>
-                    <ButtonLink to={`/appointments/${appointment.id}`} sm>
-                      View
-                    </ButtonLink>
-                  </Td>
-                ) : (
-                  <Td>
-                    <Button
-                      onClick={(e) =>
-                        showRazorpay(appointment.id, () => getAppointments())
-                      }
-                      sm
-                    >
-                      Pay
-                    </Button>{" "}
-                  </Td>
-                )}
-              </Tr>
-            ))}
-          </Table>
-        </Grid>
-      </Container>
+    <>      
 
       <YourAppointmentsWrap>
         <div className="row">
           <div className="col">
             <div className="card shadow">
               <div className="card-header border-0">
-                <h3 className="mb-0">Card tables</h3>
+                <h3 className="mb-0">Your Appointments</h3>
               </div>
               <div className="table-responsive">
                 <table className="table align-items-center table-flush">
                   <thead className="thead-light">
                     <tr>
-                      <th scope="col">Project</th>
-                      <th scope="col">Budget</th>
+                      <th scope="col">ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Time</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Users</th>
-                      <th scope="col">Completion</th>
-                      <th scope="col" />
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">
-                        <div className="media align-items-center">
-                          <a href="#" className="avatar rounded-circle mr-3">
-                            <img
-                              alt="Image placeholder"
-                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/bootstrap.jpg"
-                            />
-                          </a>
-                          <div className="media-body">
-                            <span className="mb-0 text-sm">
-                              Argon Design System
-                            </span>
-                          </div>
-                        </div>
-                      </th>
-                      <td>$2,500 USD</td>
-                      <td>
-                        <span className="badge badge-dot mr-4">
-                          <i className="bg-warning" /> pending
-                        </span>
-                      </td>
-                      <td>
-                        <div className="avatar-group">
-                          <a
-                            href="#"
-                            className="avatar avatar-sm"
-                            data-toggle="tooltip"
-                            data-original-title="Ryan Tompson"
-                          >
-                            <img
-                              alt="Image placeholder"
-                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/team-1-800x800.jpg"
-                              className="rounded-circle"
-                            />
-                          </a>
-                          <a
-                            href="#"
-                            className="avatar avatar-sm"
-                            data-toggle="tooltip"
-                            data-original-title="Romina Hadid"
-                          >
-                            <img
-                              alt="Image placeholder"
-                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/team-2-800x800.jpg"
-                              className="rounded-circle"
-                            />
-                          </a>
-                          <a
-                            href="#"
-                            className="avatar avatar-sm"
-                            data-toggle="tooltip"
-                            data-original-title="Alexander Smith"
-                          >
-                            <img
-                              alt="Image placeholder"
-                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/team-2-800x800.jpg"
-                              className="rounded-circle"
-                            />
-                          </a>
-                          <a
-                            href="#"
-                            className="avatar avatar-sm"
-                            data-toggle="tooltip"
-                            data-original-title="Jessica Doe"
-                          >
-                            <img
-                              alt="Image placeholder"
-                              src="https://raw.githack.com/creativetimofficial/argon-dashboard/master/assets/img/theme/team-4-800x800.jpg"
-                              className="rounded-circle"
-                            />
-                          </a>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="d-flex align-items-center">
-                          <span className="mr-2">60%</span>
-                          <div>
-                            <div className="progress">
-                              <div
-                                className="progress-bar bg-warning"
-                                role="progressbar"
-                                aria-valuenow={60}
-                                aria-valuemin={0}
-                                aria-valuemax={100}
-                                style={{ width: "60%" }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="text-right">
-                        <div className="dropdown">
-                          <a
-                            className="btn btn-sm btn-icon-only text-light"
-                            href="#"
-                            role="button"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            <i className="fas fa-ellipsis-v" />
-                          </a>
-                          <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <a className="dropdown-item" href="#">
-                              Action
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Another action
-                            </a>
-                            <a className="dropdown-item" href="#">
-                              Something else here
-                            </a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                    {appointments.map((appointment, i) => (
+                      <tr>
+                        <th scope="row">{appointment?.id}</th>
+                        <td>{appointment?.name}</td>
+                        <td>{appointment?.email}</td>
+                        <td>{appointment?.number}</td>
+                        <td>{getDateFromStr(appointment?.date)}</td>
+                        <td>{getTimeFromStr(appointment?.time)}</td>
+                        <td>{appointment?.status}</td>
+                        <td>{appointment?.isPaid ? "Paid" : "Unpaid"}</td>
+                        {appointment?.isPaid ? (
+                          <td>
+                            <ButtonLink
+                              to={`/appointments/${appointment.id}`}
+                              sm
+                            >
+                              View
+                            </ButtonLink>
+                          </td>
+                        ) : (
+                          <td>
+                            <Button
+                              onClick={(e) =>
+                                showRazorpay(appointment.id, () =>
+                                  getAppointments()
+                                )
+                              }
+                              sm
+                            >
+                              Pay
+                            </Button>{" "}
+                          </td>
+                        )}
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
-              </div>
-              <div className="card-footer py-4">
-                <nav aria-label="...">
-                  <ul className="pagination justify-content-end mb-0">
-                    <li className="page-item disabled">
-                      <a className="page-link" href="#" tabIndex={-1}>
-                        <i className="fas fa-angle-left" />
-                        <span className="sr-only">Previous</span>
-                      </a>
-                    </li>
-                    <li className="page-item active">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2 <span className="sr-only">(current)</span>
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        <i className="fas fa-angle-right" />
-                        <span className="sr-only">Next</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
               </div>
             </div>
           </div>
@@ -324,7 +158,7 @@ export default function YourAppointments() {
   );
 }
 
-const YourAppointmentsWrap = styled.div`
+const YourAppointmentsWrap = styled(Container)`
 
 :root {
     --blue: #5e72e4;
@@ -623,6 +457,7 @@ h3,
     margin-right: -15px;
     margin-left: -15px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .col,

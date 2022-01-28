@@ -19,5 +19,9 @@ urlpatterns = [
     path(r'get_user_name/', get_user_name), 
     path(r'get_homepage_details/', get_homepage_details), 
     path(r'get_notifications/', get_notifications),
+    path(r'get_user_data/', get_user_data),
+
+    path(r'paypal_payment_start/', paypal_payment_start),
+    path(r'paypal_payment_success/', paypal_payment_success),
     
 ] + router.urls

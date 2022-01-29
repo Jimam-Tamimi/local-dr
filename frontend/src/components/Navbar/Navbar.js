@@ -256,6 +256,17 @@ export default function Navbar({}) {
                               Login/Signup
                             </Button>
                           </Menu>
+                          <Menu onClick={(e) => setShowDropdown(!showDropdown)}>
+                            <Link
+                              to="/"
+                              style={{
+                                textDecoration: "underline",
+                                fontWeight: 600,
+                              }}
+                            >
+                              Home
+                            </Link>
+                          </Menu>
                         </Link>
                       )}
                     </Account>

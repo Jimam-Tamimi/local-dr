@@ -1,5 +1,5 @@
 import { Column, Flex } from "../../../styles/Essentials.styles";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import HeroBg from "../../../assets/images/hero-bg.jpg";
 export const HeroWrap = styled.div`
   width: 100vw;
@@ -135,16 +135,18 @@ export const SearchColumn = styled.form`
     outline: none;
     background: var(--primary-color);
     color: var(--primary-text-color);
-    font-size: 25px;
+    font-size: 17px !important;
+    font-weight: 500 !important;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    padding: 0.77rem 2.5rem !important;
   }
 
   & > div > svg {
     position: absolute;
-    top: 19px;
+    top: 20px;
     font-size: 25px;
   }
   @media screen  and (max-width: 768px) {
@@ -233,8 +235,8 @@ margin: 30px 0px;
   padding-left: 65px;
 
   img {
-    max-width: 85%;
-    height: 686px;
+    max-width: 80%;
+    height: 450px;
     object-fit: cover;
 }
 @media screen and (max-width: 992px) {

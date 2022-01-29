@@ -117,12 +117,14 @@ const AdminLogin = () => {
           </div>
           <div className="second-column">
             <div className="brand-wrapper">
-              <h1>MyCity DOC</h1>
+              <h1>MY City Doc</h1>
             </div>
-            <p className="login-card-desc">Sign in to your account</p>
+            <p className="login-card-desc">Hospitals login</p>
             <form onSubmit={onSubmit} className="login-form">
               <div className="form-group">
+                <label htmlFor="email">Email</label>
                 <input
+                id="email"
                   type="email"
                   name="email"
                   placeholder="Email"
@@ -131,9 +133,12 @@ const AdminLogin = () => {
                 />
               </div>
               <div className="form-group">
+              <label htmlFor="password">Password</label>
+
                 <input
                   type="password"
                   name="password"
+                  id="password"
                   placeholder="********"
                   value={password}
                   onChange={onChange}
@@ -160,7 +165,6 @@ const AdminFormWrap = styled.div`
   div.login-cart {
     background-color: white;
     border: 0;
-    border-radius: 27.5px;
     box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
     overflow: hidden;
     width: 1110px;
@@ -175,7 +179,7 @@ const AdminFormWrap = styled.div`
       max-width: 690px;
     }  
     @media (max-width: 768px) {
-      max-width: 510px;
+      max-width: 80%;
     } 
     div.first-column {
       border: 0;
@@ -244,6 +248,8 @@ const AdminFormWrap = styled.div`
             font-size: 13px;
             line-height: 15;
             font-weight: normal;
+            margin-top: 10px;
+
 
             &:focus {
               color: #495057;

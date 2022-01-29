@@ -1,7 +1,5 @@
 import axios from 'axios'
-import { IoLogoFacebook } from 'react-icons/io5'
 import alert from '../alert/actions'
-import jwt_decode from "jwt-decode";
 
 
 export const signup = (email, password, cpassword, name, number) => async dispatch => {
@@ -67,7 +65,7 @@ export const authenticate = () => async dispatch => {
         let data = { token: auth.access }
         try {
  
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}api/account/token/verify/`, data)
+            await axios.post(`${process.env.REACT_APP_API_URL}api/account/token/verify/`, data)
 
         } catch (error) {
         }

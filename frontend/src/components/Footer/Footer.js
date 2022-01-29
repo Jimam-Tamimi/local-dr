@@ -13,8 +13,8 @@ export default function Footer() {
       <FooterWrap >
         <Grid justify="space-between" >
           <FooterColumn justify="start"  sx={12} lg={8}>
-            <h3>Local Doctor</h3>
-            <p><b>© 2022 Local Doctor, Inc.</b></p>
+            <h3>My City Doc</h3>
+            <p><b>© 2022 , Inc.</b></p>
             <Link to={''} onClick={e => {e.preventDefault(); window.location.reload();}} >Home</Link>
             {
               auth.isAuthenticated ?

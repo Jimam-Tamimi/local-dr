@@ -144,7 +144,7 @@ export default function BookAppointment({ match }) {
       .replaceAll("[", "")
       .replaceAll("]", "")
       .split(",")
-      .map((t) => t + ", ");
+      .map((t) => t );
   }
 
   function getTime(time) {
@@ -192,7 +192,10 @@ export default function BookAppointment({ match }) {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=AbV2ss66FK_GIMJ0BUT8M7TJv1fRaFVIJahfnEw2EK0gItqkmyJd21klAdOEOh7HU77dUKeRbCKC3BFJ&enable-funding=venmo&currency=USD";
+  script.type = "text/javascript";
+  script.crossOrigin = "anonymous"
+
     await document.body.appendChild(script);
     script.onload = () => {
       setSubmitButtonState("paypal");

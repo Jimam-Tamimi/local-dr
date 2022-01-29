@@ -9,19 +9,8 @@ import {
   ButtonLink,
   Container,
   Flex,
-  Grid,
-} from "../../styles/Essentials.styles";
-import {
-  Actions,
-  OptionsColumn,
-  Search,
-  Table,
-  Td,
-  Th,
-  Tr,
-} from "../../styles/Table.styles";
+} from "../../styles/Essentials.styles"; 
 import Modal from "../../components/Modal/Modal";
-import { useHistory } from "react-router-dom";
 import alert from "../../redux/alert/actions";
 
 export default function YourAppointments() {
@@ -47,6 +36,7 @@ export default function YourAppointments() {
     setTimeout(() => {
       getAppointments();
     });
+       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDateFromStr = (date) => {
@@ -77,20 +67,8 @@ export default function YourAppointments() {
     }`;
   };
 
-  const filterAppointments = async (e) => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}api/appointments/?search=${e.target.value}`
-      );
-      if (res.status === 200) {
-        setAppointments(res.data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const dispatch = useDispatch();
-  const history = useHistory();
+ 
+  const dispatch = useDispatch(); 
 
   const [submitButtonState, setSubmitButtonState] = useState("");
   const [shoePayMod, setShoePayMod] = useState(false);
@@ -113,7 +91,9 @@ export default function YourAppointments() {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=AbV2ss66FK_GIMJ0BUT8M7TJv1fRaFVIJahfnEw2EK0gItqkmyJd21klAdOEOh7HU77dUKeRbCKC3BFJ&enable-funding=venmo&currency=USD";
+  script.type = "text/javascript";
+script.crossOrigin = "anonymous"
     await document.body.appendChild(script);
     script.onload = () => {
       setSubmitButtonState("paypal");

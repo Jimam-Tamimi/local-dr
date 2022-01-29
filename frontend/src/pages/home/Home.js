@@ -212,7 +212,7 @@ export default function Home() {
                         <input
                           name="location"
                           type="text"
-                          placeholder="My Location"
+                          placeholder="City, Place, Zip"
                           style={{ borderBottom: "1px solid #0000003b" }}
                           onKeyDown={(e) => {
                             if (e.keyCode === 13) {
@@ -241,6 +241,7 @@ export default function Home() {
                     onChange={getSpecialityRecommendations}
                     type="text"
                     placeholder="Speciality"
+                    style={{padding: "1rem 2.5rem"}}
                   />
                   {specialityRecommendations.length !== 0 ? (
                     <div>
@@ -260,7 +261,7 @@ export default function Home() {
                   )}
                 </div>
 
-                <button>{changeSearch ? "Find Care" : <FaSearch />}</button>
+                <button>{changeSearch ? "Find Doctor" : <FaSearch />}</button>
               </SearchColumn>
             </ColumnOne>
           </Grid>
@@ -274,7 +275,7 @@ export default function Home() {
             <ColumnCta1  >
                     <h2 className="heading">Looking for a doctor near you?</h2>
                     <p className="desc">My City Doc has the number of providers in your city</p>
-                    <Button sm >Browse</Button>
+                    <Button sm  onClick={e => history.push('/search/')} >Browse</Button>
             </ColumnCta1>
             <ColumnCta2>
                     <img src={CtaSecImg} />
@@ -293,7 +294,7 @@ export default function Home() {
             <ColumnCta1  >
                     <h2 className="heading">Make An Appointment With Your Doctor</h2>
                     <p className="desc">My City Doc has the number of providers in your city</p>
-                    <Button sm >Book Now</Button>
+                    <Button sm onClick={e => history.push('/search/')} >Book Now</Button>
             </ColumnCta1>
           </Grid>
         </Container>

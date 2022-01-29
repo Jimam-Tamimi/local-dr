@@ -53,7 +53,7 @@ export const Form = styled.form`
     
     label {
       font-size: 12px;
-      text-transform: uppercase;
+      text-transform: capitalize;
       letter-spacing: 1px;
       color: #000;
       font-weight: 700;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { SearchColumnNav } from "../../../components/Navbar/Navbar.styles";
 import { Column, Flex } from "../../../styles/Essentials.styles";
 
 export const ProvidersWrap = styled("div")`
@@ -204,6 +203,8 @@ export const TabUnderline = styled.p`
   position: relative;
   padding: 10px 5px;
   margin-right: 10px;
+  color: #797579;
+
 
   &::after {
     transition: var(--main-transition);

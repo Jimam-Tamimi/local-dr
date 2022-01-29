@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Badge,
   Button,
   ButtonLink,
   Column,
-  Container,
   Grid,
-  SmallContainer,
 } from "../../styles/Essentials.styles";
 import {
   DropdownDiv,
@@ -16,48 +13,24 @@ import {
   ProviderHeading,
   ProvidersWrap,
   RightCol,
-  SearchColumnSearch,
   Tab,
   TabUnderline,
 } from "../styles/home/Search.styles";
 
 import Dropdown from '../../components/Dropdown/Dropdown'
-
-import demoDr from "../../assets/images/demo-dr.png";
-import demoDr2 from "../../assets/images/demo-dr2.png";
-import demoDr3 from "../../assets/images/demo-dr3.png";
-import locationSvg from "../../assets/images/location.svg";
-import activeLocationSvg from "../../assets/images/activeLocation.svg";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { SearchColumn } from "../styles/home/Home.styles";
-import { FaSearch } from "react-icons/fa";
-import { SearchColumnNav } from "../../components/Navbar/Navbar.styles";
-import { Input } from "../../styles/Form.styles";
+ 
+ 
+import {  useHistory, useLocation } from "react-router-dom";
+ 
 import InfiniteScroll from 'react-infinite-scroller';
-import SyncLoader from "react-spinners/SyncLoader";
-import { BsShieldFillPlus } from 'react-icons/bs'
-import { IoLocationSharp } from 'react-icons/io5'
+import SyncLoader from "react-spinners/SyncLoader"; 
 import { RiMoneyDollarCircleFill } from 'react-icons/ri'
-import { Datepicker, Page, setOptions } from '@mobiscroll/react';
-import { Marker } from "react-google-maps";
-
-import Map from "../../components/Map/Map";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setProgress } from "../../redux/progress/actions";
 
 export default function Search({ match, }) {
-  const [providers, setProviders] = useState([
-    { img: demoDr, cords: { lat: 40.73010, lng: -73.935242 } },
-    // { img: demoDr2, cords: { lat: 40.7350610, lng: -73.945242 } },
-    // { img: demoDr3, cords: { lat: 40.7305610, lng: -73.955242 } },
-    // { img: demoDr2, cords: { lat: 40.7305610, lng: -73.965242 } },
-    // { img: demoDr3, cords: { lat: 40.7530610, lng: -73.975242 } },
-    // { img: demoDr, cords: { lat: 40.730610, lng: -73.938882 } },
-    // { img: demoDr2, cords: { lat: 40.77360610, lng: -73.956242 } },
-    // { img: demoDr3, cords: { lat: 40.77630610, lng: -73.934642 } },
-  ]);
-  const [activeProvider, setActiveProvider] = useState({})
+  
 
   const [showSearch, setShowSearch] = useState(
     window.innerWidth < 965 ? true : false
@@ -178,7 +151,7 @@ export default function Search({ match, }) {
     await getDoctorList()
     dispatch(setProgress(60))
 
-    history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`)
+    // history.push(`/search?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&location-name=${location_name}`)
     dispatch(setProgress(100))
 
   }, [search])

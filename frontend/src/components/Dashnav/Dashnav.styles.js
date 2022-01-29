@@ -23,7 +23,8 @@ export const FirstSection = styled.div`
     font-size: 2rem;
     cursor: pointer;
     font-weight: 700;
-    color: #112233;
+    color: rgb(0, 0, 128);
+    
   }
 `;
 export const SecondSection = styled.div`

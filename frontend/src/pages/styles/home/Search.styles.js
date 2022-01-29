@@ -13,6 +13,12 @@ export const ProvidersWrap = styled("div")`
   @media screen and (max-width: 830px) {
     padding: 0px 0;
   }
+
+  justify-content: flex-start;
+
+  
+  
+  
 `;
 
 export const ProviderColumn = styled(Column)`
@@ -52,20 +58,10 @@ export const RightCol = styled.div`
   & > * {
     margin: 3px 0px;
   }
-  & > a {
-    font-weight: 600;
-    text-decoration: underline;
-    position: absolute;
-    right: 0;
-    bottom: 0px;
-
-    @media screen and (max-width: 715px) {
-      font-size: 0.9rem;
-    }
-  }
+   
   & > h2 {
     font-size: 1.8em;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 5px;
     @media screen and (max-width: 715px) {
       font-size: 1.7rem;
@@ -89,15 +85,24 @@ export const RightCol = styled.div`
     color: rgb(15, 157, 239) !important;
     margin-right: 5px;
   }
-  & > button {
-    position: absolute;
-    right: 28px;
-    bottom: 0px;
-    @media screen and (max-width: 615px) {
-      position: relative;
-      right: 0px;
-      bottom: 0px;
+  & > button , & > a.btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+
+    background-color: #ffc107;
+    margin-top: 2rem;
+    padding: 0.7rem 0px;
+    width: 320px;
+    font-size: 1.1rem;
+    font-weight: 400;
+    transition: var(--main-transition);
+    &:hover {
+      background-color: gold;
+
     }
+
   }
   & > p {
     font-size: 1.1rem;
@@ -145,7 +150,7 @@ export const SearchColumnSearch = styled.div`
 export const Tab = styled.div`
   ${Flex}
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   padding: 8px 20px;
   border: 1px solid #00234b6b;
   border-radius: 20px;
@@ -188,13 +193,13 @@ export const DropdownOption = styled.div`
   & > * {
     cursor: pointer;
     margin-right: 12px;
-    font-weight: 600;
+    font-weight: 400;
   }
 `;
 
 export const TabUnderline = styled.p`
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 400;
   cursor: pointer;
   position: relative;
   padding: 10px 5px;
@@ -227,9 +232,10 @@ export const TabUnderline = styled.p`
 `;
 
 export const ProviderHeading = styled.h1`
-  color: var(--primary-text-color);
-  text-align: start;
-  width: 100%;
-  margin-top: 2rem;
-  margin-bottom: 5px;
+    color: #000000;
+    text-align: start;
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 5px;
+    font-weight: 400;
 `;

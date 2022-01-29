@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Button,
   Column,
   Container,
   Grid,
@@ -14,6 +15,9 @@ import {
   HeadingColumn,
   BoxColumn,
   FeatureBox,
+  CtaSection,
+  ColumnCta1,
+  ColumnCta2,
 } from "../styles/home/Home.styles";
 import hero from "../../assets/images/hero.svg";
 import feat1 from "../../assets/images/icon-home-1.svg";
@@ -32,7 +36,12 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Label } from "../../styles/Form.styles";
 
-const TEXTS = ["Doctor", "Dentist", "Psychologist", "Dermatologist"];
+import CtaSecImg from '../../assets/images/cta-sec.png'
+import CtaSecImg2 from '../../assets/images/cta-sec-2.png'
+
+
+
+const TEXTS = ["Doctor", "Dentist", "Physician", ];
 
 export default function Home() {
   const [changeSearch, setChangeSearch] = useState(
@@ -59,8 +68,8 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(
       (location) => {
         setLocation({
-          lat: '',
-          lng: '',
+          lat: "",
+          lng: "",
         });
       },
       () => console.log("error :)"),
@@ -72,7 +81,6 @@ export default function Home() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (doctor) {
-
       history.push(
         `/search?doctor=${doctor}&lat=&lng=&speciality=${speciality}&&location-name=${LocationName}`
       );
@@ -80,10 +88,8 @@ export default function Home() {
       history.push(
         `/search?doctor=${doctor}&lat=${location?.lat}&lng=${location?.lng}&speciality=${speciality}&location-name=${LocationName}`
       );
-
     }
   };
-
 
   // doctor recommendation
   const [doctorRecommendations, setDoctorRecommendations] = useState([]);
@@ -115,8 +121,8 @@ export default function Home() {
     }
   };
 
-  const [autoComplete, setAutoComplete] = useState(null)
-  const [LocationName, setLocationName] = useState('');
+  const [autoComplete, setAutoComplete] = useState(null);
+  const [LocationName, setLocationName] = useState("");
   const onPlaceChanged = () => {
     try {
       const lat = autoComplete.getPlace().geometry.location.lat();
@@ -125,13 +131,10 @@ export default function Home() {
       setLocationName(autoComplete.getPlace().formatted_address);
       setLocation({
         lat: lat,
-        lng: lng
+        lng: lng,
       });
-      
-    } catch {
-
-    }
-  }
+    } catch {}
+  };
 
   return (
     <>
@@ -152,7 +155,7 @@ export default function Home() {
                   text={TEXTS[index % TEXTS.length]}
                   springConfig={presets.default}
                 />
-                s <br /> in your place
+                s <br /> in your City
               </h1>
               <SearchColumn autoComplete="off" onSubmit={onSubmit}>
                 <div
@@ -170,6 +173,7 @@ export default function Home() {
                     name={`doctor`}
                     value={doctor}
                     onChange={getDoctorRecommendations}
+                    
                   />
                   {doctorRecommendations.length !== 0 ? (
                     <div>
@@ -194,26 +198,32 @@ export default function Home() {
                     width: "30%",
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
-                    
                   }}
                   className="search-hospital"
-
                 >
                   <>
                     <IoLocationSharp />
-                    <Autocomplete className="location-input" onLoad={autoC => setAutoComplete(autoC)} onPlaceChanged={onPlaceChanged}>
+                    <Autocomplete
+                      className="location-input"
+                      onLoad={(autoC) => setAutoComplete(autoC)}
+                      onPlaceChanged={onPlaceChanged}
+                    >
                       <>
-
                         <input
                           name="location"
                           type="text"
                           placeholder="My Location"
-                          style={{borderBottom: "1px solid #0000003b"}}
-                          onKeyDown={e => { if (e.keyCode === 13) { e.preventDefault() } else { return true } }}
+                          style={{ borderBottom: "1px solid #0000003b" }}
+                          onKeyDown={(e) => {
+                            if (e.keyCode === 13) {
+                              e.preventDefault();
+                            } else {
+                              return true;
+                            }
+                          }}
                         />
                       </>
                     </Autocomplete>
-
                   </>
                 </div>
                 <div
@@ -257,69 +267,39 @@ export default function Home() {
         </Container>
       </HeroWrap>
 
-      <FeatureWrap>
-        <SmallContainer>
-          <Grid direction="column">
-            <HeadingColumn data-aos="zoom-in" direction="column" lg={12}>
-              <h1>
-                DISCOVER THE <b>ONLINE</b> APPOINTMENT!
-              </h1>
-              <p>
-                Usu habeo equidem sanctus no. Suas summo id sed, erat erant
-                oporteat cu pri. In eum <br /> omnes molestie. Sed ad debet
-                scaevola, ne mel.
-              </p>
-            </HeadingColumn>
-            <BoxColumn wrap="wrap" lg={12}>
-              <FeatureBox
-                data-aos="fade-right"
-                direction="column"
-                lg={4}
-                sm={6}
-                sx={12}
-                selfSpacing={15}
-              >
-                <img src={feat1} />
-                <h4>FIND A DOCTOR</h4>
-                <p>
-                  Usu habeo equidem sanctus no. Suas summo id sed, erat erant
-                  oporteat cu pri. In eum omnes molestie.
-                </p>
-              </FeatureBox>
-              <FeatureBox
-                data-aos="fade-in"
-                direction="column"
-                lg={4}
-                sm={6}
-                sx={12}
-                selfSpacing={15}
-              >
-                <img src={feat2} />
-                <h4>VIEW PROFILE</h4>
-                <p>
-                  Usu habeo equidem sanctus no. Suas summo id sed, erat erant
-                  oporteat cu pri. In eum omnes molestie.
-                </p>
-              </FeatureBox>
-              <FeatureBox
-                data-aos="fade-left"
-                direction="column"
-                lg={4}
-                sm={6}
-                sx={12}
-                selfSpacing={15}
-              >
-                <img src={feat3} />
-                <h4>BOOK A VISIT</h4>
-                <p>
-                  Usu habeo equidem sanctus no. Suas summo id sed, erat erant
-                  oporteat cu pri. In eum omnes molestie.
-                </p>
-              </FeatureBox>
-            </BoxColumn>
+
+      <CtaSection>
+        <Container>
+          <Grid lg={6} sm={12} >
+            <ColumnCta1  >
+                    <h2 className="heading">Looking for a doctor near you?</h2>
+                    <p className="desc">My City Doc has the number of providers in your city</p>
+                    <Button>Browse</Button>
+            </ColumnCta1>
+            <ColumnCta2>
+                    <img src={CtaSecImg} />
+            </ColumnCta2>
           </Grid>
-        </SmallContainer>
-      </FeatureWrap>
+        </Container>
+      </CtaSection>
+      
+
+      <CtaSection>
+        <Container>
+          <Grid className="second-div" lg={6} sm={12} >
+            <ColumnCta2 className="second-div" justify="start">
+                    <img src={CtaSecImg2} />
+            </ColumnCta2>
+            <ColumnCta1  >
+                    <h2 className="heading">Make An Appointment With Your Doctor</h2>
+                    <p className="desc">My City Doc has the number of providers in your city</p>
+                    <Button>Book Now</Button>
+            </ColumnCta1>
+          </Grid>
+        </Container>
+      </CtaSection>
+      
+
     </>
   );
 }

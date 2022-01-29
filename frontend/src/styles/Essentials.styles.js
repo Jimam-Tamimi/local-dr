@@ -104,7 +104,7 @@ export const Grid = styled.div`
 
 export const Button = styled.button`
   background: var(--primary-color);
-  color: var(--primary-text-color);
+  color: black;
   padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 2px solid transparent;
@@ -112,7 +112,7 @@ export const Button = styled.button`
   /* box-shadow: 3px 3px 13px #00000075; */
   transition: var(--main-transition);
   letter-spacing: 0.51px;
-  font-weight: 700;
+  font-weight: 500;
   &:hover {
   }
   &:active {

@@ -10,7 +10,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     /* font-family:  sharp-sans, sans-serif; */
-    font-family: 'Source Sans Pro', sans-serif;
+    /* font-family: 'Source Sans Pro', sans-serif; */
+    font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
   }
   

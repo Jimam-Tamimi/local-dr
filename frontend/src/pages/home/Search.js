@@ -129,20 +129,23 @@ export default function Search({ match, }) {
   const [count, setCount] = useState(0)
   const fetchMoreData = async () => {
 
+    if(paginationNext){
     try {
-      console.log('fetching more data')
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&${paginationNext ? 'page=' + paginationNext : ''}`)
-      console.log(res.data, 'data frm pagination')
-      if (res.status === 200) {
 
-        setDoctorList([...doctorList, ...res?.data?.results])
-        console.log([...doctorList, ...res?.data?.results])
-        setPaginationNext(res.data.next)
-        console.log(res.data.next, 'next')
-
+        console.log('fetching more data')
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}api/search/?doctor=${doctor}&lat=${lat}&lng=${lng}&speciality=${speciality}&available=${available}&max-distance=${distance}&${paginationNext ? 'page=' + paginationNext : ''}`)
+        console.log(res.data, 'data frm pagination')
+        if (res.status === 200) {
+          
+          setDoctorList([...doctorList, ...res?.data?.results])
+          console.log([...doctorList, ...res?.data?.results])
+          setPaginationNext(res.data.next)
+          console.log(res.data.next, 'next')
+          
+        }
+      } catch (err) {
+        console.log(err)
       }
-    } catch (err) {
-      console.log(err)
     }
   };
 
@@ -179,36 +182,37 @@ export default function Search({ match, }) {
     dispatch(setProgress(100))
 
   }, [search])
+  
   return (
     <>
       <ProvidersWrap >
         <Column direction="column" lg={8} sx={12}>
           <Grid justify="space-between" lg={6}>
             <Column style={{ margin: "20px 0px" }} justify="flex-start" lg={12}>
-              <TabUnderline activeTab={activeTab === 1} onClick={e => setActiveTab(1)}>All Appointment</TabUnderline>
-              <TabUnderline activeTab={activeTab === 2} onClick={e => setActiveTab(2)}>In Person</TabUnderline>
-              <TabUnderline activeTab={activeTab === 3} onClick={e => setActiveTab(3)}>VIdeo Visit</TabUnderline>
+              <TabUnderline activeTab={activeTab === 1} onClick={e => setActiveTab(1)}>All Doctors</TabUnderline>
+              <TabUnderline activeTab={activeTab === 2} onClick={e => setActiveTab(2)}>Hospitals</TabUnderline>
+              <TabUnderline activeTab={activeTab === 3} onClick={e => setActiveTab(3)}>Online Visit</TabUnderline>
             </Column>
 
             <Column justify="start" lg={12} sx={12} style={{ width: "100%" }}>
               <div style={{ position: 'relative', }}>
                 <Tab onClick={e => setShowAvailablaity(!showAvailablaity)}>Availability</Tab>
                 <Dropdown style={{ left: '10px' }} show={showAvailablaity} setShow={setShowAvailablaity}>
-                  <DropdownDiv>
-                    {
-                      [true, false].map((item, index) => (
-                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: item }) }} key={index}>
-                          <input value={item} checked={item == available} id={`d-${item}`} name="available" type={'radio'} />
-                          <label >{`${item}`}</label>
+                  <DropdownDiv style={{width: "200px"}} >
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: true }) }} >
+                          <input value={true} checked={true == available} id={`d-${true}`} name="available" type={'radio'} />
+                          <label >Available</label>
                         </DropdownOption>
-                      ))
-                    }
+                        <DropdownOption onClick={e => { dispatch({ type: 'CHANGE_AVAILABLE', payload: false }) }} >
+                          <input value={false} checked={false == available} id={`d-${false}`} name="available" type={'radio'} />
+                          <label >Not Available</label>
+                        </DropdownOption> 
                   </DropdownDiv>
                 </Dropdown>
               </div>
               <div style={{ position: 'relative' }}>
                 <Tab onClick={e => setShowSpeciality(!showSpeciality)}>Speciality</Tab>
-                <Dropdown show={showSpeciality} setShow={setShowSpeciality}>
+                {/* <Dropdown show={showSpeciality} setShow={setShowSpeciality}>
                   <DropdownDiv>
                     <DropdownOption>
                       <input value="10" id="d-10" name="distance" type={'radio'} />
@@ -219,7 +223,7 @@ export default function Search({ match, }) {
                       <label for="d-30" >30 KM</label>
                     </DropdownOption>
                   </DropdownDiv>
-                </Dropdown>
+                </Dropdown> */}
               </div>
               <div style={{ position: 'relative' }}>
                 <Tab onClick={e => setShowDistance(!showDistance)}>Distance</Tab>
@@ -268,18 +272,18 @@ export default function Search({ match, }) {
                     <RightCol>
                       {/* <Badge style={{}}>Available</Badge> */}
                       <h2>{doctor.name}</h2>
-                      <p>
-                        <b>{doctor.hospital.name}</b>
-                      </p>
-                      <p>{doctor?.hospital?.locationName}</p>
                       <p>{doctor.qualification}</p>
                       <p>{doctor.speciality}</p>
+                      <p>
+                        {doctor.hospital.name}
+                      </p>
+                      <p>{doctor?.hospital?.locationName}</p>
                       <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />Consultation charges may vary</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
 
                         doctor.available ?
-                          <ButtonLink to={`/doctor/${doctor.id}/`} style={{ boxShadow: "none" }} sm >
+                          <ButtonLink className="btn" to={`/doctor/${doctor.id}/`} style={{ boxShadow: "none" }} sm >
                             Book Appointment
                           </ButtonLink> :
                           <Button to={`/doctor/${doctor.id}/`} style={{ boxShadow: "none" }} sm disabled={true}>
@@ -325,28 +329,10 @@ export default function Search({ match, }) {
             </InfiniteScroll>
           </Grid>
         </Column>
-        {
-          showMap && (
-            <></>
-            // <Column lg={4} sx={0} style={{ position: "sticky", right: 0, top: 0, height: "calc(100vh)" }}>
-            //   <Map
-            //     coords={{ lat: 40.730610, lng: -73.935242 }}
-            //     isMarkerShown
-            //     googleMapURL=" "
-            //     loadingElement={<div style={{ height: `100%`, width: "100%" }} />}
-            //     containerElement={<div style={{ height: `100%`, width: "100%" }} />}
-            //     mapElement={<div style={{ height: `100%`, width: "100%" }} />}
-            //     defaultZoom={14}
-            //   >
-            //     {
-            //       providers.map(({ cords }, i) => (<Marker size="20px" icon={cords === activeProvider ? { url: activeLocationSvg, scaledSize: new window.google.maps.Size(35, 35) } : { url: locationSvg, scaledSize: new window.google.maps.Size(35, 35) }} key={i} position={cords} />))
-
-            //     }
-            //   </Map>
-            // </Column>
-          )
-        }
+ 
       </ProvidersWrap>
+
+
     </>
   );
 }

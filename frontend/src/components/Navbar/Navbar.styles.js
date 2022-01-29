@@ -9,7 +9,9 @@ export const NavWrap = styled.header`
     height: 100px;
     /* border-bottom: 2px solid #0000001f; */
     &.bg-color{
-       background: var(--secondary-color);
+       /* background: var(--secondary-color); */
+       /* background: var(--primary-color); */
+
     }
 
 `;
@@ -94,11 +96,14 @@ export const SearchColumnNav = styled(SearchColumn)`
     padding: 0px 15px;
     font-size: 1rem;
     border: 1px solid #0000001f;
-    font-weight: 600;
+    /* font-weight: 500; */
+    font-weight: 400;
+
     outline: none;
   }
   & > div {
-    padding: 0px 0px;
+    padding: 0px 0px; 
+
   }
   & > div > div {
     top: initial;
@@ -111,6 +116,7 @@ export const SearchColumnNav = styled(SearchColumn)`
    
   & > button {
     font-size: 15px;
+    background-color: #ffc107;
   }
 
   & > div > div > input {
@@ -125,8 +131,9 @@ export const SearchColumnNav = styled(SearchColumn)`
     padding: 0px 15px;
     font-size: 1rem;
     border: 1px solid #0000001f;
-    font-weight: 600;
     outline: none;
+    font-weight: 400;
+
   }
   
   

@@ -1,14 +1,17 @@
-import { Column } from "../../../styles/Essentials.styles";
-import styled, { keyframes } from 'styled-components';
-
+import { Column, Flex } from "../../../styles/Essentials.styles";
+import styled, { keyframes } from "styled-components";
+import HeroBg from "../../../assets/images/hero-bg.jpg";
 export const HeroWrap = styled.div`
   width: 100vw;
-  padding: 130px 0px;
+  padding: 200px 0px;
   background: var(--secondary-color);
+  background-image: url(${HeroBg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   @media only screen and (max-width: 992px) {
-  padding: 50px 0px;
-  padding-top: 0px;
-
+    padding: 50px 0px;
+    padding-top: 0px;
   }
 `;
 
@@ -16,6 +19,7 @@ export const ColumnOne = styled(Column)`
   & > h1 {
     font-size: 4.4rem;
     color: var(--primary-text-color);
+    font-weight: 600;
     @media only screen and (max-width: 992px) {
       font-size: 2.2rem;
     }
@@ -30,21 +34,18 @@ export const ColumnOne = styled(Column)`
 export const ColumnTwo = styled(Column)`
   & > img {
     width: 80%;
-    animation:  heroAnimation 10s ease 0s infinite;
+    animation: heroAnimation 10s ease 0s infinite;
   }
   @keyframes heroAnimation {
-      0% {
-        transform: translateY(30px);
-
-      }
-      50% {
-        transform: translateY(-30px);
-
-      }
-      100% {
-        transform: translateY(30px);
-
-      }
+    0% {
+      transform: translateY(30px);
+    }
+    50% {
+      transform: translateY(-30px);
+    }
+    100% {
+      transform: translateY(30px);
+    }
   }
   @media only screen and (max-width: 992px) {
     & > img {
@@ -64,7 +65,7 @@ export const SearchColumn = styled.form`
       width: 100% !important;
     font-size: 1rem;
     padding: 1.3rem 2.1rem;
-    font-weight: 600;
+    font-weight: 400;
     outline: none;
     border-radius: 4px;
   }
@@ -86,9 +87,10 @@ export const SearchColumn = styled.form`
       width: 100% !important;
     font-size: 1rem;
     padding: 1.3rem 2.1rem;
-    font-weight: 600;
     outline: none;
     border-radius: 4px;
+    font-weight: 400;
+
   }
   & > div > div {
     background: white;
@@ -197,53 +199,43 @@ export const SearchColumn = styled.form`
     }
   }
 
-`
+`;
 
+export const CtaSection = styled.div`
+  ${Flex}
+  margin: 50px auto;
 
-export const FeatureWrap = styled.div`
-  width: 100vw;
-  background-color: #F5F8FA;
-  padding: 60px 0px;
+  div.second-div {
+    @media screen and (max-width: 992px) {
+      flex-direction: column-reverse;
+    }
+  }
+`;
+export const ColumnCta1 = styled(Column)`
+  flex-direction: column;
+  align-items: baseline;
+  @media screen and (max-width: 992px) {
+    align-items: center;
+  }
+  margin: 30px 0px;
+  p {
+    margin: 3px 0px;
+  }
+`;
+export const ColumnCta2 = styled(Column)`
+margin: 30px 0px;
 
-`
+&.second-div{
+  img {
+    max-width: 85%;
+    height: 686px;
+    object-fit: cover;
+}
+@media screen and (max-width: 992px) {
 
-export const HeadingColumn = styled(Column)`
-margin-bottom: 20px;
-margin-top: 20px;
-  & > * {
-    text-align: center;
-    margin-bottom: 10px;
-    margin-top: 10px;
+justify-content: center;
+}
   }
-  & > h1 {
-    font-size: 2.3rem;
-    font-weight: 500;
-  }
-  & > p {
-    font-size: 1.33rem;
-    font-weight: 300;
-  }
-`
-export const BoxColumn = styled(Column)`
-margin-bottom: 20px;
-margin-top: 20px;
-`
-export const FeatureBox = styled(Column)`
-    box-shadow: 0px 0px 17px 4px #0000002e;
-    padding: 45px 60px;
-    min-height: 345px;
-    margin-bottom: 20px;
-    margin-top: 20px;
+}
 
-  & > * {
-    text-align: center;
-    margin: 5px 0px;
-  }
-  & > h4 {
-    font-size: 1.5rem;
-    color: #e74e84;
-  }
-  & > p {
-    line-height: 1.39rem;
-  }
-`
+`;

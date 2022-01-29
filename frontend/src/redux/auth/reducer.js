@@ -22,7 +22,7 @@ if(auth){
 
 const authReducer = (state=initialState, action) => {
     if(action.type === "LOGIN_SUCCESS") {
-        const { access, refresh, id } = action.payload
+        const { access, refresh } = action.payload
         console.log(action.payload);
          
         var token = access;
@@ -54,8 +54,6 @@ const authReducer = (state=initialState, action) => {
     else if (action.type === "REFRESH_TOKEN_SUCCESS") { 
         const payload = action.payload
                  
-        var token = payload.access;
-        var decoded = jwt_decode(token);
         let user_id = decoded.user_id; 
         state = {
             ...state,

@@ -214,25 +214,31 @@ export const CtaSection = styled.div`
 export const ColumnCta1 = styled(Column)`
   flex-direction: column;
   align-items: baseline;
+  padding-left: 65px;
+
   @media screen and (max-width: 992px) {
     align-items: center;
+    padding-left: 0;
+
   }
   margin: 30px 0px;
   p {
-    margin: 3px 0px;
+    margin: 20px 0px;
   }
 `;
 export const ColumnCta2 = styled(Column)`
 margin: 30px 0px;
 
 &.second-div{
+  padding-left: 65px;
+
   img {
     max-width: 85%;
     height: 686px;
     object-fit: cover;
 }
 @media screen and (max-width: 992px) {
-
+  padding-left: 0px;
 justify-content: center;
 }
   }

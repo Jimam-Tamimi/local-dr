@@ -274,7 +274,7 @@ export default function Home() {
             <ColumnCta1  >
                     <h2 className="heading">Looking for a doctor near you?</h2>
                     <p className="desc">My City Doc has the number of providers in your city</p>
-                    <Button>Browse</Button>
+                    <Button sm >Browse</Button>
             </ColumnCta1>
             <ColumnCta2>
                     <img src={CtaSecImg} />
@@ -293,7 +293,7 @@ export default function Home() {
             <ColumnCta1  >
                     <h2 className="heading">Make An Appointment With Your Doctor</h2>
                     <p className="desc">My City Doc has the number of providers in your city</p>
-                    <Button>Book Now</Button>
+                    <Button sm >Book Now</Button>
             </ColumnCta1>
           </Grid>
         </Container>

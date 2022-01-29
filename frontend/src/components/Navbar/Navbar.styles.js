@@ -6,13 +6,7 @@ import { Flex } from '../../styles/Essentials.styles';
 export const NavWrap = styled.header`
     ${Flex}
     width: 100vw;
-    height: 100px;
-    /* border-bottom: 2px solid #0000001f; */
-    &.bg-color{
-       /* background: var(--secondary-color); */
-       /* background: var(--primary-color); */
-
-    }
+    height: 70px; 
 
 `;
 export const Logo = styled.div`

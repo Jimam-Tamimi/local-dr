@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block title %} Payment {% endblock title %}
+
+{% block css %}
+<style>
+    .wrap {
+        width: 100vw;
+        height: 100vh;
+        background-color: #000000e6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button-container {}
+
+    .btn {
+        background: #FFF04B;
+        color: black;
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        border: 2px solid transparent;
+        cursor: pointer;
+        -webkit-transition: var(--main-transition);
+        transition: var(--main-transition);
+        -webkit-letter-spacing: 0.51px;
+        -moz-letter-spacing: 0.51px;
+        -ms-letter-spacing: 0.51px;
+        letter-spacing: 0.51px;
+        font-weight: 500;
+        width: 100%;
+        display: block;
+        padding: 0.9rem 1rem;
+        margin: 10px 0px;
+        text-align: center;
+        border-radius: 5px;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+<div class="wrap" style="align-items: center">
+    <div class="button-container">
+        <button onclick="payWithIndianCard({{appointment.id}})" class="btn">Pay With Indian Card</button><button class="btn"
+            style="background: #00234B; color: white">
+            Pay With International Card
+        </button>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+<!-- <script src="https://www.paypalobjects.com/api/checkout.js"></script> -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"  expType="lightbox" ></script>
+
+<script>
+
+    const auth = JSON.parse(localStorage.getItem('auth'))
+    let config = null
+    // if (auth.isAuthenticated) {
+        config = {
+            headers: {
+                'Authorization': 'JWT ' + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQzNzA0NjQzLCJpYXQiOjE2NDM2MTgyNDMsImp0aSI6IjFkYmY3NDRmNWQyZjQ0YjFiZDExNzBlM2MxYWI3NTNhIiwidXNlcl9pZCI6Mn0.k56XYv6o4bOhtZ6Q6DOLs1Bpx8Nlo2fOc6_SBmHVUyQ"
+            }
+        }
+    // } else {
+    //     window.location = window.location.origin
+    // }
+
+
+    const showRazorpay = async (id, onSuccess = () => '', onError = () => '') => {
+
+        let bodyData = new FormData();
+
+        // we will pass the amount and product name to the backend using form data
+        bodyData.append("appointment_id", id);
+        let data = undefined;
+        try {
+
+            data = await axios.post(
+                `${window.location.origin}/api/razorpay/pay/`,
+                bodyData,
+                config
+            );
+            console.log(data);
+        } catch (error) {
+            console.log(error.response);
+            onError();
+        }
+
+        // console.log(data)
+
+        // in data we will receive an object from the backend with the information about the payment
+        //that has been made by the user
+
+        var options = {
+            key_id: `rzp_test_S12YbY2Trf6xYD`,
+            key_secret: `HAldYJG4BYTUAZOYfnueSH6l`,
+            amount: data?.data?.payment?.amount,
+            currency: "INR",
+            name: "Local Doctor",
+            description: "Test teansaction",
+            image: "", // add image url
+            order_id: data?.data?.payment?.id,
+            handler: async function (response) {
+                // we will handle success by calling handlePayment method and
+                // will pass the response that we've got from razorpay
+                await handlePaymentSuccess(response, onSuccess);
+            },
+            prefill: {
+                name: "User's name",
+                email: "User's email",
+                contact: "User's phone",
+            },
+            notes: {
+                address: "Razorpay Corporate Office",
+            },
+            theme: {
+                color: "#3399cc",
+            },
+        };
+
+        var rzp1 = await new window.Razorpay(options);
+        await rzp1.open();
+    };
+    const handlePaymentSuccess = async (response, onSuccess) => {
+        console.log(response);
+        try {
+            let bodyData = new FormData();
+
+            // we will send the response we've got from razorpay to the backend to validate the payment
+            bodyData.append("response", JSON.stringify(response));
+            const res = await axios.post(
+                `${window.location.origin}/api/razorpay/payment/success/`,
+                bodyData,
+                config
+            );
+            console.log("Everything is OK!");
+            // redirect to the appointment page
+            if (res.status == 200) {
+                onSuccess();
+                return true;
+            }
+        } catch (error) {
+            console.error(error?.response);
+        }
+    };
+
+    function payWithIndianCard(id ) {
+        showRazorpay(id)
+    }
+
+</script>
+
+{% endblock js %}

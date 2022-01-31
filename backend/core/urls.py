@@ -10,6 +10,7 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('api/account/', include("account.urls")), 
     path('api/', include("hospital.urls")), 
+    path('pay/', include("payment.urls")), 
     
  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

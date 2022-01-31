@@ -23,11 +23,14 @@ export default function Footer() {
             }
             <Link to="/admin/" >Hospitals</Link>
           </FooterColumn  >
-          <FooterColumn justify="end" sx={12} lg={4}>
-              <Link to ="#" ><BsFacebook /></Link>
+          <FooterColumn direction="column" align="end" sx={12} lg={4}>
+              {/* <Link to ="#" ><BsFacebook /></Link>
               <Link to ="#" ><BsLinkedin /></Link>
               <Link to ="#" ><BsTwitter /></Link>
-              <Link to ="#" ><BsInstagram /></Link>
+              <Link to ="#" ><BsInstagram /></Link> */}   
+              <p style={{textAlign: "end"}} ><b>Address</b> - Hno  22-2-220/D , Deshaipet, Warangal , Telangana State, India</p>
+              <p style={{textAlign: "end"}} >Mobile - 9573278499, 9346557817</p>
+              
           </FooterColumn>
         </Grid>
       </FooterWrap>

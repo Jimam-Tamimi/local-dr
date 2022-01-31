@@ -159,28 +159,24 @@ export default function Navbar({}) {
         <Container>
           <Grid
             wrap="no-wrap"
-            justify={
-              !showSearch && location.pathname === "/"
-                ? `flex-end`
-                : "space-between"
-            }
+            justify="space-between"
           >
-            {showSearch && (
-              <Column justify="start" lg={2} sm={0}>
+            {(location.pathname.startsWith('/search') && showSearch) || (!location.pathname.startsWith('/search'))  ?(
+              <Column justify="start" lg={2} md={5} sm={5} sx={7} >
                 <Link to="/">
                   {/* <img src={logo} /> */}
                   <h1
-                    style={{ 
+                    style={{
                       color: "#000080",
                       fontWeight: 600,
-                      fontSize: "30px"
+                      fontSize: "2rem",
                     }}
                   >
                     MY City Doc
                   </h1>
                 </Link>
               </Column>
-            )}
+             ): ''} 
             {!showSearch && (
               <Column
                 justify={

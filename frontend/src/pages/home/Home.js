@@ -36,8 +36,8 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Label } from "../../styles/Form.styles";
 
-import CtaSecImg from '../../assets/images/cta-sec.png'
-import CtaSecImg2 from '../../assets/images/cta-sec-2.png'
+import CtaSecImg from '../../assets/images/cta-sec-3.jpg'
+import CtaSecImg2 from '../../assets/images/cta-sec-4.jpg'
 
 
 
@@ -277,7 +277,7 @@ export default function Home() {
                     <p className="desc">My City Doc has the number of providers in your city</p>
                     <Button sm  onClick={e => history.push('/search/')} >Browse</Button>
             </ColumnCta1>
-            <ColumnCta2>
+            <ColumnCta2 className="second-div" >
                     <img src={CtaSecImg} />
             </ColumnCta2>
           </Grid>

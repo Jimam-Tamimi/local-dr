@@ -180,6 +180,7 @@ export default function BookAppointment({ match }) {
 
   const payWithIndianCard = async (e) => {
     e.preventDefault();
+    console.log('pay with indian card');
     await showRazorpay(onSubmitSuccessApoId, () => {
       dispatch(alert("Appointment booked successfully", "success"));
       history.push(`/your-appointments/`);

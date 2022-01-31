@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
@@ -53,12 +54,12 @@ def vallidateToken(request):
     return Response({"vallied": True, 'message': 'Token is vallied', }, status=status.HTTP_200_OK)
 
 
+from django.core.mail import EmailMessage
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def forgot_password(request):
-    data = request.data
-    print(data)
+    data = request.data 
     email = data.get('email', None)
     try:
         user = MyUser.objects.get(email=email)
@@ -68,7 +69,9 @@ def forgot_password(request):
     forgotPasswordCode = ForgotPasswordCode.objects.create(user=user)
     subject = "Password reset code for your account from Local Doctor"
     message = f'Your password reset code is {forgotPasswordCode.code}'
-    SendEmail(subject, message, [user.email]).start()
+    # print(EmailMessage(subject, message, [user.email]).send())
+    SendEmail(subject, message, ['matiurrahman6101968@gmail.com']).start()
+    
 
     return Response({'success': True, 'message': 'Password reset code sent to your email'}, status=status.HTTP_200_OK)
 

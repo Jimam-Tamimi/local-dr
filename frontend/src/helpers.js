@@ -29,7 +29,7 @@ export const loadScript = () => {
   script.type = "text/javascript";
 // script.crossOrigin = "anonymous"
 
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 };
 export const showRazorpay = async (id, onSuccess, onError) => {
   const res = await loadScript();

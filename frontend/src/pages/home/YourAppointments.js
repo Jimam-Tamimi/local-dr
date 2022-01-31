@@ -75,16 +75,16 @@ export default function YourAppointments() {
 
   const payWithIndianCard = async (e) => {
     e.preventDefault();
-    // await showRazorpay(
-    //   selectedAppId,
-    //   () => {
-    //     dispatch(alert("Payment Successful", "success"));
-    //     getAppointments();
-    //     setShoePayMod(false);
-    //     setSubmitButtonState(null);
-    //   },
-    //   () => dispatch(alert("Payment Failed", "danger"))
-    // );
+    await showRazorpay(
+      selectedAppId,
+      () => {
+        dispatch(alert("Payment Successful", "success"));
+        getAppointments();
+        setShoePayMod(false);
+        setSubmitButtonState(null);
+      },
+      () => dispatch(alert("Payment Failed", "danger"))
+    );
   };
   const payWithInternationalCard = async (e) => {
     e.preventDefault();

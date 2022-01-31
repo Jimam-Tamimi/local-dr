@@ -64,7 +64,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR , 'build'), os.path.join(BASE_DIR, 'payment/templates')],
+        'DIRS': [os.path.join(BASE_DIR , 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,8 +130,7 @@ TIME_ZONE =  'Asia/Calcutta'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static'),
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, 'build/static'), 
 
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

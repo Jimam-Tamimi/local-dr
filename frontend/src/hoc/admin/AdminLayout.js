@@ -271,7 +271,7 @@ const AdminFormWrap = styled.div`
           margin-bottom: 1.5rem !important;
           cursor: pointer;
           padding: 13px 20px 12px;
-          background-color: #000;
+          background-color: rgb(0, 0, 128);
           border-radius: 4px;
           font-size: 17px;
           font-weight: bold;
@@ -280,7 +280,7 @@ const AdminFormWrap = styled.div`
           width: 100%;
           border: 1px solid transparent;
           &:hover {
-            border: 1px solid #000;
+            border: 1px solid rgb(0, 0, 128);
             background-color: transparent;
             color: #000;
           }

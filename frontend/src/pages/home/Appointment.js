@@ -11,19 +11,13 @@ import {
 import { MdOutlineEmail, MdOutlinePermIdentity } from "react-icons/md";
 import { AiFillPhone } from "react-icons/ai";
 import { Button, Column, Grid } from "../../styles/Essentials.styles";
-import Calendar from "react-calendar";
-import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Datepicker, setOptions } from "@mobiscroll/react";
+import Calendar from "react-calendar"; 
 import "react-calendar/dist/Calendar.css";
 import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import alert from "../../redux/alert/actions";
-import { setProgress } from "../../redux/progress/actions";
-setOptions({
-  theme: "ios",
-  themeVariant: "light",
-});
+import { setProgress } from "../../redux/progress/actions"; 
 export default function BookAppointment({ match }) {
   const [times, setTimes] = useState([]);
   const [selectedTime, setSelectedTime] = useState("");

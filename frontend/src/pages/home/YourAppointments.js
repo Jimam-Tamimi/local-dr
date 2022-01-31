@@ -9,7 +9,7 @@ import {
   ButtonLink,
   Container,
   Flex,
-} from "../../styles/Essentials.styles"; 
+} from "../../styles/Essentials.styles";
 import Modal from "../../components/Modal/Modal";
 import alert from "../../redux/alert/actions";
 
@@ -36,7 +36,7 @@ export default function YourAppointments() {
     setTimeout(() => {
       getAppointments();
     });
-       // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDateFromStr = (date) => {
@@ -67,8 +67,7 @@ export default function YourAppointments() {
     }`;
   };
 
- 
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
   const [submitButtonState, setSubmitButtonState] = useState("");
   const [shoePayMod, setShoePayMod] = useState(false);
@@ -76,35 +75,34 @@ export default function YourAppointments() {
 
   const payWithIndianCard = async (e) => {
     e.preventDefault();
-    await showRazorpay(
-      selectedAppId,
-      () => {
-        dispatch(alert("Payment Successful", "success"));
-        getAppointments();
-        setShoePayMod(false);
-        setSubmitButtonState(null);
-    },
-    () => dispatch(alert("Payment Failed", "danger"))
-    );
+    // await showRazorpay(
+    //   selectedAppId,
+    //   () => {
+    //     dispatch(alert("Payment Successful", "success"));
+    //     getAppointments();
+    //     setShoePayMod(false);
+    //     setSubmitButtonState(null);
+    //   },
+    //   () => dispatch(alert("Payment Failed", "danger"))
+    // );
   };
   const payWithInternationalCard = async (e) => {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=AbV2ss66FK_GIMJ0BUT8M7TJv1fRaFVIJahfnEw2EK0gItqkmyJd21klAdOEOh7HU77dUKeRbCKC3BFJ&enable-funding=venmo&currency=USD";
-  script.type = "text/javascript";
-script.crossOrigin = "anonymous"
-    await document.body.appendChild(script);
+      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
+    script.type = "text/javascript";
+    // script.crossOrigin = "anonymous";
+    await document.head.appendChild(script);
     script.onload = () => {
       setSubmitButtonState("paypal");
       initPayPalButton(
         selectedAppId,
         () => {
-            dispatch(alert("Payment Successful", "success"));
-            getAppointments();
-            setShoePayMod(false);
-            setSubmitButtonState(null);
-
+          dispatch(alert("Payment Successful", "success"));
+          getAppointments();
+          setShoePayMod(false);
+          setSubmitButtonState(null);
         },
         () => dispatch(alert("Payment Failed", "danger"))
       );
@@ -180,7 +178,15 @@ script.crossOrigin = "anonymous"
         </div>
       </YourAppointmentsWrap>
 
-      <Modal style={{alignItems: `${submitButtonState === "paypal" ? 'baseline':'center'}`}} show={shoePayMod} setShow={setShoePayMod}>
+      <Modal
+        style={{
+          alignItems: `${
+            submitButtonState === "paypal" ? "baseline" : "center"
+          }`,
+        }}
+        show={shoePayMod}
+        setShow={setShoePayMod}
+      >
         <ChoosePayWrap>
           {submitButtonState === "paypal" ? (
             <div
@@ -222,7 +228,7 @@ const ChoosePayWrap = styled.div`
     width: 90%;
     margin: 10px 0px;
   }
-  #paypal-button-container{
+  #paypal-button-container {
     width: 90%;
   }
 `;

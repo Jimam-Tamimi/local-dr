@@ -27,9 +27,9 @@ export const loadScript = () => {
   const script = document.createElement("script");
   script.src = "https://checkout.razorpay.com/v1/checkout.js";
   script.type = "text/javascript";
-script.crossOrigin = "anonymous"
+// script.crossOrigin = "anonymous"
 
-  document.body.appendChild(script);
+  document.head.appendChild(script);
 };
 export const showRazorpay = async (id, onSuccess, onError) => {
   const res = await loadScript();

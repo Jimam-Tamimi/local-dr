@@ -10,9 +10,7 @@ import {
 import { MdOutlineEmail, MdOutlinePermIdentity } from "react-icons/md";
 import { AiFillPhone } from "react-icons/ai";
 import { Button, Column, Grid } from "../../styles/Essentials.styles";
-import Calendar from "react-calendar";
-import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import { Datepicker, setOptions } from "@mobiscroll/react";
+import Calendar from "react-calendar";  
 import "react-calendar/dist/Calendar.css";
 import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
@@ -192,11 +190,12 @@ export default function BookAppointment({ match }) {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=AbV2ss66FK_GIMJ0BUT8M7TJv1fRaFVIJahfnEw2EK0gItqkmyJd21klAdOEOh7HU77dUKeRbCKC3BFJ&enable-funding=venmo&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
   script.type = "text/javascript";
-  script.crossOrigin = "anonymous"
+  // script.crossOrigin = "anonymous"
+  // script.setAttribute("data-csp-nonce", "xyz-123")
 
-    await document.body.appendChild(script);
+    await document.head.appendChild(script);
     script.onload = () => {
       setSubmitButtonState("paypal");
       initPayPalButton(onSubmitSuccessApoId, () => {

@@ -123,8 +123,7 @@ export default function YourAppointments() {
   };
 
   // stripe
-  // stripe
-  const [clientSecret, setClientSecret] = useState("");
+  // stripe 
   const [payAmount, setPayAmount] = useState(0);
   const payWithStripe = async (e) => {
     e.preventDefault();
@@ -135,9 +134,8 @@ export default function YourAppointments() {
         { appointment_id: selectedAppId }
       );
       dispatch(setProgress(80));
-      if (res.status === 200) {
-        setClientSecret(res.data.client_secret);
-        setPayAmount(res.data.amount / 100 )
+      if (res.status === 200) { 
+        setPayAmount(res?.data?.amount )
         setSubmitButtonState("stripe");
         dispatch(setProgress(90));
       }
@@ -150,8 +148,7 @@ export default function YourAppointments() {
   const appearance = {
     theme: "stripe",
   };
-  const options = {
-    clientSecret,
+  const options = { 
     appearance,
   };
 
@@ -248,13 +245,11 @@ export default function YourAppointments() {
               id="paypal-button-container"
             ></div>
           ) : submitButtonState === "stripe" ? (
-            <>
-              {clientSecret && (
+ 
                 <Elements options={options} stripe={stripePromise}>
-                  <CheckoutForm payAmount={payAmount} onPaymentSuccess={onPaymentSuccess} />
+                  <CheckoutForm  appointment_id={selectedAppId} payAmount={payAmount} onPaymentSuccess={onPaymentSuccess} />
                 </Elements>
-              )}
-            </>
+ 
           ) : (
             <>
               <Button onClick={payWithStripe} block>

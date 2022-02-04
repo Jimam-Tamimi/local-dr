@@ -3,17 +3,19 @@ import {
   PaymentElement,
   useStripe,
   useElements,
-  CardElement
+  CardElement,
 } from "@stripe/react-stripe-js";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setProgress } from "../../redux/progress/actions";
 import alert from "../../redux/alert/actions";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 export default function CheckoutForm({
   onPaymentSuccess = undefined,
   payAmount = "",
+  appointment_id = null,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -39,70 +41,39 @@ export default function CheckoutForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(setProgress(10));
+    setIsLoading(true);
+    dispatch(setProgress(20));
 
     if (!stripe || !elements) {
       // Stripe.js has not yet loaded.
       // Make sure to disable form submission until Stripe.js has loaded.
       return;
-    } 
-
-
-
-    // setIsLoading(true);
-    // dispatch(setProgress(30));
-    // const status = await stripe.confirmPayment({
-    //   elements,
-    //   //   confirmParams: {
-    //   //     // Make sure to change this to your payment completion page
-    //   //     return_url: "http://localhost:3000",
-    //   //     receipt_email: email,
-
-    //   //   },
-    //   redirect: "if_required",
-    // });
-    // console.log(status);
-    // if (status?.paymentIntent?.status === "succeeded") {
-    //   dispatch(setProgress(70));
-    //   setTimeout(() => {
-    //     setIsLoading(false);
-    //     setMessage("Payment succeeded!");
-    //     dispatch(alert("Payment succeeded!", "success"));
-    //     if (onPaymentSuccess !== undefined) {
-    //       onPaymentSuccess();
-    //     }
-    //     dispatch(setProgress(100));
-    //   }, 3000);
-    // }
-    // const { error } = status;
-
-    // // This point will only be reached if there is an immediate error when
-    // // confirming the payment. Otherwise, your customer will be redirected to
-    // // your `return_url`. For some payment methods like iDEAL, your customer will
-    // // be redirected to an intermediate site first to authorize the payment, then
-    // // redirected to the `return_url`.
-    // if (error.type === "card_error" || error.type === "validation_error") {
-    //   setMessage(error.message);
-    // } else {
-    //   setMessage("An unexpected error occured.");
-    //   console.log(error);
-
-    
-    
-    
-    // }
-
+    }
+ 
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
     console.log(result);
-    if(result.error){
-      setMessage("An unexpected error occured.");
+    if (result.error) {
+      setMessage(result.error.message);
     } else {
-      console.log('');
+      setMessage("");
+
+      const { token } = result;
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}api/stripe_payment_confirm/`,
+        { stripeToken: token.id, appointment_id: appointment_id }
+      );
+      console.log(res);
+      dispatch(setProgress(70)); 
+      if (res.status === 200) {
+        setMessage("Payment succeeded!");
+        dispatch(alert("Payment succeeded!", "success"));
+        if (onPaymentSuccess !== undefined) {
+          onPaymentSuccess();
+          dispatch(setProgress(100));
+        }
+      }
     }
-    
-    
-    dispatch(setProgress(100));
 
     setIsLoading(false);
   };
@@ -110,16 +81,8 @@ export default function CheckoutForm({
   return (
     <Wrap>
       <form id="payment-form" onSubmit={handleSubmit}>
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email address"
-        />
-        <CardElement 
-          id="card-element"
-        />
+ 
+        <CardElement id="card-element" />
 
         <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
@@ -266,6 +229,10 @@ const Wrap = styled.div`
     transform-origin: 0px 10.2px;
     -webkit-animation: loading 2s infinite ease;
     animation: loading 2s infinite ease;
+  }
+   #submit{
+    position: relative;
+    top: 20px;
   }
 
   @keyframes loading {

@@ -1,3 +1,4 @@
+from locale import currency
 from django.views.decorators.csrf import csrf_exempt
 import json
 from os import environ
@@ -383,6 +384,7 @@ def start_payment(request):
                                        "currency": "INR",
                                        "payment_capture": "1"})
         appointment.payment_id = payment['id']
+        
         appointment.amount = amount
         appointment.save()
         appointment_data = AppointmentSerializer(appointment).data
@@ -626,16 +628,11 @@ def paypal_payment_start(request):
 
 
 # stripe
+stripe.api_key = environ['STRIPE_SECRET_KEY']
+
+
 @api_view(['POST', 'GET'])
 def create_payment(request):
-    stripe.api_key = environ['STRIPE_SECRET_KEY']
-    # endpoint = stripe.WebhookEndpoint.create(
-    # url='http://localhost:8000/api/tamimi/',
-    # enabled_events=[
-    #     'charge.failed',
-    #     'charge.succeeded',
-    # ],
-    # )
 
     appointment_id = request.data.get('appointment_id', None)
     if(appointment_id is None):
@@ -651,71 +648,49 @@ def create_payment(request):
     print(amount)
 
     try:
-        
 
-        # Create a PaymentIntent with the order amount and currency
-        intent = stripe.PaymentIntent.create(
-            amount=amount * 100,
-            currency='usd',
-            payment_method_types=['card'],
-            
-
-            description="Software development services",
-        )
-        
- 
         appointment.amount = amount
-        appointment.payment_id = intent['id']
         appointment.save()
-        print(intent)
 
-        return Response({'client_secret': intent['client_secret'], 'amount': intent['amount']}, status=status.HTTP_200_OK)
+        return Response({'amount': amount}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# @api_view(['POST'])
-# @permission_classes([AllowAny])
+@api_view(['POST'])
+@permission_classes([IsAuthenticated]) 
+def stripe_payment_confirm(request):
 
-
-@csrf_exempt
-def stripe_webhook(request):
-    event = None
-    payload = request.body
-    endpoint_secret = environ['STRIPE_ENDPOINT_SECRET']
+    appointment_id = request.data.get('appointment_id', None)
+    
     try:
-        event = payload
-    except Exception as e:
-        # print('⚠️  Webhook error while parsing basic request.' + str(e))
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-    if endpoint_secret:
-        # Only verify the event if there is an endpoint secret defined
-        # Otherwise use the basic event deserialized with json
-        sig_header = request.headers.get('stripe-signature')
-        try:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, endpoint_secret
-            )
-        except stripe.error.SignatureVerificationError as e:
-            # print('⚠️  Webhook signature verification failed.' + str(e))
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        appointment = Appointment.objects.get(id=appointment_id)
+    except Appointment.DoesNotExist:
+        return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-    # Handle the event
-    if event and event['type'] == 'payment_intent.succeeded':
-        # contains a stripe.PaymentIntent
-        payment_intent = event['data']['object']
-        payment_id = event['data']['object']['id']
+ 
+    amount = appointment.doctor.hospital.price
+    customer = stripe.Customer.create(
+        email=request.user.email,
+        source = request.data.get('stripeToken', None)
+    )
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        
+        amount =  amount * 100,
+        currency='usd',
+        description="Payment for appointment with '" + appointment.doctor.name + "' at '" + appointment.doctor.hospital.name + "' on " + str(appointment.date) + " at " + str(appointment.time) + '.'
+    )
+    print(charge)
+    if(charge['paid'] == True):
 
-        try:
-            appointment = Appointment.objects.get(payment_id=payment_id)
-        except Appointment.DoesNotExist:
-            return Response({"message": "Appointment does not exist"}, status=status.HTTP_404_NOT_FOUND)
-
+ 
         appointment.isPaid = True
+        appointment.amount = amount
         appointment.save()
 
         Payment.objects.create(appointment=appointment, amount=appointment.amount,
-                               payment_id=payment_id, payed_with='stripe')
+                               payment_id=charge['id'], payed_with='stripe')
         Notification.objects.create(appointment=appointment)
 
         try:
@@ -730,10 +705,5 @@ def stripe_webhook(request):
         except Exception as e:
             print(e)
 
-        # Then define and call a method to handle the successful payment intent.
-        # handle_payment_intent_succeeded(payment_intent)
-    else:
-        # Unexpected event type
-        print('Unhandled event type {}'.format(event['type']))
-
-    return HttpResponse('ok')
+        
+    return Response({"message": "Payment Successful"}, status=status.HTTP_200_OK)

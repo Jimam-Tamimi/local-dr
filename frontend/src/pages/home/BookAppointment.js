@@ -220,7 +220,6 @@ export default function BookAppointment({ match }) {
   };
 
   // stripe
-  const [clientSecret, setClientSecret] = useState("");
   const [payAmount, setPayAmount] = useState(0);
   const payWithStripe = async (e) => {
     e.preventDefault();
@@ -232,8 +231,7 @@ export default function BookAppointment({ match }) {
       );
       dispatch(setProgress(80));
       if (res.status === 200) {
-        await setClientSecret(res.data.client_secret);
-        await setPayAmount(res.data.amount / 100);
+        await setPayAmount(res.data.amount);
 
         await dispatch(setProgress(90));
         setSubmitButtonState("stripe");
@@ -248,18 +246,17 @@ export default function BookAppointment({ match }) {
     theme: "stripe",
   };
   const options = {
-    clientSecret,
     appearance,
   };
 
   const onPaymentSuccess = () => {
     history.push(`/appointments/${onSubmitSuccessApoId}/`);
-  }
+  };
 
   return (
     <>
       <Wrap>
-        {submitButtonState !== 'stripe' && (
+        {submitButtonState !== "stripe" && (
           <Form
             onSubmit={onSubmit}
             style={{ marginBottom: "20px", height: "auto" }}
@@ -403,10 +400,14 @@ export default function BookAppointment({ match }) {
             )}
           </Form>
         )}
-
-        {clientSecret && (
+        {submitButtonState === "stripe" && (
           <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm payAmount={payAmount} email={email} onPaymentSuccess={onPaymentSuccess} />
+            <CheckoutForm
+              payAmount={payAmount}
+              appointment_id={onSubmitSuccessApoId}
+              email={email}
+              onPaymentSuccess={onPaymentSuccess}
+            />
           </Elements>
         )}
       </Wrap>

@@ -29,6 +29,8 @@ import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
 import Staff from "./pages/admin/Staff";
 import LoadingBar from "react-top-loading-bar";
 
+
+
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();

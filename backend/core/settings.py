@@ -192,6 +192,8 @@ BASE_URL = "http://127.0.0.1:3000/"
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    "https://www.mycitydoc.com",
+    "https://mycitydoc.com",
 ]
 
 
@@ -199,4 +201,7 @@ CORS_ALLOWED_ORIGINS = [
 os.environ['RAZOR_KEY_ID'] = 'rzp_test_S12YbY2Trf6xYD' 
 os.environ['RAZOR_KEY_SECRET'] = 'HAldYJG4BYTUAZOYfnueSH6l'
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000/']
+os.environ['STRIPE_SECRET_KEY'] = 'sk_test_51J5yMeFrv5eyNRBwFHbIXZOv5hDdV5c0lD1nUF0Oc9qKWiDsYs3jrlZpW9MtKStBxjZhHmwFlN0btaVqUYZqqMkk00EHrLdlUv'
+ 
+os.environ['STRIPE_ENDPOINT_SECRET'] = 'whsec_8TlA3BNZmCtXgWhxZGuMytPLK9k6HAXm'
+# os.environ['STRIPE_ENDPOINT_SECRET'] = 'whsec_b534acfd4d58a6757f59f9475aacb5821a8978dd0740948ca182ec1339a86e29'

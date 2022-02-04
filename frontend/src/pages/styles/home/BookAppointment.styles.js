@@ -4,6 +4,8 @@ import { Column, Flex } from "../../../styles/Essentials.styles";
 export const Wrap = styled.div`
   width: 100vw;
   ${Flex}
+  flex-direction: column;
+
 `;
 
 export const Form = styled.form`

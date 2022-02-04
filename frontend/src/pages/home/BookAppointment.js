@@ -10,7 +10,7 @@ import {
 import { MdOutlineEmail, MdOutlinePermIdentity } from "react-icons/md";
 import { AiFillPhone } from "react-icons/ai";
 import { Button, Column, Grid } from "../../styles/Essentials.styles";
-import Calendar from "react-calendar";  
+import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import demoDr2 from "../../assets/images/demo-dr2.png";
 import axios from "axios";
@@ -19,6 +19,14 @@ import alert from "../../redux/alert/actions";
 import { logout } from "../../redux/auth/actions";
 import { initPayPalButton, showRazorpay } from "../../helpers";
 import { setProgress } from "../../redux/progress/actions";
+
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
+
+const stripePromise = loadStripe(
+  `${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`
+);
 
 export default function BookAppointment({ match }) {
   const dispatch = useDispatch();
@@ -31,7 +39,6 @@ export default function BookAppointment({ match }) {
       minute: parseInt(timeArray[1]?.split(" ")[0]),
       timeOffset: timeArray[1]?.split(" ")[1]?.replaceAll(",", ""),
     };
-    console.log(t);
     return t;
   };
   const newDate = new Date();
@@ -142,12 +149,11 @@ export default function BookAppointment({ match }) {
       .replaceAll("[", "")
       .replaceAll("]", "")
       .split(",")
-      .map((t) => t );
+      .map((t) => t);
   }
 
   function getTime(time) {
     time = getTimeFromString(time);
-    console.log(time);
     return (
       (time.timeOffset === "PM" ? time.hour + 12 : time.hour) +
       ":" +
@@ -175,172 +181,234 @@ export default function BookAppointment({ match }) {
     dispatch(setProgress(100));
   }, [date]);
 
-
   const [submitButtonState, setSubmitButtonState] = useState("continue");
 
   const payWithIndianCard = async (e) => {
     e.preventDefault();
-    console.log('pay with indian card');
-    await showRazorpay(onSubmitSuccessApoId, () => {
-      dispatch(alert("Appointment booked successfully", "success"));
-      history.push(`/your-appointments/`);
-    }, () => dispatch(alert("Payment Failed", "danger")) );
+    console.log("pay with indian card");
+    await showRazorpay(
+      onSubmitSuccessApoId,
+      () => {
+        dispatch(alert("Appointment booked successfully", "success"));
+        history.push(`/your-appointments/`);
+      },
+      () => dispatch(alert("Payment Failed", "danger"))
+    );
   };
 
   const payWithInternationalCard = async (e) => {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
-  script.type = "text/javascript";
-  // script.crossOrigin = "anonymous"
-  // script.setAttribute("data-csp-nonce", "xyz-123")
+      "https://www.paypal.com/sdk/js?client-id=ASl7xJp05iNYH19do47QXnku1t4__RVVe-3VDt_GkWQ9Vf749WVDkF9ti4YUHSXTPj5NUvYIAPrbq9Qx&currency=USD";
+    script.type = "text/javascript";
+    // script.crossOrigin = "anonymous"
+    // script.setAttribute("data-csp-nonce", "xyz-123")
 
     await document.head.appendChild(script);
     script.onload = () => {
       setSubmitButtonState("paypal");
-      initPayPalButton(onSubmitSuccessApoId, () => {
-        dispatch(alert("Appointment booked successfully", "success"));
-        history.push(`/your-appointments/`);
-      }, () => dispatch(alert("Payment Failed", "danger")));
+      initPayPalButton(
+        onSubmitSuccessApoId,
+        () => {
+          dispatch(alert("Appointment booked successfully", "success"));
+          history.push(`/your-appointments/`);
+        },
+        () => dispatch(alert("Payment Failed", "danger"))
+      );
     };
   };
+
+  // stripe
+  const [clientSecret, setClientSecret] = useState("");
+  const [payAmount, setPayAmount] = useState(0);
+  const payWithStripe = async (e) => {
+    e.preventDefault();
+    dispatch(setProgress(10));
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}api/stripe_payment_start/`,
+        { appointment_id: onSubmitSuccessApoId }
+      );
+      dispatch(setProgress(80));
+      if (res.status === 200) {
+        await setClientSecret(res.data.client_secret);
+        await setPayAmount(res.data.amount / 100);
+
+        await dispatch(setProgress(90));
+        setSubmitButtonState("stripe");
+      }
+    } catch (error) {
+      console.log(error?.response);
+    }
+    dispatch(setProgress(100));
+  };
+
+  const appearance = {
+    theme: "stripe",
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+
+  const onPaymentSuccess = () => {
+    history.push(`/appointments/${onSubmitSuccessApoId}/`);
+  }
 
   return (
     <>
       <Wrap>
-        <Form
-          onSubmit={onSubmit}
-          style={{ marginBottom: "20px", height: "auto" }}
-          id="appointment-form"
-        >
-          <Grid direction="row" justify="start">
-            <ProfileColumn justify="start" lg={3} sx={4}>
-              <img
-                src={
-                  doctorData?.image &&
-                  `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`
-                }
+        {submitButtonState !== 'stripe' && (
+          <Form
+            onSubmit={onSubmit}
+            style={{ marginBottom: "20px", height: "auto" }}
+            id="appointment-form"
+          >
+            <Grid direction="row" justify="start">
+              <ProfileColumn justify="start" lg={3} sx={4}>
+                <img
+                  src={
+                    doctorData?.image &&
+                    `${process.env.REACT_APP_MEDIA_URL}${doctorData?.image}`
+                  }
+                />
+              </ProfileColumn>
+
+              <ProfileColumn direction="column" align="start" lg={9} sx={8}>
+                <h3>{doctorData?.name}</h3>
+                <p>{doctorData?.hospital?.name}</p>
+                <p>{doctorData?.qualification}</p>
+              </ProfileColumn>
+            </Grid>
+            <InputDiv>
+              <FormTitle>Book your appointment</FormTitle>
+            </InputDiv>
+            <InputDiv>
+              <Label>Name</Label>
+
+              <Input
+                value={name}
+                onChange={onChange}
+                placeholder="Name"
+                name="name"
+                required
               />
-            </ProfileColumn>
+            </InputDiv>
+            <InputDiv>
+              <Label>Email</Label>
 
-            <ProfileColumn direction="column" align="start" lg={9} sx={8}>
-              <h3>{doctorData?.name}</h3>
-              <p>{doctorData?.hospital?.name}</p>
-              <p>{doctorData?.qualification}</p>
-            </ProfileColumn>
-          </Grid>
-          <InputDiv>
-            <FormTitle>Book your appointment</FormTitle>
-          </InputDiv>
-          <InputDiv>
-            <Label>Name</Label>
-
-            <Input
-              value={name}
-              onChange={onChange}
-              placeholder="Name"
-              name="name"
-              required
-            />
-          </InputDiv>
-          <InputDiv>
-            <Label>Email</Label>
-
-            <Input
-              value={email}
-              onChange={onChange}
-              placeholder="Email"
-              name="email"
-              required
-            />
-          </InputDiv>
-          <InputDiv>
-            <Label>Mobile Number</Label>
-            <Input
-              value={number}
-              onChange={onChange}
-              placeholder="Mobile Number"
-              name="number"
-              required
-            />
-          </InputDiv>
-          <InputDiv>
-            <Label>Date</Label>
-            <Input
-              onChange={onChange}
-              placeholder="Date"
-              name="date"
-              required
-              type={"date"}
-              value={date}
-            />
-          </InputDiv>
-          <InputDiv>
-            <Label>Select Time</Label>
-            <Grid
-              style={{ maxHeight: "290px", overflowY: "scroll" }}
-              justify="space-between"
-              lg={4}
-              spacing={10}
-            >
-              {activeTime?.map((time) =>
-                convertStrToTimeList(time.time)?.map((t, i) => (
-                  <TimeColumn
-                    key={i}
-                    selected={formData.time === getTime(t)}
-                    onClick={(e) => {
-                      setFormData({ ...formData, time: getTime(t) });
-                      console.log(formData);
+              <Input
+                value={email}
+                onChange={onChange}
+                placeholder="Email"
+                name="email"
+                required
+              />
+            </InputDiv>
+            <InputDiv>
+              <Label>Mobile Number</Label>
+              <Input
+                value={number}
+                onChange={onChange}
+                placeholder="Mobile Number"
+                name="number"
+                required
+              />
+            </InputDiv>
+            <InputDiv>
+              <Label>Date</Label>
+              <Input
+                onChange={onChange}
+                placeholder="Date"
+                name="date"
+                required
+                type={"date"}
+                value={date}
+              />
+            </InputDiv>
+            <InputDiv>
+              <Label>Select Time</Label>
+              <Grid
+                style={{ maxHeight: "290px", overflowY: "scroll" }}
+                justify="space-between"
+                lg={4}
+                spacing={10}
+              >
+                {activeTime?.map((time) =>
+                  convertStrToTimeList(time.time)?.map((t, i) => (
+                    <TimeColumn
+                      key={i}
+                      selected={formData.time === getTime(t)}
+                      onClick={(e) => {
+                        setFormData({ ...formData, time: getTime(t) });
+                        console.log(formData);
+                      }}
+                    >
+                      {t}
+                    </TimeColumn>
+                  ))
+                )}
+                {activeTime?.length === 0 && (
+                  <p
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      marginTop: "25px",
                     }}
                   >
-                    {t}
-                  </TimeColumn>
-                ))
-              )}
-              {activeTime?.length === 0 && (
-                <p
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    marginTop: "25px",
-                  }}
+                    No Appointments Available on Selected Date
+                  </p>
+                )}
+              </Grid>
+            </InputDiv>
+            {submitButtonState === "continue" ? (
+              <Button block>Continue Booking</Button>
+            ) : submitButtonState === "choose" ? (
+              <>
+                <Button
+                  type="button"
+                  onClick={payWithStripe}
+                  style={{ margin: "5px 0px" }}
+                  block
                 >
-                  No Appointments Available on Selected Date
-                </p>
-              )}
-            </Grid>
-          </InputDiv>
-          {submitButtonState === "continue" ? (
-            <Button block>Continue Booking</Button>
-          ) : submitButtonState === "choose" ? (
-            <>
-              <Button
-                type="button"
-                onClick={payWithIndianCard}
-                style={{ margin: "5px 0px" }}
-                block
-              >
-                Pay With Indian Card
-              </Button>
-              <Button
-                onClick={payWithInternationalCard}
-                style={{ margin: "5px 0px" }}
-                block
-              >
-                Pay With International Card
-              </Button>
-              :
-            </>
-          ) : submitButtonState === "paypal" ? (
-            <div
-              style={{ marginTop: "15px" }}
-              id="paypal-button-container"
-            ></div>
-          ) : (
-            ""
-          )}
-        </Form>
+                  Pay With Stripe
+                </Button>
+                <Button
+                  type="button"
+                  onClick={payWithIndianCard}
+                  style={{ margin: "5px 0px" }}
+                  block
+                >
+                  Pay With Indian Card
+                </Button>
+                <Button
+                  onClick={payWithInternationalCard}
+                  style={{ margin: "5px 0px" }}
+                  block
+                >
+                  Pay With International Card
+                </Button>
+                :
+              </>
+            ) : submitButtonState === "paypal" ? (
+              <div
+                style={{ marginTop: "15px" }}
+                id="paypal-button-container"
+              ></div>
+            ) : submitButtonState === "stripe" ? (
+              <></>
+            ) : (
+              ""
+            )}
+          </Form>
+        )}
+
+        {clientSecret && (
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm payAmount={payAmount} email={email} onPaymentSuccess={onPaymentSuccess} />
+          </Elements>
+        )}
       </Wrap>
     </>
   );

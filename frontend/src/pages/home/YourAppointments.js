@@ -12,6 +12,19 @@ import {
 } from "../../styles/Essentials.styles";
 import Modal from "../../components/Modal/Modal";
 import alert from "../../redux/alert/actions";
+import CheckoutForm from "./CheckoutForm";
+
+
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+
+const stripePromise = loadStripe(
+    `${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`
+  );
+  
+
+
 
 export default function YourAppointments() {
   const [appointments, setAppointments] = useState([]);
@@ -90,7 +103,7 @@ export default function YourAppointments() {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=ASl7xJp05iNYH19do47QXnku1t4__RVVe-3VDt_GkWQ9Vf749WVDkF9ti4YUHSXTPj5NUvYIAPrbq9Qx&currency=USD";
     script.type = "text/javascript";
     // script.crossOrigin = "anonymous";
     await document.head.appendChild(script);
@@ -108,6 +121,47 @@ export default function YourAppointments() {
       );
     };
   };
+
+  // stripe
+  // stripe
+  const [clientSecret, setClientSecret] = useState("");
+  const [payAmount, setPayAmount] = useState(0);
+  const payWithStripe = async (e) => {
+    e.preventDefault();
+    dispatch(setProgress(10));
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}api/stripe_payment_start/`,
+        { appointment_id: selectedAppId }
+      );
+      dispatch(setProgress(80));
+      if (res.status === 200) {
+        setClientSecret(res.data.client_secret);
+        setPayAmount(res.data.amount / 100 )
+        setSubmitButtonState("stripe");
+        dispatch(setProgress(90));
+      }
+    } catch (error) {
+      console.log(error?.response);
+    }
+    dispatch(setProgress(100));
+  };
+
+  const appearance = {
+    theme: "stripe",
+  };
+  const options = {
+    clientSecret,
+    appearance,
+  };
+
+
+  const onPaymentSuccess = () => {
+        setShoePayMod(false);
+        getAppointments()
+        
+  }
+
 
   return (
     <>
@@ -193,8 +247,19 @@ export default function YourAppointments() {
               style={{ marginTop: "15px" }}
               id="paypal-button-container"
             ></div>
+          ) : submitButtonState === "stripe" ? (
+            <>
+              {clientSecret && (
+                <Elements options={options} stripe={stripePromise}>
+                  <CheckoutForm payAmount={payAmount} onPaymentSuccess={onPaymentSuccess} />
+                </Elements>
+              )}
+            </>
           ) : (
             <>
+              <Button onClick={payWithStripe} block>
+                Pay With Stripe
+              </Button>
               <Button onClick={payWithIndianCard} block>
                 Pay With Indian Card
               </Button>

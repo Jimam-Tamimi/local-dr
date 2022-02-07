@@ -103,7 +103,7 @@ export default function YourAppointments() {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=ASl7xJp05iNYH19do47QXnku1t4__RVVe-3VDt_GkWQ9Vf749WVDkF9ti4YUHSXTPj5NUvYIAPrbq9Qx&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=ATB2rrj6MJzI1tJZsMzwU74x25MBvW7l21D3CW545TrgVdg6vpIhI6rnCcayWmDDX0VHDUZCavwqgXyg&currency=USD";
     script.type = "text/javascript";
     // script.crossOrigin = "anonymous";
     await document.head.appendChild(script);
@@ -123,7 +123,8 @@ export default function YourAppointments() {
   };
 
   // stripe
-  // stripe 
+  // stripe
+  const [clientSecret, setClientSecret] = useState("");
   const [payAmount, setPayAmount] = useState(0);
   const payWithStripe = async (e) => {
     e.preventDefault();
@@ -134,8 +135,9 @@ export default function YourAppointments() {
         { appointment_id: selectedAppId }
       );
       dispatch(setProgress(80));
-      if (res.status === 200) { 
-        setPayAmount(res?.data?.amount )
+      if (res.status === 200) {
+        setClientSecret(res.data.client_secret);
+        setPayAmount(res.data.amount / 100 )
         setSubmitButtonState("stripe");
         dispatch(setProgress(90));
       }
@@ -148,7 +150,8 @@ export default function YourAppointments() {
   const appearance = {
     theme: "stripe",
   };
-  const options = { 
+  const options = {
+    clientSecret,
     appearance,
   };
 
@@ -245,16 +248,18 @@ export default function YourAppointments() {
               id="paypal-button-container"
             ></div>
           ) : submitButtonState === "stripe" ? (
- 
+            <>
+              {clientSecret && (
                 <Elements options={options} stripe={stripePromise}>
-                  <CheckoutForm  appointment_id={selectedAppId} payAmount={payAmount} onPaymentSuccess={onPaymentSuccess} />
+                  <CheckoutForm payAmount={payAmount} onPaymentSuccess={onPaymentSuccess} />
                 </Elements>
- 
+              )}
+            </>
           ) : (
             <>
-              <Button onClick={payWithStripe} block>
+              {/* <Button onClick={payWithStripe} block>
                 Pay With Stripe
-              </Button>
+              </Button> */}
               <Button onClick={payWithIndianCard} block>
                 Pay With Indian Card
               </Button>

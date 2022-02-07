@@ -1,4 +1,5 @@
  
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 
@@ -8,7 +9,7 @@ export const BoxesWrap = styled.div`
     flex-wrap: wrap;
 `
 
-export const Box = styled.div`
+export const Box = styled(Link)`
     background: ${props => props.background};
     color: white;
     display: flex;

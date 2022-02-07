@@ -184,8 +184,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'jimamdrive.vid@gmail.com'
-EMAIL_HOST_PASSWORD = "google.drive.jimam.storage"
+EMAIL_HOST_USER = 'mycitydocs@gmail.com'
+EMAIL_HOST_PASSWORD = "App@221x"
 
 
 BASE_URL = "http://127.0.0.1:3000/"
@@ -198,12 +198,10 @@ CORS_ALLOWED_ORIGINS = [
 
 
 
-os.environ['RAZOR_KEY_ID'] = 'rzp_test_S12YbY2Trf6xYD' 
-os.environ['RAZOR_KEY_SECRET'] = 'HAldYJG4BYTUAZOYfnueSH6l'
+os.environ['RAZOR_KEY_ID'] = 'rzp_live_YcR9yGI4tes6k2' 
+os.environ['RAZOR_KEY_SECRET'] = '8QTfA5a1MB4m7t49cXPJL5O6'
 
-# os.environ['STRIPE_SECRET_KEY'] = 'sk_test_51J5yMeFrv5eyNRBwFHbIXZOv5hDdV5c0lD1nUF0Oc9qKWiDsYs3jrlZpW9MtKStBxjZhHmwFlN0btaVqUYZqqMkk00EHrLdlUv'
-os.environ['STRIPE_SECRET_KEY'] = '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'
-
+os.environ['STRIPE_SECRET_KEY'] = 'ECbiwMiuaHQarU9BcenQ3s0O4YSKf4DI5FYoEfTqH3d6xqJxOWS3ks8Su1LhfyPNj9yn64V3iopEp3X2'
  
 os.environ['STRIPE_ENDPOINT_SECRET'] = 'whsec_8TlA3BNZmCtXgWhxZGuMytPLK9k6HAXm'
 # os.environ['STRIPE_ENDPOINT_SECRET'] = 'whsec_b534acfd4d58a6757f59f9475aacb5821a8978dd0740948ca182ec1339a86e29'

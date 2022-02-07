@@ -60,8 +60,8 @@ export const showRazorpay = async (id, onSuccess, onError) => {
     key_secret: `${process.env.REACT_APP_RAZOR_KEY_SECRET}`,
     amount: data?.data?.payment?.amount,
     currency: "INR",
-    name: "Local Doctor",
-    description: "Test teansaction",
+    name: "My City Doc",
+    description: "Payment for your appointment",
     image: "", // add image url
     order_id: data?.data?.payment?.id,
     handler: async function (response) {

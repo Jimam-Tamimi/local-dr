@@ -10,6 +10,9 @@ export const Wrap = styled.div`
 
 export const Form = styled.form`
   width: 600px;
+  @media (max-width: 620px) {
+    width: 90%;
+  }
   padding: 30px;
   padding-top: 0px;
   height: 800px; 

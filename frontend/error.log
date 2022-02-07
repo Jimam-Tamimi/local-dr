@@ -1,0 +1,601 @@
+[Mon Feb 07 08:41:23.153362 2022] [mpm_event:notice] [pid 2959:tid 140649732049984] AH00489: Apache/2.4.41 (Ubuntu) configured -- resuming normal operations
+[Mon Feb 07 08:41:23.158299 2022] [core:notice] [pid 2959:tid 140649732049984] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 08:42:26.006763 2022] [mpm_event:notice] [pid 2959:tid 140649732049984] AH00491: caught SIGTERM, shutting down
+[Mon Feb 07 08:42:26.096227 2022] [mpm_event:notice] [pid 8860:tid 139792828283968] AH00489: Apache/2.4.41 (Ubuntu) mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 08:42:26.096298 2022] [core:notice] [pid 8860:tid 139792828283968] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 09:00:24.115679 2022] [mpm_event:notice] [pid 8860:tid 139792828283968] AH00491: caught SIGTERM, shutting down
+[Mon Feb 07 09:01:41.882241 2022] [mpm_event:notice] [pid 10341:tid 140616341584960] AH00489: Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 09:01:41.882328 2022] [core:notice] [pid 10341:tid 140616341584960] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 14:31:47.345560 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776] Internal Server Error: /
+[Mon Feb 07 14:31:47.345616 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776] Traceback (most recent call last):
+[Mon Feb 07 14:31:47.345620 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:31:47.345623 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     response = get_response(request)
+[Mon Feb 07 14:31:47.345625 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 167, in _get_response
+[Mon Feb 07 14:31:47.345628 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     callback, callback_args, callback_kwargs = self.resolve_request(request)
+[Mon Feb 07 14:31:47.345631 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 290, in resolve_request
+[Mon Feb 07 14:31:47.345634 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     resolver_match = resolver.resolve(request.path_info)
+[Mon Feb 07 14:31:47.345636 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:31:47.345639 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     for pattern in self.url_patterns:
+[Mon Feb 07 14:31:47.345641 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:31:47.345644 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:31:47.345646 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:31:47.345649 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:31:47.345651 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:31:47.345654 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:31:47.345702 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:31:47.345705 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:31:47.345708 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:31:47.345710 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:31:47.345712 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:31:47.345714 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:31:47.345716 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:31:47.345718 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:31:47.345720 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:31:47.345723 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:31:47.345725 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:31:47.345727 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:31:47.345729 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:31:47.345731 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:31:47.345733 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:31:47.345736 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:31:47.345738 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:31:47.345740 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:31:47.345742 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:31:47.345744 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:31:47.345746 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:31:47.345748 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:31:47.345751 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:31:47.345755 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     from .views import *
+[Mon Feb 07 14:31:47.345757 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:31:47.345760 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776]     import stripe
+[Mon Feb 07 14:31:47.345762 2022] [wsgi:error] [pid 10342:tid 140616308422400] [remote 103.118.76.169:53776] ModuleNotFoundError: No module named 'stripe'
+[Mon Feb 07 14:31:48.595711 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777] Internal Server Error: /favicon.ico
+[Mon Feb 07 14:31:48.595760 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777] Traceback (most recent call last):
+[Mon Feb 07 14:31:48.595763 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:31:48.595766 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     response = get_response(request)
+[Mon Feb 07 14:31:48.595768 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/deprecation.py", line 125, in __call__
+[Mon Feb 07 14:31:48.595770 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     response = self.process_request(request)
+[Mon Feb 07 14:31:48.595772 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 53, in process_request
+[Mon Feb 07 14:31:48.595775 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     if self.should_redirect_with_slash(request):
+[Mon Feb 07 14:31:48.595777 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 70, in should_redirect_with_slash
+[Mon Feb 07 14:31:48.595790 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     if not is_valid_path(request.path_info, urlconf):
+[Mon Feb 07 14:31:48.595800 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 153, in is_valid_path
+[Mon Feb 07 14:31:48.595802 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     return resolve(path, urlconf)
+[Mon Feb 07 14:31:48.595804 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 24, in resolve
+[Mon Feb 07 14:31:48.595807 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     return get_resolver(urlconf).resolve(path)
+[Mon Feb 07 14:31:48.595809 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:31:48.595811 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     for pattern in self.url_patterns:
+[Mon Feb 07 14:31:48.595813 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:31:48.595815 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:31:48.595818 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:31:48.595831 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:31:48.595834 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:31:48.595836 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:31:48.595838 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:31:48.595841 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:31:48.595843 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:31:48.595845 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:31:48.595847 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:31:48.595849 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:31:48.595852 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:31:48.595854 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:31:48.595856 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:31:48.595858 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:31:48.595860 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:31:48.595863 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:31:48.595865 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:31:48.595867 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:31:48.595869 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:31:48.595872 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:31:48.595874 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:31:48.595876 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:31:48.595878 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:31:48.595880 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:31:48.595885 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:31:48.595887 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:31:48.595889 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:31:48.595892 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     from .views import *
+[Mon Feb 07 14:31:48.595894 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:31:48.595896 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777]     import stripe
+[Mon Feb 07 14:31:48.595898 2022] [wsgi:error] [pid 10342:tid 140616190924544] [remote 103.118.76.169:53777] ModuleNotFoundError: No module named 'stripe'
+Exception ignored in: <function Local.__del__ at 0x7fe3c14b1790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+Exception ignored in: <function Local.__del__ at 0x7fe3c14b1790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+[Mon Feb 07 09:02:11.145543 2022] [mpm_event:notice] [pid 10341:tid 140616341584960] AH00491: caught SIGTERM, shutting down
+[Mon Feb 07 09:02:11.297539 2022] [mpm_event:notice] [pid 10479:tid 139635944668224] AH00489: Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 09:02:11.297629 2022] [core:notice] [pid 10479:tid 139635944668224] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 14:32:12.886206 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797] Internal Server Error: /
+[Mon Feb 07 14:32:12.886273 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797] Traceback (most recent call last):
+[Mon Feb 07 14:32:12.886276 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:12.886280 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     response = get_response(request)
+[Mon Feb 07 14:32:12.886283 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 167, in _get_response
+[Mon Feb 07 14:32:12.886286 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     callback, callback_args, callback_kwargs = self.resolve_request(request)
+[Mon Feb 07 14:32:12.886290 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 290, in resolve_request
+[Mon Feb 07 14:32:12.886293 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     resolver_match = resolver.resolve(request.path_info)
+[Mon Feb 07 14:32:12.886296 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:32:12.886299 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     for pattern in self.url_patterns:
+[Mon Feb 07 14:32:12.886302 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:12.887246 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:12.887256 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:32:12.887260 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:32:12.887263 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:12.887266 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:12.887293 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:32:12.887296 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:32:12.887299 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:12.887303 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:12.887306 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:12.887309 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:12.887312 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:12.887315 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:12.887317 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:12.887320 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:12.887323 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:32:12.887326 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:32:12.887329 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:32:12.887332 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:32:12.887335 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:12.887338 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:12.887341 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:12.887343 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:12.887383 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:12.887386 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:12.887388 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:12.887391 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:12.887393 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:32:12.887395 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     from .views import *
+[Mon Feb 07 14:32:12.887397 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:32:12.887399 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797]     import stripe
+[Mon Feb 07 14:32:12.887427 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53797] ModuleNotFoundError: No module named 'stripe'
+[Mon Feb 07 14:32:13.988171 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798] Internal Server Error: /favicon.ico
+[Mon Feb 07 14:32:13.988228 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798] Traceback (most recent call last):
+[Mon Feb 07 14:32:13.988233 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:13.988237 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     response = get_response(request)
+[Mon Feb 07 14:32:13.988240 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/deprecation.py", line 125, in __call__
+[Mon Feb 07 14:32:13.988244 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     response = self.process_request(request)
+[Mon Feb 07 14:32:13.988246 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 53, in process_request
+[Mon Feb 07 14:32:13.988249 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     if self.should_redirect_with_slash(request):
+[Mon Feb 07 14:32:13.988252 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 70, in should_redirect_with_slash
+[Mon Feb 07 14:32:13.988256 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     if not is_valid_path(request.path_info, urlconf):
+[Mon Feb 07 14:32:13.988259 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 153, in is_valid_path
+[Mon Feb 07 14:32:13.988262 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     return resolve(path, urlconf)
+[Mon Feb 07 14:32:13.988265 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 24, in resolve
+[Mon Feb 07 14:32:13.988269 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     return get_resolver(urlconf).resolve(path)
+[Mon Feb 07 14:32:13.988284 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:32:13.988287 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     for pattern in self.url_patterns:
+[Mon Feb 07 14:32:13.988290 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:13.988294 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:13.988297 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:32:13.988300 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:32:13.988303 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:13.988307 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:13.988310 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:32:13.988313 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:32:13.988316 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:13.988320 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:13.988323 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:13.988326 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:13.988329 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:13.988332 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:13.988335 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:13.988339 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:13.988342 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:32:13.988345 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:32:13.988348 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:32:13.988352 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:32:13.988355 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:13.988363 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:13.988366 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:13.988369 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:13.988372 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:13.988375 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:13.988378 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:13.988381 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:13.988385 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:32:13.988388 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     from .views import *
+[Mon Feb 07 14:32:13.988391 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:32:13.988394 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798]     import stripe
+[Mon Feb 07 14:32:13.988397 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53798] ModuleNotFoundError: No module named 'stripe'
+[Mon Feb 07 14:32:14.676330 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800] Internal Server Error: /
+[Mon Feb 07 14:32:14.676376 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800] Traceback (most recent call last):
+[Mon Feb 07 14:32:14.676379 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:14.676382 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     response = get_response(request)
+[Mon Feb 07 14:32:14.676384 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 167, in _get_response
+[Mon Feb 07 14:32:14.676387 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     callback, callback_args, callback_kwargs = self.resolve_request(request)
+[Mon Feb 07 14:32:14.676389 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 290, in resolve_request
+[Mon Feb 07 14:32:14.676391 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     resolver_match = resolver.resolve(request.path_info)
+[Mon Feb 07 14:32:14.676393 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:32:14.676396 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     for pattern in self.url_patterns:
+[Mon Feb 07 14:32:14.676398 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:14.676414 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:14.676417 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:32:14.676419 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:32:14.676421 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:14.676423 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:14.676426 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:32:14.676428 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:32:14.676430 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:14.676432 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:14.676435 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:14.676437 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:14.676439 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:14.676441 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:14.676443 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:14.676445 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:14.676448 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:32:14.676450 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:32:14.676452 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:32:14.676454 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:32:14.676456 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:14.676458 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:14.676461 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:14.676463 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:14.676467 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:14.676470 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:14.676472 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:14.676474 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:14.676476 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:32:14.676478 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     from .views import *
+[Mon Feb 07 14:32:14.676480 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:32:14.676482 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800]     import stripe
+[Mon Feb 07 14:32:14.676484 2022] [wsgi:error] [pid 10480:tid 139635810793216] [remote 103.118.76.169:53800] ModuleNotFoundError: No module named 'stripe'
+[Mon Feb 07 14:32:15.805898 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801] Internal Server Error: /favicon.ico
+[Mon Feb 07 14:32:15.805957 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801] Traceback (most recent call last):
+[Mon Feb 07 14:32:15.805961 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:15.805964 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     response = get_response(request)
+[Mon Feb 07 14:32:15.805967 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/deprecation.py", line 125, in __call__
+[Mon Feb 07 14:32:15.805970 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     response = self.process_request(request)
+[Mon Feb 07 14:32:15.805973 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 53, in process_request
+[Mon Feb 07 14:32:15.805976 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     if self.should_redirect_with_slash(request):
+[Mon Feb 07 14:32:15.805980 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/middleware/common.py", line 70, in should_redirect_with_slash
+[Mon Feb 07 14:32:15.805983 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     if not is_valid_path(request.path_info, urlconf):
+[Mon Feb 07 14:32:15.805986 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 153, in is_valid_path
+[Mon Feb 07 14:32:15.805989 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     return resolve(path, urlconf)
+[Mon Feb 07 14:32:15.805992 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/base.py", line 24, in resolve
+[Mon Feb 07 14:32:15.805995 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     return get_resolver(urlconf).resolve(path)
+[Mon Feb 07 14:32:15.806015 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 590, in resolve
+[Mon Feb 07 14:32:15.806018 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     for pattern in self.url_patterns:
+[Mon Feb 07 14:32:15.806021 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:15.806025 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:15.806028 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 632, in url_patterns
+[Mon Feb 07 14:32:15.806031 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+[Mon Feb 07 14:32:15.806033 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/utils/functional.py", line 48, in __get__
+[Mon Feb 07 14:32:15.806035 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     res = instance.__dict__[self.name] = self.func(instance)
+[Mon Feb 07 14:32:15.806037 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 625, in urlconf_module
+[Mon Feb 07 14:32:15.806040 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     return import_module(self.urlconf_name)
+[Mon Feb 07 14:32:15.806042 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:15.806044 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:15.806046 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:15.806049 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:15.806051 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:15.806053 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:15.806055 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:15.806058 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:15.806060 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/core/urls.py", line 12, in <module>
+[Mon Feb 07 14:32:15.806062 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     path('api/', include("hospital.urls")),
+[Mon Feb 07 14:32:15.806064 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/venv/lib/python3.8/site-packages/django/urls/conf.py", line 34, in include
+[Mon Feb 07 14:32:15.806067 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     urlconf_module = import_module(urlconf_module)
+[Mon Feb 07 14:32:15.806116 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/usr/lib/python3.8/importlib/__init__.py", line 127, in import_module
+[Mon Feb 07 14:32:15.806125 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     return _bootstrap._gcd_import(name[level:], package, level)
+[Mon Feb 07 14:32:15.806131 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 1014, in _gcd_import
+[Mon Feb 07 14:32:15.806138 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 991, in _find_and_load
+[Mon Feb 07 14:32:15.806141 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 975, in _find_and_load_unlocked
+[Mon Feb 07 14:32:15.806144 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
+[Mon Feb 07 14:32:15.806147 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap_external>", line 848, in exec_module
+[Mon Feb 07 14:32:15.806150 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+[Mon Feb 07 14:32:15.806153 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/hospital/urls.py", line 2, in <module>
+[Mon Feb 07 14:32:15.806156 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     from .views import *
+[Mon Feb 07 14:32:15.806159 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]   File "/var/www/core/hospital/views.py", line 24, in <module>
+[Mon Feb 07 14:32:15.806163 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801]     import stripe
+[Mon Feb 07 14:32:15.806166 2022] [wsgi:error] [pid 10480:tid 139635802400512] [remote 103.118.76.169:53801] ModuleNotFoundError: No module named 'stripe'
+[Mon Feb 07 09:02:34.851187 2022] [mpm_event:notice] [pid 10479:tid 139635944668224] AH00491: caught SIGTERM, shutting down
+Exception ignored in: <function Local.__del__ at 0x7eff7d154790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+Exception ignored in: <function Local.__del__ at 0x7eff7d154790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+[Mon Feb 07 09:02:35.060503 2022] [mpm_event:notice] [pid 10619:tid 140326926543936] AH00489: Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 09:02:35.060597 2022] [core:notice] [pid 10619:tid 140326926543936] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 14:32:36.751234 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811] Internal Server Error: /
+[Mon Feb 07 14:32:36.751293 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811] Traceback (most recent call last):
+[Mon Feb 07 14:32:36.751296 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:36.751299 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     response = get_response(request)
+[Mon Feb 07 14:32:36.751302 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 204, in _get_response
+[Mon Feb 07 14:32:36.751305 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     response = response.render()
+[Mon Feb 07 14:32:36.752234 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 105, in render
+[Mon Feb 07 14:32:36.752242 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     self.content = self.rendered_content
+[Mon Feb 07 14:32:36.752244 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 81, in rendered_content
+[Mon Feb 07 14:32:36.752247 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     template = self.resolve_template(self.template_name)
+[Mon Feb 07 14:32:36.752250 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 63, in resolve_template
+[Mon Feb 07 14:32:36.752252 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     return select_template(template, using=self.using)
+[Mon Feb 07 14:32:36.752255 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/loader.py", line 47, in select_template
+[Mon Feb 07 14:32:36.752257 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811]     raise TemplateDoesNotExist(', '.join(template_name_list), chain=chain)
+[Mon Feb 07 14:32:36.752260 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 103.118.76.169:53811] django.template.exceptions.TemplateDoesNotExist: index.html
+[Mon Feb 07 14:32:37.689931 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812] Internal Server Error: /favicon.ico
+[Mon Feb 07 14:32:37.689990 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812] Traceback (most recent call last):
+[Mon Feb 07 14:32:37.689994 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:37.689997 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     response = get_response(request)
+[Mon Feb 07 14:32:37.689999 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 204, in _get_response
+[Mon Feb 07 14:32:37.690002 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     response = response.render()
+[Mon Feb 07 14:32:37.690004 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 105, in render
+[Mon Feb 07 14:32:37.690006 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     self.content = self.rendered_content
+[Mon Feb 07 14:32:37.690008 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 81, in rendered_content
+[Mon Feb 07 14:32:37.690011 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     template = self.resolve_template(self.template_name)
+[Mon Feb 07 14:32:37.690013 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 63, in resolve_template
+[Mon Feb 07 14:32:37.690016 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     return select_template(template, using=self.using)
+[Mon Feb 07 14:32:37.690018 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/loader.py", line 47, in select_template
+[Mon Feb 07 14:32:37.690046 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812]     raise TemplateDoesNotExist(', '.join(template_name_list), chain=chain)
+[Mon Feb 07 14:32:37.690048 2022] [wsgi:error] [pid 10620:tid 140326775883520] [remote 103.118.76.169:53812] django.template.exceptions.TemplateDoesNotExist: index.html
+[Mon Feb 07 14:32:53.585987 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904] Internal Server Error: /
+[Mon Feb 07 14:32:53.586049 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904] Traceback (most recent call last):
+[Mon Feb 07 14:32:53.586056 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:32:53.586060 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     response = get_response(request)
+[Mon Feb 07 14:32:53.586063 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 204, in _get_response
+[Mon Feb 07 14:32:53.586066 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     response = response.render()
+[Mon Feb 07 14:32:53.586107 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 105, in render
+[Mon Feb 07 14:32:53.586111 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     self.content = self.rendered_content
+[Mon Feb 07 14:32:53.586113 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 81, in rendered_content
+[Mon Feb 07 14:32:53.586116 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     template = self.resolve_template(self.template_name)
+[Mon Feb 07 14:32:53.586118 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/response.py", line 63, in resolve_template
+[Mon Feb 07 14:32:53.586120 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     return select_template(template, using=self.using)
+[Mon Feb 07 14:32:53.586123 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]   File "/var/www/core/venv/lib/python3.8/site-packages/django/template/loader.py", line 47, in select_template
+[Mon Feb 07 14:32:53.586125 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904]     raise TemplateDoesNotExist(', '.join(template_name_list), chain=chain)
+[Mon Feb 07 14:32:53.586127 2022] [wsgi:error] [pid 10620:tid 140326893381376] [remote 45.146.165.37:48904] django.template.exceptions.TemplateDoesNotExist: index.html
+[Mon Feb 07 09:03:09.005370 2022] [mpm_event:notice] [pid 10619:tid 140326926543936] AH00491: caught SIGTERM, shutting down
+Exception ignored in: <function Local.__del__ at 0x7fa05ed01790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+Exception ignored in: <function Local.__del__ at 0x7fa05ed01790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+[Mon Feb 07 09:03:09.292492 2022] [mpm_event:notice] [pid 10874:tid 139771533888576] AH00489: Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 09:03:09.292577 2022] [core:notice] [pid 10874:tid 139771533888576] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 14:33:13.375781 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53831] Unauthorized: /api/account/token/verify/
+[Mon Feb 07 14:33:13.392234 2022] [wsgi:error] [pid 10875:tid 139771492333312] [remote 103.118.76.169:53834] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:33:15.101159 2022] [wsgi:error] [pid 10875:tid 139771492333312] [remote 103.118.76.169:53835] Unauthorized: /api/search/
+[Mon Feb 07 14:33:15.166655 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53835] Unauthorized: /api/search/
+[Mon Feb 07 14:33:24.271807 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53837] Unauthorized: /api/search/
+[Mon Feb 07 14:33:24.343879 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53837] Unauthorized: /api/account/token/verify/
+[Mon Feb 07 14:33:24.390900 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53847] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:33:24.412722 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53837] Unauthorized: /api/search/
+[Mon Feb 07 14:33:34.253859 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] 1
+[Mon Feb 07 14:33:34.324249 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53858] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:33:34.369828 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53860] 1
+[Mon Feb 07 14:33:39.874971 2022] [wsgi:error] [pid 10875:tid 139771492333312] [remote 103.118.76.169:53867] jimamtamimi12@gmail.com
+[Mon Feb 07 14:33:39.890572 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53859] []
+[Mon Feb 07 14:33:43.070682 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53858] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:33:44.669541 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] Internal Server Error: /api/appointments/
+[Mon Feb 07 14:33:44.669582 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] Traceback (most recent call last):
+[Mon Feb 07 14:33:44.669586 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 85, in _execute
+[Mon Feb 07 14:33:44.669589 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return self.cursor.execute(sql, params)
+[Mon Feb 07 14:33:44.669592 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 416, in execute
+[Mon Feb 07 14:33:44.669595 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return Database.Cursor.execute(self, query, params)
+[Mon Feb 07 14:33:44.669598 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] sqlite3.OperationalError: attempt to write a readonly database
+[Mon Feb 07 14:33:44.669600 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] 
+[Mon Feb 07 14:33:44.669603 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] The above exception was the direct cause of the following exception:
+[Mon Feb 07 14:33:44.669605 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] 
+[Mon Feb 07 14:33:44.669608 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] Traceback (most recent call last):
+[Mon Feb 07 14:33:44.669611 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:33:44.669613 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     response = get_response(request)
+[Mon Feb 07 14:33:44.669627 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:33:44.669630 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:33:44.669632 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:33:44.669635 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:33:44.669637 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/viewsets.py", line 125, in view
+[Mon Feb 07 14:33:44.669640 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:33:44.669642 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 509, in dispatch
+[Mon Feb 07 14:33:44.669644 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     response = self.handle_exception(exc)
+[Mon Feb 07 14:33:44.669647 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 469, in handle_exception
+[Mon Feb 07 14:33:44.669649 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     self.raise_uncaught_exception(exc)
+[Mon Feb 07 14:33:44.669651 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+[Mon Feb 07 14:33:44.669654 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     raise exc
+[Mon Feb 07 14:33:44.669656 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 506, in dispatch
+[Mon Feb 07 14:33:44.669659 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     response = handler(request, *args, **kwargs)
+[Mon Feb 07 14:33:44.669661 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/hospital/views.py", line 216, in create
+[Mon Feb 07 14:33:44.669663 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     ap.delete()
+[Mon Feb 07 14:33:44.669665 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/models/base.py", line 971, in delete
+[Mon Feb 07 14:33:44.669668 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return collector.delete()
+[Mon Feb 07 14:33:44.669670 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/models/deletion.py", line 412, in delete
+[Mon Feb 07 14:33:44.669673 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     count = qs._raw_delete(using=self.using)
+[Mon Feb 07 14:33:44.669675 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/models/query.py", line 769, in _raw_delete
+[Mon Feb 07 14:33:44.669677 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     cursor = query.get_compiler(using).execute_sql(CURSOR)
+[Mon Feb 07 14:33:44.669680 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/models/sql/compiler.py", line 1202, in execute_sql
+[Mon Feb 07 14:33:44.669685 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     cursor.execute(sql, params)
+[Mon Feb 07 14:33:44.669687 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 99, in execute
+[Mon Feb 07 14:33:44.669689 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return super().execute(sql, params)
+[Mon Feb 07 14:33:44.669692 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 67, in execute
+[Mon Feb 07 14:33:44.669694 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+[Mon Feb 07 14:33:44.669696 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 76, in _execute_with_wrappers
+[Mon Feb 07 14:33:44.669699 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return executor(sql, params, many, context)
+[Mon Feb 07 14:33:44.669701 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 85, in _execute
+[Mon Feb 07 14:33:44.669704 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return self.cursor.execute(sql, params)
+[Mon Feb 07 14:33:44.669706 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/utils.py", line 90, in __exit__
+[Mon Feb 07 14:33:44.669708 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     raise dj_exc_value.with_traceback(traceback) from exc_value
+[Mon Feb 07 14:33:44.669711 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/utils.py", line 85, in _execute
+[Mon Feb 07 14:33:44.669713 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return self.cursor.execute(sql, params)
+[Mon Feb 07 14:33:44.669715 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]   File "/var/www/core/venv/lib/python3.8/site-packages/django/db/backends/sqlite3/base.py", line 416, in execute
+[Mon Feb 07 14:33:44.669718 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858]     return Database.Cursor.execute(self, query, params)
+[Mon Feb 07 14:33:44.669720 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53858] django.db.utils.OperationalError: attempt to write a readonly database
+[Mon Feb 07 14:34:04.149164 2022] [wsgi:error] [pid 10875:tid 139771391620864] [remote 103.118.76.169:53886] jimamtamimi12@gmail.com
+[Mon Feb 07 14:34:04.156865 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53885] []
+[Mon Feb 07 14:34:04.234689 2022] [wsgi:error] [pid 10875:tid 139771433584384] [remote 103.118.76.169:53885] Forbidden: /api/account/is-admin/
+[Mon Feb 07 09:04:43.765365 2022] [mpm_event:notice] [pid 10874:tid 139771533888576] AH00491: caught SIGTERM, shutting down
+Exception ignored in: <function Local.__del__ at 0x7f1f0ed4a790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+Exception ignored in: <function Local.__del__ at 0x7f1f0ed4a790>
+Traceback (most recent call last):
+  File "/var/www/core/venv/lib/python3.8/site-packages/asgiref/local.py", line 94, in __del__
+NameError: name 'TypeError' is not defined
+[Mon Feb 07 09:04:44.052507 2022] [mpm_event:notice] [pid 11007:tid 140411151535168] AH00489: Apache/2.4.41 (Ubuntu) OpenSSL/1.1.1f mod_wsgi/4.6.8 Python/3.8 configured -- resuming normal operations
+[Mon Feb 07 09:04:44.052627 2022] [core:notice] [pid 11007:tid 140411151535168] AH00094: Command line: '/usr/sbin/apache2'
+[Mon Feb 07 14:34:46.627465 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:53929] jimamtamimi12@gmail.com
+[Mon Feb 07 14:34:46.701088 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:53929] []
+[Mon Feb 07 14:34:46.757863 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:53930] Forbidden: /api/account/is-admin/
+[Mon Feb 07 14:34:49.119203 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:53935] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:34:57.645231 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49687] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:35:11.410779 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49689] Unauthorized: /api/appointments/
+[Mon Feb 07 14:35:21.259986 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49690] Unauthorized: /api/account/token/
+[Mon Feb 07 14:36:02.219363 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49704] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:36:11.875399 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49705] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:36:16.225162 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49705] 1
+[Mon Feb 07 14:36:16.265958 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49705] 1
+[Mon Feb 07 14:36:37.641818 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49711] {'email': 'a@gmail.com', 'password': '2212', 'cpassword': '2212', 'name': 'a', 'number': '221212'}
+[Mon Feb 07 14:36:37.780269 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49711] {'id': 7, 'email': 'a@gmail.com', 'name': 'a', 'number': '221212'}
+[Mon Feb 07 14:36:37.857059 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49711] a@gmail.com
+[Mon Feb 07 14:36:37.895511 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49711] []
+[Mon Feb 07 14:36:41.623051 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:36:46.165295 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712] The api key provided is invalid
+[Mon Feb 07 14:36:46.229465 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:36:46.229504 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712] Traceback (most recent call last):
+[Mon Feb 07 14:36:46.229509 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:36:46.229514 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     response = get_response(request)
+[Mon Feb 07 14:36:46.229518 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:36:46.229522 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:36:46.229526 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:36:46.229546 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:36:46.229550 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:36:46.229553 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:36:46.229556 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:36:46.229559 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:36:46.229562 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:36:46.229566 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:36:46.229570 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49712] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:36:49.618520 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714] The api key provided is invalid
+[Mon Feb 07 14:36:49.655109 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:36:49.655150 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714] Traceback (most recent call last):
+[Mon Feb 07 14:36:49.655154 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:36:49.655158 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     response = get_response(request)
+[Mon Feb 07 14:36:49.655161 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:36:49.655165 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:36:49.655168 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:36:49.655172 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:36:49.655175 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:36:49.655178 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:36:49.655181 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:36:49.655184 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:36:49.655204 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:36:49.655208 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:36:49.655211 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49714] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:36:59.429583 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.118.76.169:54008] 1
+[Mon Feb 07 14:36:59.508500 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54008] 1
+[Mon Feb 07 14:37:01.344242 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.118.76.169:54008] jimamtamimi12@gmail.com
+[Mon Feb 07 14:37:01.353247 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54009] []
+[Mon Feb 07 14:37:05.783670 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:37:08.889465 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009] The api key provided is invalid
+[Mon Feb 07 14:37:08.925634 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:37:08.925671 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009] Traceback (most recent call last):
+[Mon Feb 07 14:37:08.925674 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:37:08.925677 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     response = get_response(request)
+[Mon Feb 07 14:37:08.925680 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:37:08.925682 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:37:08.925685 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:37:08.925688 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:37:08.925691 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:37:08.925693 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:37:08.925696 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:37:08.925698 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:37:08.925701 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:37:08.925704 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:37:08.925720 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:54009] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:37:13.865167 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012] The api key provided is invalid
+[Mon Feb 07 14:37:13.904441 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:37:13.904479 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012] Traceback (most recent call last):
+[Mon Feb 07 14:37:13.904483 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:37:13.904487 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     response = get_response(request)
+[Mon Feb 07 14:37:13.904490 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:37:13.904493 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:37:13.904496 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:37:13.904499 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:37:13.904502 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:37:13.904505 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:37:13.904508 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:37:13.904511 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:37:13.904514 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:37:13.904516 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:37:13.904520 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:54012] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:37:23.794531 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49721] j@j.com
+[Mon Feb 07 14:37:56.541769 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49726] 1
+[Mon Feb 07 14:37:56.541899 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49727] 1
+[Mon Feb 07 14:37:56.542656 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49727] could not convert string to float: 'undefined'
+[Mon Feb 07 14:37:58.466506 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:49725] a@gmail.com
+[Mon Feb 07 14:37:58.469557 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49726] []
+[Mon Feb 07 14:38:05.458762 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49725] 1
+[Mon Feb 07 14:38:05.458831 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49725] could not convert string to float: 'undefined'
+[Mon Feb 07 14:38:05.523439 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49728] 1
+[Mon Feb 07 14:38:05.523479 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49728] could not convert string to float: 'undefined'
+[Mon Feb 07 14:38:06.266833 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.57.134.32:49728] a@gmail.com
+[Mon Feb 07 14:38:06.271767 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49725] []
+[Mon Feb 07 14:38:10.696734 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.57.134.32:49728] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:38:15.545914 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728] The api key provided is invalid
+[Mon Feb 07 14:38:15.582350 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:38:15.582387 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728] Traceback (most recent call last):
+[Mon Feb 07 14:38:15.582390 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:38:15.582393 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     response = get_response(request)
+[Mon Feb 07 14:38:15.582395 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:38:15.582398 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:38:15.582400 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:38:15.582403 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:38:15.582405 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:38:15.582408 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:38:15.582410 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:38:15.582412 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:38:15.582414 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:38:15.582417 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:38:15.582419 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49728] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:39:07.546852 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.118.76.169:62610] Forbidden: /api/account/is-admin/
+[Mon Feb 07 14:39:08.743110 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.118.76.169:62612] 1
+[Mon Feb 07 14:39:08.821565 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62612] 1
+[Mon Feb 07 14:39:09.872477 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62612] jimamtamimi12@gmail.com
+[Mon Feb 07 14:39:09.876298 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62609] []
+[Mon Feb 07 14:39:13.071622 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:39:18.007853 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612] The api key provided is invalid
+[Mon Feb 07 14:39:18.047062 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:39:18.047101 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612] Traceback (most recent call last):
+[Mon Feb 07 14:39:18.047105 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:39:18.047109 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     response = get_response(request)
+[Mon Feb 07 14:39:18.047113 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:39:18.047117 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:39:18.047120 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:39:18.047124 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:39:18.047127 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:39:18.047131 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:39:18.047134 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:39:18.047138 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:39:18.047141 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:39:18.047145 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:39:18.047149 2022] [wsgi:error] [pid 11008:tid 140411118372608] [remote 103.118.76.169:62612] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:39:21.162889 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.57.134.32:33896] Unauthorized: /api/account/is-admin/
+[Mon Feb 07 14:39:23.323025 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:62615] jimamtamimi12@gmail.com
+[Mon Feb 07 14:39:23.412840 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62615] Forbidden: /api/account/is-admin/
+[Mon Feb 07 14:39:23.413256 2022] [wsgi:error] [pid 11008:tid 140411009267456] [remote 103.118.76.169:62629] []
+[Mon Feb 07 14:39:28.393063 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62613] [OrderedDict([('id', 3), ('date', '2022-01-30'), ('time', "['07:10 AM', '07:00 AM', '07:30 AM', '07:40 AM', '08:00 AM', '08:30 AM', '08:40 AM', '08:10 AM', '08:20 AM', '07:50 AM', '07:20 AM']")])]
+[Mon Feb 07 14:39:37.982650 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638] The api key provided is invalid
+[Mon Feb 07 14:39:38.022941 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638] Internal Server Error: /api/razorpay/pay/
+[Mon Feb 07 14:39:38.022988 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638] Traceback (most recent call last):
+[Mon Feb 07 14:39:38.022992 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+[Mon Feb 07 14:39:38.022995 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     response = get_response(request)
+[Mon Feb 07 14:39:38.022997 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 181, in _get_response
+[Mon Feb 07 14:39:38.023000 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     response = wrapped_callback(request, *callback_args, **callback_kwargs)
+[Mon Feb 07 14:39:38.023002 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+[Mon Feb 07 14:39:38.023005 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     return view_func(*args, **kwargs)
+[Mon Feb 07 14:39:38.023007 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/django/views/generic/base.py", line 69, in view
+[Mon Feb 07 14:39:38.023010 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     return self.dispatch(request, *args, **kwargs)
+[Mon Feb 07 14:39:38.023015 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 511, in dispatch
+[Mon Feb 07 14:39:38.023024 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     self.response = self.finalize_response(request, response, *args, **kwargs)
+[Mon Feb 07 14:39:38.023027 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]   File "/var/www/core/venv/lib/python3.8/site-packages/rest_framework/views.py", line 423, in finalize_response
+[Mon Feb 07 14:39:38.023030 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638]     assert isinstance(response, HttpResponseBase), (
+[Mon Feb 07 14:39:38.023034 2022] [wsgi:error] [pid 11008:tid 140411017660160] [remote 103.118.76.169:62638] AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'NoneType'>`
+[Mon Feb 07 14:41:00.729755 2022] [wsgi:error] [pid 11008:tid 140411000874752] [remote 103.57.134.32:49730] Not Found: /api/razorpay/pay/
+z

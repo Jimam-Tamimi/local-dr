@@ -190,7 +190,7 @@ export default function BookAppointment({ match }) {
       onSubmitSuccessApoId,
       () => {
         dispatch(alert("Appointment booked successfully", "success"));
-        history.push(`/your-appointments/`);
+        history.push(`/appointments/${onSubmitSuccessApoId}/`);
       },
       () => dispatch(alert("Payment Failed", "danger"))
     );
@@ -200,7 +200,7 @@ export default function BookAppointment({ match }) {
     e.preventDefault();
     const script = await document.createElement("script");
     script.src =
-      "https://www.paypal.com/sdk/js?client-id=ASl7xJp05iNYH19do47QXnku1t4__RVVe-3VDt_GkWQ9Vf749WVDkF9ti4YUHSXTPj5NUvYIAPrbq9Qx&currency=USD";
+      "https://www.paypal.com/sdk/js?client-id=ATB2rrj6MJzI1tJZsMzwU74x25MBvW7l21D3CW545TrgVdg6vpIhI6rnCcayWmDDX0VHDUZCavwqgXyg&currency=USD";
     script.type = "text/javascript";
     // script.crossOrigin = "anonymous"
     // script.setAttribute("data-csp-nonce", "xyz-123")
@@ -220,6 +220,7 @@ export default function BookAppointment({ match }) {
   };
 
   // stripe
+  const [clientSecret, setClientSecret] = useState("");
   const [payAmount, setPayAmount] = useState(0);
   const payWithStripe = async (e) => {
     e.preventDefault();
@@ -231,7 +232,8 @@ export default function BookAppointment({ match }) {
       );
       dispatch(setProgress(80));
       if (res.status === 200) {
-        await setPayAmount(res.data.amount);
+        await setClientSecret(res.data.client_secret);
+        await setPayAmount(res.data.amount / 100);
 
         await dispatch(setProgress(90));
         setSubmitButtonState("stripe");
@@ -246,17 +248,18 @@ export default function BookAppointment({ match }) {
     theme: "stripe",
   };
   const options = {
+    clientSecret,
     appearance,
   };
 
   const onPaymentSuccess = () => {
     history.push(`/appointments/${onSubmitSuccessApoId}/`);
-  };
+  }
 
   return (
     <>
       <Wrap>
-        {submitButtonState !== "stripe" && (
+        {submitButtonState !== 'stripe' && (
           <Form
             onSubmit={onSubmit}
             style={{ marginBottom: "20px", height: "auto" }}
@@ -363,14 +366,14 @@ export default function BookAppointment({ match }) {
               <Button block>Continue Booking</Button>
             ) : submitButtonState === "choose" ? (
               <>
-                <Button
+                {/* <Button
                   type="button"
                   onClick={payWithStripe}
                   style={{ margin: "5px 0px" }}
                   block
                 >
                   Pay With Stripe
-                </Button>
+                </Button> */}
                 <Button
                   type="button"
                   onClick={payWithIndianCard}
@@ -385,8 +388,7 @@ export default function BookAppointment({ match }) {
                   block
                 >
                   Pay With International Card
-                </Button>
-                :
+                </Button> 
               </>
             ) : submitButtonState === "paypal" ? (
               <div
@@ -400,14 +402,10 @@ export default function BookAppointment({ match }) {
             )}
           </Form>
         )}
-        {submitButtonState === "stripe" && (
+
+        {clientSecret && (
           <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm
-              payAmount={payAmount}
-              appointment_id={onSubmitSuccessApoId}
-              email={email}
-              onPaymentSuccess={onPaymentSuccess}
-            />
+            <CheckoutForm payAmount={payAmount} email={email} onPaymentSuccess={onPaymentSuccess} />
           </Elements>
         )}
       </Wrap>

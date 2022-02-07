@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Column } from "../../styles/Essentials.styles";
+import { Column, Flex } from "../../styles/Essentials.styles";
 
 export const FooterWrap = styled.div`
   width: 100vw;
@@ -14,11 +14,22 @@ export const FooterWrap = styled.div`
     }
 `;
 export const FooterColumn = styled(Column)`
+ &.first  {
+  ${Flex}
+  flex-direction: column;
+  align-items: flex-start;
+  .c-logo{
+    ${Flex}
+    justify-content: flex-start;
+  }
+
+ }
+
     @media screen  and (max-width: 768px) {
         justify-content: center;
         margin: 8px 0px;
     }
-  & > * {
+  &  a {
       transition: var(--main-transition);
     margin: 0px 10px;
     color: rgba(255, 255, 255, 0.6);

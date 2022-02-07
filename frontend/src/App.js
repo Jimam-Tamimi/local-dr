@@ -28,8 +28,12 @@ import CompletedAppointments from "./pages/admin/hospital/CompletedAppointments"
 import DeactivatedHospital from "./pages/admin/DeactivatedHospital";
 import Staff from "./pages/admin/Staff";
 import LoadingBar from "react-top-loading-bar";
-
-
+import AboutUs from "./pages/styles/home/AboutUs";
+import ContactUs from "./pages/styles/home/ContactUs";
+import Pricing from "./pages/styles/home/Pricing";
+import PrivacyPolicy from "./pages/styles/home/PrivacyPolicy";
+import TOS from "./pages/styles/home/TOS";
+import RefundPolicy from "./pages/styles/home/RefundPolicy";
 
 function App() {
   const dispatch = useDispatch();
@@ -159,6 +163,12 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/search/" component={Search} />
         <Route path="/" component={Account} />
+        <Route path="/about-us/" component={AboutUs} />
+        <Route path="/contact-us/" component={ContactUs} />
+        <Route path="/pricing/" component={Pricing} />
+        <Route path="/privacy-policy/" component={PrivacyPolicy} />
+        <Route path="/terms-service/" component={TOS} />
+        <Route path="/refund-policy/" component={RefundPolicy} />
       </Layout>
     </>
   );

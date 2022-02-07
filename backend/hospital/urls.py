@@ -25,6 +25,6 @@ urlpatterns = [
     path(r'paypal_payment_success/', paypal_payment_success),
 
     path(r'stripe_payment_start/', create_payment),
-    path(r'stripe_payment_confirm/', stripe_payment_confirm),
+    path(r'stripe-webhook/', stripe_webhook),
     
 ] + router.urls

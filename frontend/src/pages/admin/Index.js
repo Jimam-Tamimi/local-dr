@@ -33,25 +33,25 @@ export default function Index() {
         <>
             <BoxesWrap>
 
-                {(adminDetails?.payments || adminDetails?.payments ===0) && <Box background="#009EFA">
+                {(adminDetails?.payments || adminDetails?.payments ===0) && <Box  to="/admin/appointment/" background="#009EFA">
                     <h3>{adminDetails?.payments}</h3>
                     <p>Total Payments</p>
                 </Box>}
 
-                <Box background="#009EFA">
+                <Box to="/admin/appointment/completed/" background="#009EFA">
                     <h3>{adminDetails?.completed_appointments}</h3>
                     <p>Completed Appointments</p>
                 </Box>
-                <Box background="#7260ED">
+                <Box  to="/admin/appointment/" background="#7260ED">
                     <h3>{adminDetails?.total_appointments}</h3>
                     <p>Total Appointments</p>
                 </Box>
-                <Box  background="#56CE66">
+                <Box  to="/admin/schedule/"   background="#56CE66">
                     <h3>{adminDetails?.total_doctors}</h3>
                     <p>Total Doctors</p>
                 </Box>
 
-                {(adminDetails?.total_hospitals || adminDetails?.total_hospitals === 0) && <Box  background="#ffbd34">
+                {(adminDetails?.total_hospitals || adminDetails?.total_hospitals === 0) && <Box  to="/admin/hospitals/" background="#ffbd34">
                     <h3>{adminDetails?.total_hospitals}</h3>
                     <p>Total Hospitals</p>
                 </Box>}

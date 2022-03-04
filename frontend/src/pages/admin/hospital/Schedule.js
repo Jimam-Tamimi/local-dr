@@ -303,14 +303,14 @@ function ShowSchedule({ selectedTime, getDoctors, doctors, setSelectedTime }) {
     }, [selectedTime, doctors]);
 
     function convertStrToTimeList(str) {
-        return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t + ', ')
+        return str.replaceAll("'", '').replaceAll("[", "").replaceAll("]", '').split(',').map(t => t )
     }
 
     const dispatch = useDispatch()
     const clearTime = async (tid) => {
         if (window.confirm('Are you sure you want to clear time?')) {
             try {
-                const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${tid}/`)
+                const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${tid}/`, { data: { type: 'COMPLETE_DELETE' } })
                 console.log(res)
                 if (res.status === 200) {
                     dispatch(alert('Doctor Time Cleared', 'success'))
@@ -325,6 +325,28 @@ function ShowSchedule({ selectedTime, getDoctors, doctors, setSelectedTime }) {
         }
     }
 
+    const clearSingleTime = async (t, time) => {
+        console.log(t)
+        if (window.confirm('Are you sure you want to clear ' + time )) {
+            try {
+                let date = t.date
+                const payload = { data: { type: 'PARTIAL_DELETE',  time, date } }
+                const res = await axios.delete(`${process.env.REACT_APP_API_URL}api/schedule-doctor/${t.id}/`,  payload)
+                console.log(res)
+                if (res.status === 200) {
+                    dispatch(alert(time + ' Time Cleared', 'success'))
+                    getDoctors()
+                }
+            } catch (error) {
+
+                dispatch(alert('Failed to clear doctor time', 'danger'))
+
+                console.log(error.response)
+            }
+        }
+
+    }
+
     return (
         <TimeScheduleWrap  >
             {
@@ -335,7 +357,7 @@ function ShowSchedule({ selectedTime, getDoctors, doctors, setSelectedTime }) {
                         <Times>
                             {
                                 convertStrToTimeList(time.time).map((t, i) => (
-                                    <Time>{t}</Time>
+                                    <Time onClick={e => clearSingleTime(time, t)} >{t}</Time>
                                 ))
                             }
                         </Times>

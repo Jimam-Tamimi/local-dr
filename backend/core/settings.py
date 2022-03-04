@@ -184,18 +184,18 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'mycitydocs@gmail.com'
-EMAIL_HOST_PASSWORD = "App@221x"
+EMAIL_HOST_USER = 'jimamdrive.vid@gmail.com'
+EMAIL_HOST_PASSWORD = "google.drive.jimam.storage"
 
 
 BASE_URL = "http://127.0.0.1:3000/"
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
     "https://www.mycitydoc.com",
     "https://mycitydoc.com",
 ]
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
 os.environ['RAZOR_KEY_ID'] = 'rzp_live_YcR9yGI4tes6k2' 

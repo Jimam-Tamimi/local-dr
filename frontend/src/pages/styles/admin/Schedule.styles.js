@@ -26,6 +26,7 @@ border: 1px solid #00000073;
 export const Times = styled.div`
 `
 export const Time = styled.div`
+cursor: pointer;
 border: 1px solid #00000024;
 text-align: center;
 padding: 2px 0px;

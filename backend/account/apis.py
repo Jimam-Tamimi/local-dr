@@ -69,8 +69,7 @@ def forgot_password(request):
     forgotPasswordCode = ForgotPasswordCode.objects.create(user=user)
     subject = "Password reset code for your account from Local Doctor"
     message = f'Your password reset code is {forgotPasswordCode.code}'
-    # print(EmailMessage(subject, message, [user.email]).send())
-    SendEmail(subject, message, ['matiurrahman6101968@gmail.com']).start()
+    SendEmail(subject, message, [user.email]).start()
     
 
     return Response({'success': True, 'message': 'Password reset code sent to your email'}, status=status.HTTP_200_OK)

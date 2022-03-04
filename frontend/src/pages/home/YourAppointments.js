@@ -261,7 +261,8 @@ export default function YourAppointments() {
                 Pay With Stripe
               </Button> */}
               <Button onClick={payWithIndianCard} block>
-                Pay With Indian Card
+                Pay
+                 With Indian Card
               </Button>
               <Button
                 onClick={payWithInternationalCard}

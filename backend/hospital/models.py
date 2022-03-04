@@ -49,7 +49,7 @@ class Appointment(models.Model):
     number = models.CharField(max_length=20, null=False, blank=False)
     date = models.DateField(null=False, blank=False)
     time = models.TimeField(null=False, blank=False)
-    status = models.CharField(max_length=20, default="in progress", null=False, blank=False,choices=[('in progress','in progress'),('completed','completed')])
+    status = models.CharField(max_length=20, default="in progress", null=False, blank=False,choices=[('in progress','in progress'),('completed','completed'), ('cancelled','cancelled')])
 
     payment_id = models.CharField(max_length=250, null=True, blank=True)
     isPaid = models.BooleanField(default=False)

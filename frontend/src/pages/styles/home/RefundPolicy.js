@@ -10,7 +10,7 @@ export default function RefundPolicy() {
     <>
       <ContentContainer>
         <h1 style={{ marginBottom: "1rem", textTransform: "uppercase" }}>
-          Privacy Policy
+          Refund Policy
         </h1>
         <Content>
           Refund is done if a Booking is not confirmed and money is deducte.

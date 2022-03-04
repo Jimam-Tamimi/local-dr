@@ -47,13 +47,7 @@ export default function BookAppointment({ match }) {
     name: "",
     email: "",
     number: "",
-    date:
-      new Date().getFullYear() +
-      "-" +
-      new Date().getMonth() +
-      1 +
-      "-" +
-      new Date().getDate(),
+    date:new Date().toISOString().split("T")[0],
     time: "",
     doctor: match?.params?.id,
     user: auth.id,
@@ -282,7 +276,8 @@ export default function BookAppointment({ match }) {
               </ProfileColumn>
             </Grid>
             <InputDiv>
-              <FormTitle>Book your appointment</FormTitle>
+              <FormTitle>Book your appointment </FormTitle>
+              <h4>Pay {doctorData?.hospital?.price}</h4>
             </InputDiv>
             <InputDiv>
               <Label>Name</Label>
@@ -380,7 +375,8 @@ export default function BookAppointment({ match }) {
                   style={{ margin: "5px 0px" }}
                   block
                 >
-                  Pay With Indian Card
+                  Pay 
+                  With Indian Card
                 </Button>
                 <Button
                   onClick={payWithInternationalCard}
@@ -400,6 +396,8 @@ export default function BookAppointment({ match }) {
             ) : (
               ""
             )}
+
+            <p style={{marginTop: '5px', textAlign: 'center'}} >* Booking Fee is only Charged</p>
           </Form>
         )}
 
@@ -408,6 +406,7 @@ export default function BookAppointment({ match }) {
             <CheckoutForm payAmount={payAmount} email={email} onPaymentSuccess={onPaymentSuccess} />
           </Elements>
         )}
+
       </Wrap>
     </>
   );

@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 import json
 from os import environ
@@ -86,7 +87,6 @@ class DoctorViewSet(ModelViewSet):
         elif(self.request.user.is_hospital):
             self.queryset = self.queryset.filter(
                 hospital__user=self.request.user)
-            print(self.queryset, 'is hospital')
             return self.queryset
         return super().get_queryset()
 
@@ -135,13 +135,45 @@ def schedule_doctor(request, id=None):
         return Response({"message": "Doctor schedule added successfully"}, status=status.HTTP_200_OK)
 
     if(request.method == "DELETE"):
-        try:
-            doctorSchedule = DoctorSchedule.objects.get(id=id)
-        except Doctor.DoesNotExist:
-            return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        if(request.data['type'] == "COMPLETE_DELETE"):            
+            try:
+                doctorSchedule = DoctorSchedule.objects.get(id=id)
+            except Doctor.DoesNotExist:
+                return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            
+            doctorSchedule.delete()
+            return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
+        elif(request.data['type'] == "PARTIAL_DELETE"):   
+            try:
+                doctorSchedule = DoctorSchedule.objects.get(id=id)
+            except Doctor.DoesNotExist:
+                return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-        doctorSchedule.delete()
-        return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
+            tmpTime = doctorSchedule.time.replace("'", "").replace("[", "").replace(']', '').split(', ')
+            for time in tmpTime:
+                if(time == request.data['time'].strip()):
+                    tmpTime.remove(time)
+                    try:
+                        doctor = Doctor.objects.get(doctor_schedule__id=id)
+                        print(f"{doctor} doctor" )
+                        appointment = Appointment.objects.get(doctor=doctor, time=datetime.strptime(time, "%H:%M %p").time() , date=request.data['date'])
+                        print(f"{appointment} ap" )
+                        send_mail(
+                            'Your appointment was canceled because doctor is not available.',
+                            'Your appointment was canceled because Dr. ' + appointment.doctor.name + ' is not available at' + str(appointment.time)  +" Please email for refund at mycitydocs@gmail.com with the subject  Refund",
+                            settings.EMAIL_HOST_USER,
+                            [appointment.email],
+                        )
+                        appointment.status = 'cancelled'
+                        appointment.save()
+                    except Exception as e:
+                        print(e)
+                        pass
+                    
+            doctorSchedule.time = str(tmpTime)
+            doctorSchedule.save()
+            return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
+        
 
     if(request.method == "GET"):
         try:

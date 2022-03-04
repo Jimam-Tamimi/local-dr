@@ -3,7 +3,7 @@ import alert from '../alert/actions'
 
 
 export const signup = (email, password, cpassword, name, number) => async dispatch => {
-    const data = { email, password, cpassword, name, number }
+    const data = { email: email.toLowerCase(), password, cpassword, name, number }
     try {
         const config = {
             headers: {
@@ -34,7 +34,7 @@ export const signup = (email, password, cpassword, name, number) => async dispat
 
 
 export const login = (email, password) => async dispatch => {
-    const data = { email, password }
+    const data = { email: email.toLowerCase(), password }
     try {
         const config = {
             headers: {

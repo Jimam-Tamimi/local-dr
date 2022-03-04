@@ -17,6 +17,8 @@ class UserSerializer(ModelSerializer):
         model = MyUser
         fields = [ "id", "email", "password", "cpassword", 'name', 'number']  
         
+ 
+        
     
     def create(self, validated_data): 
         email = validated_data['email']
@@ -36,9 +38,10 @@ class UserSerializer(ModelSerializer):
         if(not name or not number):
             raise ValidationError("Name and Number are required")
          
-        user = MyUser.objects.create(email=email, name=name, number=number)
+        user = MyUser.objects.create(email=email.lower(), name=name, number=number)
         user.set_password(password)
         user.save()
         return user
+        
         
     

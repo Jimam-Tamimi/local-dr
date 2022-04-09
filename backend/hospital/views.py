@@ -141,6 +141,29 @@ def schedule_doctor(request, id=None):
             except Doctor.DoesNotExist:
                 return Response({"message": "Doctor does not exist"}, status=status.HTTP_404_NOT_FOUND)
             
+            tmpTime = doctorSchedule.time.replace("'", "").replace("[", "").replace(']', '').split(', ')
+
+            print(tmpTime)
+            for time in tmpTime:
+                tmpTime.remove(time)
+                try:
+                    doctor = Doctor.objects.get(doctor_schedule__id=id)
+                    # print(f'{type(time)} time')
+                    # print(datetime.strptime(time, "%H:%M %p").time() )
+                    
+                    appointment = Appointment.objects.get(doctor=doctor, time=datetime.strptime(time, "%H:%M %p").time(),  date=doctorSchedule.date)
+                    print(f"{appointment} ap" )
+                    send_mail(
+                        'Your appointment was canceled because doctor is not available.',
+                        'Your appointment was canceled because Dr. ' + appointment.doctor.name + ' is not available at' + str(appointment.time)  +" Please email for refund at mycitydocs@gmail.com with the subject  Refund",
+                        settings.EMAIL_HOST_USER,
+                        [appointment.email],
+                    )
+                    appointment.status = 'cancelled'
+                    appointment.save()
+                except Exception as e:
+                    print(e)
+                    pass
             doctorSchedule.delete()
             return Response({"message": "Doctor schedule deleted successfully"}, status=status.HTTP_200_OK)
         elif(request.data['type'] == "PARTIAL_DELETE"):   

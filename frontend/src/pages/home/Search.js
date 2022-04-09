@@ -251,7 +251,7 @@ export default function Search({ match, }) {
                         {doctor.hospital.name}
                       </p>
                       <p>{doctor?.hospital?.locationName}</p>
-                      <p className="consultation"><RiMoneyDollarCircleFill style={{ fontSize: '1.4rem' }} />{doctor?.consultation_fee} Consultation fee at clinic</p>
+                      <p > {doctor?.consultation_fee} Consultation fee at clinic</p>
                       {/* <Link>Book Appointment</Link> */}
                       {showButton && (
 

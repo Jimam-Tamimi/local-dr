@@ -283,7 +283,7 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
         </InputDiv>
         <InputDiv>
           <Label>Consultation Fee *</Label>
-          <Input required name="consultation_fee"   step="any" type="number" placeholder="Consultation Fee" onChange={onChange} />
+          <Input required name="consultation_fee"  type="text" placeholder="Consultation Fee" onChange={onChange} />
         </InputDiv>
         <InputDiv   >
           <Label>Profile Image *</Label>
@@ -454,7 +454,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
         </InputDiv>
         <InputDiv>
           <Label>Consultation Fee *</Label>
-          <Input required name="consultation_fee"  step="any"  type="text" placeholder="Consultation Fee" onChange={onChange} value={consultation_fee} />
+          <Input required name="consultation_fee"  type="text" placeholder="Consultation Fee" onChange={onChange} value={consultation_fee} />
         </InputDiv>
         <InputDiv   >
           <Label>Profile Image *</Label>

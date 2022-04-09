@@ -262,17 +262,17 @@ export default function YourAppointments() {
               </Button> */}
               <Button onClick={payWithIndianCard} block>
                 Pay
-                 With Indian Card
+                 {/* With Indian Card */}
               </Button>
               <Button
                 onClick={payWithInternationalCard}
                 style={{
-                  background: "var(--primary-text-color)",
+                  background: "#0070ba",
                   color: "white",
                 }}
                 block
               >
-                Pay With International Card
+                PayPal
               </Button>
             </>
           )}

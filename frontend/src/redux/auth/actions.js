@@ -91,9 +91,7 @@ export const refreshToken = () => async dispatch => {
                 })
             }
         } catch (error) {
-            if (error?.response?.status === 401) {
-                dispatch({type: 'LOGOUT'})
-            }
+            dispatch({type: 'LOGOUT'}) 
         }
     }
 }

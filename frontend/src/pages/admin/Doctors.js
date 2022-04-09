@@ -113,6 +113,7 @@ export default function Doctors() {
             <Th>Name</Th>
             <Th>Speciality</Th>
             <Th>Qualification</Th>
+            <Th>Consultation Fee</Th>
             <Th>Action</Th>
           </Tr>
           {
@@ -124,6 +125,7 @@ export default function Doctors() {
                 <Td img={true}> <div> { doctor.image && <img src={doctor.image} />} {doctor.name}</div></Td>
                 <Td>{doctor.speciality}</Td>
                 <Td>{doctor.qualification}</Td>
+                <Td>{doctor.consultation_fee}</Td>
                 <Td>
                   <Actions>
                     <Button onClick={e => { setDoctorId(doctor.id); setShowEditForm(true) }} sm green>Edit</Button>
@@ -162,9 +164,10 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
     name: "",
     speciality: "",
     qualification: "",
+    consultation_fee: 0
   })
   const [doctorHospitalId, setDoctorHospitalId] = useState(null)
-  const { id, name, speciality, qualification } = formData;
+  const { id, name, speciality, qualification, consultation_fee } = formData;
   const [profImage, setProfImage] = useState(null)
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
@@ -178,6 +181,7 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
       formData.append('qualification', qualification);
       formData.append('hospital', doctorHospitalId);
       formData.append('image', profImage);
+      formData.append('consultation_fee', consultation_fee);
 
       const config = {
         headers: {
@@ -277,6 +281,10 @@ function DoctorForm({ setShowDoctorForm, getDoctors }) {
           <Label>Qualification *</Label>
           <Input required name="qualification" type="text" placeholder="Qualification" onChange={onChange} />
         </InputDiv>
+        <InputDiv>
+          <Label>Consultation Fee *</Label>
+          <Input required name="consultation_fee"   step="any" type="number" placeholder="Consultation Fee" onChange={onChange} />
+        </InputDiv>
         <InputDiv   >
           <Label>Profile Image *</Label>
           <Dropzone onDrop={acceptedFiles => onDrop(acceptedFiles)}>
@@ -307,6 +315,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
     name: "",
     speciality: "",
     qualification: "",
+    consultation_fee: 0
   })
   const [doctorHospitalId, setDoctorHospitalId] = useState(null)
   const [hospitalName, setHospitalName] = useState('')
@@ -314,7 +323,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
   const [profImage, setProfImage] = useState(null)
 
 
-  const { name, speciality, qualification } = formData;
+  const { name, speciality, qualification, consultation_fee } = formData;
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
     e.preventDefault();
@@ -325,6 +334,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
       formData.append('speciality', speciality);
       formData.append('qualification', qualification);
       formData.append('hospital', doctorHospitalId);
+      formData.append('consultation_fee', consultation_fee);
       if(profImage){
         formData.append('image', profImage);
       }
@@ -373,7 +383,7 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
       await axios.get(`${process.env.REACT_APP_API_URL}api/doctors/${doctorId}/`).then(res => {
     dispatch(setProgress(75))
 
-        setFormData({ ...formData, name: res.data.name, speciality: res.data.speciality, qualification: res.data.qualification })
+        setFormData({ ...formData, name: res.data.name, speciality: res.data.speciality, qualification: res.data.qualification, consultation_fee: res.data.consultation_fee })
         setDoctorHospitalId(res.data.hospital.id)
         setHospitalName(res.data.hospital.name)
         console.log(res)
@@ -441,6 +451,10 @@ function EditDoctorForm({ setShowEditForm, getDoctors, doctorId }) {
         <InputDiv>
           <Label>Qualification *</Label>
           <Input required name="qualification" type="text" placeholder="Qualification" onChange={onChange} value={qualification} />
+        </InputDiv>
+        <InputDiv>
+          <Label>Consultation Fee *</Label>
+          <Input required name="consultation_fee"  step="any"  type="text" placeholder="Consultation Fee" onChange={onChange} value={consultation_fee} />
         </InputDiv>
         <InputDiv   >
           <Label>Profile Image *</Label>

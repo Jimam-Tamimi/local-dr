@@ -35,7 +35,7 @@ class Doctor(models.Model):
     speciality = models.CharField(max_length=50, null=False, blank=False)
     qualification = models.CharField(max_length=50, null=False, blank=False)
     doctor_schedule = models.ManyToManyField(DoctorSchedule, blank=True, null=True)
-
+    consultation_fee = models.FloatField(default=0) 
     
     def __str__(self):
         return self.name

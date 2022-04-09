@@ -193,6 +193,7 @@ BASE_URL = "http://127.0.0.1:3000/"
 CORS_ALLOWED_ORIGINS = [
     "https://www.mycitydoc.com",
     "https://mycitydoc.com",
+    "http://localhost:3000",
 ]
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None

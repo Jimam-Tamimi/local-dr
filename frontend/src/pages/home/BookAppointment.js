@@ -376,14 +376,18 @@ export default function BookAppointment({ match }) {
                   block
                 >
                   Pay 
-                  With Indian Card
+                  {/* With Indian Card */}
                 </Button>
                 <Button
                   onClick={payWithInternationalCard}
-                  style={{ margin: "5px 0px" }}
                   block
+                  style={{
+                    background: "#0070ba",
+                    color: "white",
+                    margin: "5px 0px" ,
+                  }}
                 >
-                  Pay With International Card
+                  PayPal
                 </Button> 
               </>
             ) : submitButtonState === "paypal" ? (
